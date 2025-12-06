@@ -90,7 +90,7 @@ class AppTheme {
           letterSpacing: 0.1,
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: surfaceWhite,
         elevation: 0,
         shadowColor: Colors.transparent,

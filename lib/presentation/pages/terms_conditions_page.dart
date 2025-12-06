@@ -1,46 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:provider/provider.dart';
+import '../../application/providers/navigation_provider.dart';
 import '../widgets/navbar.dart';
 import '../widgets/footer.dart';
-import '../widgets/logo.dart';
 import '../theme/app_theme.dart';
 
 class TermsConditionsPage extends StatelessWidget {
   const TermsConditionsPage({super.key});
 
-  Future<void> _launchEmail() async {
-    final Uri emailUri = Uri(
-      scheme: 'mailto',
-      path: 'xmatezsolutionpvtlimited390@gmail.com',
-      query: 'subject=Terms & Conditions Inquiry',
-    );
-    if (await canLaunchUrl(emailUri)) {
-      await launchUrl(emailUri);
-    }
-  }
-
-  Future<void> _launchPhone() async {
-    final Uri phoneUri = Uri(scheme: 'tel', path: '+919495270656');
-    if (await canLaunchUrl(phoneUri)) {
-      await launchUrl(phoneUri);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width <= 768;
+    
+    // Set route when page loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<NavigationProvider>(context, listen: false).setCurrentRoute('/terms-conditions');
+    });
 
     return Scaffold(
       backgroundColor: AppTheme.surfaceWhite,
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const Navbar(currentRoute: '/terms-conditions'),
+            const Navbar(),
             // Header Section with Dark Background
             Container(
+              width: double.infinity,
               padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 24 : 100,
-                vertical: 160,
+                horizontal: isMobile ? 20 : 100,
+                vertical: isMobile ? 40 : 100,
               ),
               decoration: const BoxDecoration(
                 color: AppTheme.primaryBlack,
@@ -48,49 +36,28 @@ class TermsConditionsPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.white.withValues(alpha: 0.05),
-                              blurRadius: 30,
-                              spreadRadius: 5,
-                            ),
-                          ],
-                        ),
-                        child: const XMatezLogo(size: 120, isDark: true),
-                      ),
-                      const SizedBox(width: 28),
-                      Expanded(
-                        child: Text(
-                          'Terms & Conditions',
-                          style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                            color: Colors.white,
-                            fontSize: 44,
-                            letterSpacing: -1.5,
-                          ),
-                        ),
-                      ),
-                    ],
+                  Text(
+                    'Terms & Conditions',
+                    style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                      color: Colors.white,
+                      fontSize: isMobile ? 24 : 36,
+                      letterSpacing: isMobile ? -1 : -1.5,
+                    ),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: isMobile ? 12 : 16),
                   Text(
                     'Your rights and responsibilities when using X Matez',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Colors.white.withValues(alpha: 0.85),
-                      fontSize: 20,
+                      fontSize: isMobile ? 16 : 20,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: isMobile ? 12 : 16),
                   Text(
                     'Effective: September 6, 2025',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Colors.white.withValues(alpha: 0.7),
-                      fontSize: 16,
+                      fontSize: isMobile ? 14 : 16,
                     ),
                   ),
                 ],
@@ -99,10 +66,12 @@ class TermsConditionsPage extends StatelessWidget {
             // Content Section with White Background
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 24 : 100,
-                vertical: 120,
+                horizontal: isMobile ? 20 : 100,
+                vertical: isMobile ? 40 : 80,
               ),
-              constraints: const BoxConstraints(maxWidth: 900),
+              constraints: BoxConstraints(
+                maxWidth: isMobile ? double.infinity : 900,
+              ),
               color: AppTheme.surfaceWhite,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,7 +80,7 @@ class TermsConditionsPage extends StatelessWidget {
                     'Welcome to X Matez. These Terms & Conditions govern your use of our mobile application and related services. By accessing or using our app, you agree to be bound by these terms.',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: AppTheme.textPrimary,
-                      fontSize: 18,
+                      fontSize: isMobile ? 16 : 18,
                       height: 1.6,
                       letterSpacing: 0.2,
                     ),
@@ -123,22 +92,22 @@ class TermsConditionsPage extends StatelessWidget {
                         'By downloading, installing, accessing, or using the X Matez mobile application, you acknowledge that you have read, understood, and agree to be bound by these Terms & Conditions and our Privacy Policy.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
-                          fontSize: 17,
+                          fontSize: isMobile ? 15 : 17,
                           height: 1.6,
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: isMobile ? 10 : 14),
                       Text(
                         'If you do not agree with any part of these terms, you must not use our application or services.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
-                          fontSize: 17,
+                          fontSize: isMobile ? 15 : 17,
                           height: 1.6,
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      SizedBox(height: isMobile ? 16 : 20),
                       Container(
-                        padding: const EdgeInsets.all(24),
+                        padding: EdgeInsets.all(isMobile ? 16 : 20),
                         decoration: BoxDecoration(
                           color: AppTheme.accentBlue.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(16),
@@ -153,15 +122,15 @@ class TermsConditionsPage extends StatelessWidget {
                             Icon(
                               Icons.info_outline,
                               color: AppTheme.accentBlue,
-                              size: 24,
+                              size: isMobile ? 20 : 24,
                             ),
-                            const SizedBox(width: 16),
+                            SizedBox(width: isMobile ? 12 : 16),
                             Expanded(
                               child: Text(
                                 'Important Notice\n\nThese terms constitute a legally binding agreement between you and X Matez. Please read them carefully before using our services.',
                                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                   color: AppTheme.textPrimary,
-                                  fontSize: 17,
+                                  fontSize: isMobile ? 15 : 17,
                                   height: 1.6,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -179,11 +148,11 @@ class TermsConditionsPage extends StatelessWidget {
                         'X Matez is a mobile application that provides communication and social interaction services. Our app is designed to facilitate meaningful conversations and connections between users.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
-                          fontSize: 17,
+                          fontSize: isMobile ? 15 : 17,
                           height: 1.6,
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      SizedBox(height: isMobile ? 16 : 20),
                       _SubSection(
                         title: 'Service Description',
                         content:
@@ -285,20 +254,20 @@ class TermsConditionsPage extends StatelessWidget {
                         'Your privacy is important to us. Our collection, use, and protection of your personal information is governed by our Privacy Policy, which is incorporated into these terms by reference.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
-                          fontSize: 17,
+                          fontSize: isMobile ? 15 : 17,
                           height: 1.6,
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: isMobile ? 10 : 14),
                       Text(
                         'By using our app, you consent to the collection and use of your information as described in our Privacy Policy.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
-                          fontSize: 17,
+                          fontSize: isMobile ? 15 : 17,
                           height: 1.6,
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      SizedBox(height: isMobile ? 16 : 20),
                       _SubSection(
                         title: 'Data Security',
                         content:
@@ -372,11 +341,11 @@ class TermsConditionsPage extends StatelessWidget {
                         'You agree to indemnify and hold harmless X Matez from any claims, damages, losses, or expenses arising from:',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
-                          fontSize: 17,
+                          fontSize: isMobile ? 15 : 17,
                           height: 1.6,
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: isMobile ? 10 : 14),
                       Text(
                         '• Your use of the app\n'
                         '• Your violation of these terms\n'
@@ -384,7 +353,7 @@ class TermsConditionsPage extends StatelessWidget {
                         '• Any content you post or share',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
-                          fontSize: 17,
+                          fontSize: isMobile ? 15 : 17,
                           height: 1.6,
                         ),
                       ),
@@ -435,11 +404,11 @@ class TermsConditionsPage extends StatelessWidget {
                         'We may update these Terms & Conditions periodically to reflect changes in our services or applicable laws. We will notify you of significant changes through:',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
-                          fontSize: 17,
+                          fontSize: isMobile ? 15 : 17,
                           height: 1.6,
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: isMobile ? 10 : 14),
                       Text(
                         '• In-app notifications\n'
                         '• Email notifications (if provided)\n'
@@ -447,11 +416,11 @@ class TermsConditionsPage extends StatelessWidget {
                         'Your continued use of the app after changes constitutes acceptance of the updated terms.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
-                          fontSize: 17,
+                          fontSize: isMobile ? 15 : 17,
                           height: 1.6,
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      SizedBox(height: isMobile ? 16 : 20),
                       _SubSection(
                         title: 'Review Regularly',
                         content:
@@ -484,102 +453,6 @@ class TermsConditionsPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  _Section(
-                    title: 'CONTACT INFORMATION',
-                    children: [
-                      Text(
-                        'If you have any questions about these Terms & Conditions, please contact us:',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppTheme.textPrimary,
-                          fontSize: 17,
-                          height: 1.6,
-                        ),
-                      ),
-                      const SizedBox(height: 32),
-                      Container(
-                        padding: const EdgeInsets.all(32),
-                        decoration: BoxDecoration(
-                          color: AppTheme.lightGray,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: AppTheme.borderLight,
-                            width: 1,
-                          ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.email_outlined,
-                                  color: AppTheme.accentBlue,
-                                  size: 24,
-                                ),
-                                const SizedBox(width: 12),
-                                GestureDetector(
-                                  onTap: _launchEmail,
-                                  child: Text(
-                                    'xmatezsolutionpvtlimited390@gmail.com',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: AppTheme.accentBlue,
-                                      fontWeight: FontWeight.w600,
-                                      decoration: TextDecoration.underline,
-                                      decorationColor: AppTheme.accentBlue,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 20),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.phone_outlined,
-                                  color: AppTheme.accentPurple,
-                                  size: 24,
-                                ),
-                                const SizedBox(width: 12),
-                                GestureDetector(
-                                  onTap: _launchPhone,
-                                  child: Text(
-                                    '+91 9495270656',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: AppTheme.accentPurple,
-                                      fontWeight: FontWeight.w600,
-                                      decoration: TextDecoration.underline,
-                                      decorationColor: AppTheme.accentPurple,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 24),
-                            Text(
-                              'Note: X Matez operates as an individual-owned application and is not currently registered as a formal business entity.',
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: AppTheme.textSecondary,
-                                fontSize: 16,
-                                fontStyle: FontStyle.italic,
-                                height: 1.5,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              'We are committed to addressing your questions and concerns promptly.',
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: AppTheme.textPrimary,
-                                fontSize: 17,
-                                height: 1.6,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),
@@ -602,20 +475,21 @@ class _Section extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width <= 768;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 60),
+        SizedBox(height: isMobile ? 28 : 42),
         Text(
           title,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             color: AppTheme.textPrimary,
-            fontSize: 32,
+            fontSize: isMobile ? 22 : 28,
             fontWeight: FontWeight.w700,
             letterSpacing: -1,
           ),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: isMobile ? 20 : 24),
         ...children,
       ],
     );
@@ -633,25 +507,26 @@ class _SubSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width <= 768;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 24),
+        SizedBox(height: isMobile ? 20 : 24),
         Text(
           title,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
             color: AppTheme.textPrimary,
-            fontSize: 24,
+            fontSize: isMobile ? 20 : 24,
             fontWeight: FontWeight.w600,
             letterSpacing: -0.5,
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: isMobile ? 12 : 16),
         Text(
           content,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: AppTheme.textPrimary,
-            fontSize: 17,
+            fontSize: isMobile ? 15 : 17,
             height: 1.6,
             letterSpacing: 0.1,
           ),

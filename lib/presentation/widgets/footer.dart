@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../application/providers/navigation_provider.dart';
-import 'logo.dart';
 import '../theme/app_theme.dart';
 
 class Footer extends StatelessWidget {
@@ -10,7 +9,7 @@ class Footer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 120),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 30),
       decoration: const BoxDecoration(
         color: AppTheme.primaryBlack,
         border: Border(
@@ -31,10 +30,7 @@ class Footer extends StatelessWidget {
                 ),
               ],
             ),
-            child: const XMatezLogo(
-              size: 180,
-              isDark: true,
-            ),
+           
           ),
           const SizedBox(height: 64),
           LayoutBuilder(
@@ -99,7 +95,6 @@ class Footer extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const XMatezLogo(size: 24, isDark: true),
               const SizedBox(width: 16),
               Text(
                 '© 2025 X Matez. All rights reserved.',

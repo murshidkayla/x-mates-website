@@ -1,5 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../application/providers/navigation_provider.dart';
 import '../widgets/navbar.dart';
 import '../widgets/footer.dart';
 import '../widgets/logo.dart';
@@ -19,6 +22,14 @@ class _ContactPageState extends State<ContactPage> {
   final _formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<NavigationProvider>(context, listen: false).setCurrentRoute('/contact');
+    });
+  }
+
+  @override
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
@@ -26,14 +37,22 @@ class _ContactPageState extends State<ContactPage> {
     super.dispose();
   }
 
-  Future<void> _launchEmail() async {
-    final Uri emailUri = Uri(
-      scheme: 'mailto',
-      path: 'xmatezsolutionpvtlimited390@gmail.com',
-      query: 'subject=Contact from X Matez Website',
-    );
-    if (await canLaunchUrl(emailUri)) {
-      await launchUrl(emailUri);
+  void _showEmailFallback(BuildContext context) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+            'No email app found. Please email us at: xmatezsolutionpvtlimited390@gmail.com',
+          ),
+          backgroundColor: Colors.orange,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          margin: const EdgeInsets.all(16),
+          duration: const Duration(seconds: 5),
+        ),
+      );
     }
   }
 
@@ -46,10 +65,12 @@ class _ContactPageState extends State<ContactPage> {
     final String email = _emailController.text.trim();
     final String message = _messageController.text.trim();
 
+    // Format email body with proper line breaks
     final String emailBody = 'Name: $name\n\n'
         'Email: $email\n\n'
         'Message:\n$message';
 
+    // Create mailto URI with properly encoded parameters
     final Uri emailUri = Uri(
       scheme: 'mailto',
       path: 'xmatezsolutionpvtlimited390@gmail.com',
@@ -59,51 +80,68 @@ class _ContactPageState extends State<ContactPage> {
       },
     );
 
-    if (await canLaunchUrl(emailUri)) {
-      await launchUrl(emailUri);
-      // Clear form after successful launch
-      _nameController.clear();
-      _emailController.clear();
-      _messageController.clear();
-      
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text(
-              'Email client opened! Please send your message.',
-            ),
-            backgroundColor: AppTheme.accentBlue,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            margin: const EdgeInsets.all(16),
-          ),
-        );
+    try {
+      // Check if we can launch the URL
+      if (!await canLaunchUrl(emailUri)) {
+        _showEmailFallback(context);
+        return;
       }
-    } else {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text(
-              'Unable to open email client. Please contact us directly at xmatezsolutionpvtlimited390@gmail.com',
-            ),
-            backgroundColor: Colors.red,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            margin: const EdgeInsets.all(16),
-          ),
-        );
-      }
-    }
-  }
 
-  Future<void> _launchPhone() async {
-    final Uri phoneUri = Uri(scheme: 'tel', path: '+919495270656');
-    if (await canLaunchUrl(phoneUri)) {
-      await launchUrl(phoneUri);
+      // Use platform-specific launch mode
+      // On Android, externalApplication works better
+      // On iOS, platformDefault works better
+      final LaunchMode launchMode = Platform.isAndroid 
+          ? LaunchMode.externalApplication 
+          : LaunchMode.platformDefault;
+
+      final bool launched = await launchUrl(
+        emailUri,
+        mode: launchMode,
+      );
+      
+      if (launched) {
+        // Clear form after successful launch
+        _nameController.clear();
+        _emailController.clear();
+        _messageController.clear();
+        
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text(
+                'Email app opened! Your form data (name, email, message) is pre-filled. Please review and send your message.',
+              ),
+              backgroundColor: AppTheme.accentBlue,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              margin: const EdgeInsets.all(16),
+              duration: const Duration(seconds: 5),
+            ),
+          );
+        }
+      } else {
+        _showEmailFallback(context);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Could not open email app. Please email us at: xmatezsolutionpvtlimited390@gmail.com\n\n'
+              'Name: $name\nEmail: $email\nMessage: $message',
+            ),
+            backgroundColor: Colors.orange,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            margin: const EdgeInsets.all(16),
+            duration: const Duration(seconds: 8),
+          ),
+        );
+      }
     }
   }
 
@@ -116,12 +154,14 @@ class _ContactPageState extends State<ContactPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const Navbar(currentRoute: '/contact'),
+            const Navbar(),
             // Enhanced Hero Section with Logo and Gradient Background
             Container(
               width: double.infinity,
               constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height * 0.6,
+                minHeight: isMobile
+                    ? MediaQuery.of(context).size.height * 0.35
+                    : MediaQuery.of(context).size.height * 0.45,
               ),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -152,8 +192,8 @@ class _ContactPageState extends State<ContactPage> {
                               left: -100,
                               top: 100,
                               child: Container(
-                                width: 400 * value,
-                                height: 400 * value,
+                                width: (isMobile ? 200 : 400) * value,
+                                height: (isMobile ? 200 : 400) * value,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   gradient: RadialGradient(
@@ -174,8 +214,8 @@ class _ContactPageState extends State<ContactPage> {
                   Center(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: isMobile ? 24 : 120,
-                        vertical: 80,
+                        horizontal: isMobile ? 20 : 120,
+                        vertical: isMobile ? 30 : 50,
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -190,26 +230,15 @@ class _ContactPageState extends State<ContactPage> {
                                 opacity: value,
                                 child: Transform.scale(
                                   scale: 0.8 + (value * 0.2),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      const XMatezLogo(
-                                        size: 280,
-                                        isDark: true,
-                                      ),
-                                      const SizedBox(width: 32),
-                                      const MatezTextLogo(
-                                        height: 90,
-                                        isDark: true,
-                                      ),
-                                    ],
+                                  child: XMatezLogo(
+                                    size: isMobile ? 140 : 280,
+                                    isDark: true,
                                   ),
                                 ),
                               );
                             },
                           ),
-                          const SizedBox(height: 48),
+                          SizedBox(height: isMobile ? 24 : 36),
                           // Title
                           TweenAnimationBuilder<double>(
                             tween: Tween(begin: 0.0, end: 1.0),
@@ -225,7 +254,7 @@ class _ContactPageState extends State<ContactPage> {
                                     style: Theme.of(context).textTheme.displayMedium?.copyWith(
                                       color: Colors.white,
                                       letterSpacing: -2,
-                                      fontSize: isMobile ? 40 : 48,
+                                      fontSize: isMobile ? 28 : 40,
                                       fontWeight: FontWeight.w700,
                                     ),
                                     textAlign: TextAlign.center,
@@ -234,7 +263,7 @@ class _ContactPageState extends State<ContactPage> {
                               );
                             },
                           ),
-                          const SizedBox(height: 20),
+                          SizedBox(height: isMobile ? 12 : 16),
                           // Subtitle
                           TweenAnimationBuilder<double>(
                             tween: Tween(begin: 0.0, end: 1.0),
@@ -246,14 +275,21 @@ class _ContactPageState extends State<ContactPage> {
                                 child: Transform.translate(
                                   offset: Offset(0, 15 * (1 - value)),
                                   child: ConstrainedBox(
-                                    constraints: const BoxConstraints(maxWidth: 600),
-                                    child: Text(
-                                      'Get in touch with our support team',
-                                      textAlign: TextAlign.center,
-                                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                        color: Colors.white.withValues(alpha: 0.85),
-                                        fontSize: 18,
-                                        height: 1.6,
+                                    constraints: BoxConstraints(
+                                      maxWidth: isMobile ? double.infinity : 600,
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: isMobile ? 8 : 0,
+                                      ),
+                                      child: Text(
+                                        'Get in touch with our support team',
+                                        textAlign: TextAlign.center,
+                                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                          color: Colors.white.withValues(alpha: 0.85),
+                                          fontSize: isMobile ? 16 : 18,
+                                          height: 1.6,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -268,119 +304,49 @@ class _ContactPageState extends State<ContactPage> {
                 ],
               ),
             ),
-            // Full-Width Help & Support Section
             Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 24 : 120,
-                vertical: 100,
-              ),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    AppTheme.accentBlue.withValues(alpha: 0.05),
-                    AppTheme.accentPurple.withValues(alpha: 0.03),
-                    AppTheme.surfaceWhite,
-                  ],
-                ),
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    'Help & Support',
-                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                      color: AppTheme.textPrimary,
-                      fontSize: isMobile ? 36 : 44,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: -1,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'We\'re here to help you with any questions or concerns',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: AppTheme.textSecondary,
-                      fontSize: 18,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 80),
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      final isMobileLayout = constraints.maxWidth < 768;
-                      return Wrap(
-                        alignment: WrapAlignment.center,
-                        spacing: 32,
-                        runSpacing: 32,
-                        children: [
-                          SizedBox(
-                            width: isMobileLayout ? double.infinity : 320,
-                            child: _SupportCard(
-                              icon: Icons.email_outlined,
-                              title: 'Email Support',
-                              description: 'Get help via email',
-                              contact: 'xmatezsolutionpvtlimited390@gmail.com',
-                              color: AppTheme.accentBlue,
-                              onTap: _launchEmail,
-                            ),
-                          ),
-                          SizedBox(
-                            width: isMobileLayout ? double.infinity : 320,
-                            child: _SupportCard(
-                              icon: Icons.phone_outlined,
-                              title: 'Phone Support',
-                              description: 'Call us directly',
-                              contact: '+91 9495270656',
-                              color: AppTheme.accentPurple,
-                              onTap: _launchPhone,
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 24 : 120,
-                vertical: 100,
+                horizontal: isMobile ? 20 : 120,
+                vertical: isMobile ? 40 : 70,
               ),
               color: AppTheme.surfaceWhite,
               child: Column(
                 children: [
                   Container(
-                    constraints: const BoxConstraints(maxWidth: 800),
+                    constraints: BoxConstraints(
+                      maxWidth: isMobile ? double.infinity : 800,
+                    ),
                     child: Column(
                       children: [
                         Text(
                           'Get in Touch',
                           style: Theme.of(context).textTheme.displaySmall?.copyWith(
                             color: AppTheme.textPrimary,
-                            fontSize: isMobile ? 36 : 44,
+                            fontSize: isMobile ? 24 : 36,
                             fontWeight: FontWeight.w700,
                             letterSpacing: -1,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'Send us a message and we\'ll get back to you as soon as possible',
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: AppTheme.textSecondary,
-                            fontSize: 18,
+                        SizedBox(height: isMobile ? 12 : 16),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: isMobile ? 8 : 0,
                           ),
-                          textAlign: TextAlign.center,
+                          child: Text(
+                            'Send us a message and we\'ll get back to you as soon as possible',
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: AppTheme.textSecondary,
+                              fontSize: isMobile ? 16 : 18,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                        const SizedBox(height: 60),
+                        SizedBox(height: isMobile ? 28 : 42),
                         // Contact Form
                         Container(
-                          padding: EdgeInsets.all(isMobile ? 40 : 56),
+                          padding: EdgeInsets.all(isMobile ? 20 : 40),
                           decoration: BoxDecoration(
                             color: AppTheme.surfaceWhite,
                             borderRadius: BorderRadius.circular(24),
@@ -405,11 +371,11 @@ class _ContactPageState extends State<ContactPage> {
                                   'Send us a Message',
                                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                                     color: AppTheme.textPrimary,
-                                    fontSize: 28,
+                                    fontSize: isMobile ? 20 : 24,
                                     letterSpacing: -0.5,
                                   ),
                                 ),
-                                const SizedBox(height: 40),
+                                SizedBox(height: isMobile ? 20 : 32),
                                 TextFormField(
                                   controller: _nameController,
                                   decoration: InputDecoration(
@@ -525,94 +491,3 @@ class _ContactPageState extends State<ContactPage> {
   }
 }
 
-class _SupportCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String description;
-  final String contact;
-  final Color color;
-  final VoidCallback onTap;
-
-  const _SupportCard({
-    required this.icon,
-    required this.title,
-    required this.description,
-    required this.contact,
-    required this.color,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(24),
-        child: Container(
-          padding: const EdgeInsets.all(40),
-          decoration: BoxDecoration(
-            color: AppTheme.surfaceWhite,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(
-              color: AppTheme.borderLight,
-              width: 1,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 64,
-                height: 64,
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                child: Icon(
-                  icon,
-                  size: 32,
-                  color: color,
-                ),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                title,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: AppTheme.textPrimary,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                description,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppTheme.textSecondary,
-                  fontSize: 15,
-                  height: 1.5,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                contact,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: color,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}

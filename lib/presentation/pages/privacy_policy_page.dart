@@ -1,46 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:provider/provider.dart';
+import '../../application/providers/navigation_provider.dart';
 import '../widgets/navbar.dart';
 import '../widgets/footer.dart';
-import '../widgets/logo.dart';
 import '../theme/app_theme.dart';
 
 class PrivacyPolicyPage extends StatelessWidget {
   const PrivacyPolicyPage({super.key});
 
-  Future<void> _launchEmail() async {
-    final Uri emailUri = Uri(
-      scheme: 'mailto',
-      path: 'xmatezsolutionpvtlimited390@gmail.com',
-      query: 'subject=Privacy Policy Inquiry',
-    );
-    if (await canLaunchUrl(emailUri)) {
-      await launchUrl(emailUri);
-    }
-  }
-
-  Future<void> _launchPhone() async {
-    final Uri phoneUri = Uri(scheme: 'tel', path: '+919495270656');
-    if (await canLaunchUrl(phoneUri)) {
-      await launchUrl(phoneUri);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width <= 768;
+    
+    // Set route when page loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<NavigationProvider>(context, listen: false).setCurrentRoute('/privacy-policy');
+    });
 
     return Scaffold(
       backgroundColor: AppTheme.surfaceWhite,
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const Navbar(currentRoute: '/privacy-policy'),
+            const Navbar(),
             // Header Section with Dark Background
             Container(
+              width: double.infinity,
               padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 24 : 100,
-                vertical: 160,
+                horizontal: isMobile ? 20 : 100,
+                vertical: isMobile ? 40 : 100,
               ),
               decoration: const BoxDecoration(
                 color: AppTheme.primaryBlack,
@@ -48,49 +36,28 @@ class PrivacyPolicyPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.white.withValues(alpha: 0.05),
-                              blurRadius: 30,
-                              spreadRadius: 5,
-                            ),
-                          ],
-                        ),
-                        child: const XMatezLogo(size: 120, isDark: true),
-                      ),
-                      const SizedBox(width: 28),
-                      Expanded(
-                        child: Text(
-                          'Privacy Policy',
-                          style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                            color: Colors.white,
-                            fontSize: 44,
-                            letterSpacing: -1.5,
-                          ),
-                        ),
-                      ),
-                    ],
+                  Text(
+                    'Privacy Policy',
+                    style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                      color: Colors.white,
+                      fontSize: isMobile ? 24 : 36,
+                      letterSpacing: isMobile ? -1 : -1.5,
+                    ),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: isMobile ? 10 : 14),
                   Text(
                     'How we protect your personal information',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Colors.white.withValues(alpha: 0.85),
-                      fontSize: 20,
+                      fontSize: isMobile ? 16 : 20,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: isMobile ? 10 : 14),
                   Text(
                     'Effective: September 6, 2025',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Colors.white.withValues(alpha: 0.7),
-                      fontSize: 16,
+                      fontSize: isMobile ? 14 : 16,
                     ),
                   ),
                 ],
@@ -99,10 +66,12 @@ class PrivacyPolicyPage extends StatelessWidget {
             // Content Section with White Background
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 24 : 100,
-                vertical: 120,
+                horizontal: isMobile ? 20 : 100,
+                vertical: isMobile ? 40 : 80,
               ),
-              constraints: const BoxConstraints(maxWidth: 900),
+              constraints: BoxConstraints(
+                maxWidth: isMobile ? double.infinity : 900,
+              ),
               color: AppTheme.surfaceWhite,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,7 +80,7 @@ class PrivacyPolicyPage extends StatelessWidget {
                     'At X Matez, we value and respect your privacy. This Privacy Policy outlines how we collect, use, store, and protect your personal information when you use our mobile application and related services.',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: AppTheme.textPrimary,
-                      fontSize: 18,
+                      fontSize: isMobile ? 16 : 18,
                       height: 1.6,
                       letterSpacing: 0.2,
                     ),
@@ -155,11 +124,11 @@ class PrivacyPolicyPage extends StatelessWidget {
                         'We collect and process your information for the following legitimate purposes:',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
-                          fontSize: 17,
+                          fontSize: isMobile ? 15 : 17,
                           height: 1.6,
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 18),
                       _SubSection(
                         title: 'Service Delivery',
                         content:
@@ -250,7 +219,7 @@ class PrivacyPolicyPage extends StatelessWidget {
                         'Our app may contain links to external websites, services, or applications operated by third parties. We are not responsible for the privacy practices or content of these external services. We encourage you to review the privacy policies of any third-party services you access through our app.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
-                          fontSize: 17,
+                          fontSize: isMobile ? 15 : 17,
                           height: 1.6,
                         ),
                       ),
@@ -268,7 +237,7 @@ class PrivacyPolicyPage extends StatelessWidget {
                         'However, no method of transmission or storage is 100% secure. While we strive to protect your information, we cannot guarantee absolute security.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
-                          fontSize: 17,
+                          fontSize: isMobile ? 15 : 17,
                           height: 1.6,
                         ),
                       ),
@@ -299,11 +268,11 @@ class PrivacyPolicyPage extends StatelessWidget {
                         'Depending on your location, you may have the following rights regarding your personal information:',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
-                          fontSize: 17,
+                          fontSize: isMobile ? 15 : 17,
                           height: 1.6,
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 18),
                       _SubSection(
                         title: 'Access and Portability',
                         content:
@@ -335,12 +304,12 @@ class PrivacyPolicyPage extends StatelessWidget {
                             '• Object to certain types of data processing\n'
                             '• Request restriction of data processing in specific circumstances',
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 18),
                       Text(
                         'To exercise these rights, please contact us at xmatezsolutionpvtlimited390@gmail.com.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
-                          fontSize: 17,
+                          fontSize: isMobile ? 15 : 17,
                           height: 1.6,
                           fontWeight: FontWeight.w600,
                         ),
@@ -354,11 +323,11 @@ class PrivacyPolicyPage extends StatelessWidget {
                         'We retain your personal information only as long as necessary to fulfill the purposes outlined in this policy or as required by law. When information is no longer needed, we securely delete or anonymize it.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
-                          fontSize: 17,
+                          fontSize: isMobile ? 15 : 17,
                           height: 1.6,
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 18),
                       _SubSection(
                         title: 'Retention Periods',
                         content:
@@ -376,7 +345,7 @@ class PrivacyPolicyPage extends StatelessWidget {
                         'If we transfer your data internationally, we ensure appropriate safeguards are in place to protect your information in accordance with applicable privacy laws.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
-                          fontSize: 17,
+                          fontSize: isMobile ? 15 : 17,
                           height: 1.6,
                         ),
                       ),
@@ -389,11 +358,11 @@ class PrivacyPolicyPage extends StatelessWidget {
                         'Our app is intended for users aged 18 years and above only. We do not knowingly collect personal information from individuals under 18 years of age. If we become aware that we have collected such information, we will take immediate steps to delete it.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
-                          fontSize: 17,
+                          fontSize: isMobile ? 15 : 17,
                           height: 1.6,
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 18),
                       _SubSection(
                         title: 'Age Restriction Notice',
                         content:
@@ -408,11 +377,11 @@ class PrivacyPolicyPage extends StatelessWidget {
                         'We may update this Privacy Policy periodically to reflect changes in our practices or applicable laws. We will notify you of significant changes through:',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
-                          fontSize: 17,
+                          fontSize: isMobile ? 15 : 17,
                           height: 1.6,
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: isMobile ? 10 : 14),
                       Text(
                         '• In-app notifications\n'
                         '• Email notifications (if you have provided an email address)\n'
@@ -420,7 +389,7 @@ class PrivacyPolicyPage extends StatelessWidget {
                         'Your continued use of our app after policy updates constitutes acceptance of the revised terms.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
-                          fontSize: 17,
+                          fontSize: isMobile ? 15 : 17,
                           height: 1.6,
                         ),
                       ),
@@ -433,11 +402,11 @@ class PrivacyPolicyPage extends StatelessWidget {
                         'This Privacy Policy complies with applicable privacy laws and regulations, including but not limited to:',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
-                          fontSize: 17,
+                          fontSize: isMobile ? 15 : 17,
                           height: 1.6,
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: isMobile ? 10 : 14),
                       Text(
                         '• General Data Protection Regulation (GDPR) for EU users\n'
                         '• California Consumer Privacy Act (CCPA) for California residents\n'
@@ -445,104 +414,8 @@ class PrivacyPolicyPage extends StatelessWidget {
                         '• Other applicable local and international privacy laws',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
-                          fontSize: 17,
+                          fontSize: isMobile ? 15 : 17,
                           height: 1.6,
-                        ),
-                      ),
-                    ],
-                  ),
-                  _Section(
-                    title: 'CONTACT INFORMATION',
-                    children: [
-                      Text(
-                        'For questions, concerns, or requests regarding this Privacy Policy or your personal information, please contact us:',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppTheme.textPrimary,
-                          fontSize: 17,
-                          height: 1.6,
-                        ),
-                      ),
-                      const SizedBox(height: 32),
-                      Container(
-                        padding: const EdgeInsets.all(32),
-                        decoration: BoxDecoration(
-                          color: AppTheme.lightGray,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: AppTheme.borderLight,
-                            width: 1,
-                          ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.email_outlined,
-                                  color: AppTheme.accentBlue,
-                                  size: 24,
-                                ),
-                                const SizedBox(width: 12),
-                                GestureDetector(
-                                  onTap: _launchEmail,
-                                  child: Text(
-                                    'xmatezsolutionpvtlimited390@gmail.com',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: AppTheme.accentBlue,
-                                      fontWeight: FontWeight.w600,
-                                      decoration: TextDecoration.underline,
-                                      decorationColor: AppTheme.accentBlue,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 20),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.phone_outlined,
-                                  color: AppTheme.accentPurple,
-                                  size: 24,
-                                ),
-                                const SizedBox(width: 12),
-                                GestureDetector(
-                                  onTap: _launchPhone,
-                                  child: Text(
-                                    '+91 9495270656',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: AppTheme.accentPurple,
-                                      fontWeight: FontWeight.w600,
-                                      decoration: TextDecoration.underline,
-                                      decorationColor: AppTheme.accentPurple,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 24),
-                            Text(
-                              'Note: X Matez operates as an individual-owned application and is not currently registered as a formal business entity.',
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: AppTheme.textSecondary,
-                                fontSize: 16,
-                                fontStyle: FontStyle.italic,
-                                height: 1.5,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              'We are committed to addressing your privacy concerns promptly and transparently.',
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: AppTheme.textPrimary,
-                                fontSize: 17,
-                                height: 1.6,
-                              ),
-                            ),
-                          ],
                         ),
                       ),
                     ],
@@ -569,20 +442,21 @@ class _Section extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width <= 768;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 60),
+        SizedBox(height: isMobile ? 28 : 42),
         Text(
           title,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             color: AppTheme.textPrimary,
-            fontSize: 32,
+            fontSize: isMobile ? 22 : 28,
             fontWeight: FontWeight.w700,
             letterSpacing: -1,
           ),
         ),
-        const SizedBox(height: 24),
+                      SizedBox(height: isMobile ? 16 : 20),
         ...children,
       ],
     );
@@ -600,25 +474,26 @@ class _SubSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width <= 768;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 24),
+                      SizedBox(height: isMobile ? 16 : 20),
         Text(
           title,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
             color: AppTheme.textPrimary,
-            fontSize: 24,
+            fontSize: isMobile ? 20 : 24,
             fontWeight: FontWeight.w600,
             letterSpacing: -0.5,
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: isMobile ? 12 : 16),
         Text(
           content,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: AppTheme.textPrimary,
-            fontSize: 17,
+            fontSize: isMobile ? 15 : 17,
             height: 1.6,
             letterSpacing: 0.1,
           ),

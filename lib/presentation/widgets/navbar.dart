@@ -5,12 +5,7 @@ import 'logo.dart';
 import '../theme/app_theme.dart';
 
 class Navbar extends StatefulWidget {
-  final String currentRoute;
-
-  const Navbar({
-    super.key,
-    this.currentRoute = '/',
-  });
+  const Navbar({super.key});
 
   @override
   State<Navbar> createState() => _NavbarState();
@@ -22,11 +17,12 @@ class _NavbarState extends State<Navbar> {
   @override
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width <= 768;
+    final currentRoute = Provider.of<NavigationProvider>(context).currentRoute;
     
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: isMobile ? 24 : 140,
-        vertical: 20,
+        vertical: 12,
       ),
       decoration: BoxDecoration(
         color: AppTheme.surfaceWhite,
@@ -48,20 +44,13 @@ class _NavbarState extends State<Navbar> {
         children: [
           Row(
             children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pushReplacementNamed('/');
-                  Provider.of<NavigationProvider>(context, listen: false).setCurrentRoute('/');
-                  setState(() => _isMobileMenuOpen = false);
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const XMatezLogo(
-                    size: 160,
-                  ),
+              Container(
+                padding: const EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const XMatezLogo(
+                  size: 140,
                 ),
               ),
               const Spacer(),
@@ -71,25 +60,25 @@ class _NavbarState extends State<Navbar> {
                     _RichNavLink(
                       label: 'Home',
                       route: '/',
-                      isActive: widget.currentRoute == '/',
+                      isActive: currentRoute == '/',
                     ),
                     const SizedBox(width: 40),
                     _RichNavLink(
                       label: 'Privacy Policy',
                       route: '/privacy-policy',
-                      isActive: widget.currentRoute == '/privacy-policy',
+                      isActive: currentRoute == '/privacy-policy',
                     ),
                     const SizedBox(width: 40),
                     _RichNavLink(
                       label: 'Terms & Conditions',
                       route: '/terms-conditions',
-                      isActive: widget.currentRoute == '/terms-conditions',
+                      isActive: currentRoute == '/terms-conditions',
                     ),
                     const SizedBox(width: 40),
                     _RichNavLink(
                       label: 'Contact',
                       route: '/contact',
-                      isActive: widget.currentRoute == '/contact',
+                      isActive: currentRoute == '/contact',
                     ),
                   ],
                 )
@@ -108,34 +97,34 @@ class _NavbarState extends State<Navbar> {
           ),
           if (isMobile && _isMobileMenuOpen)
             Padding(
-              padding: const EdgeInsets.only(top: 32),
+              padding: const EdgeInsets.only(top: 20),
               child: Column(
                 children: [
                   _RichNavLink(
                     label: 'Home',
                     route: '/',
-                    isActive: widget.currentRoute == '/',
+                    isActive: currentRoute == '/',
                     onTap: () => setState(() => _isMobileMenuOpen = false),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
                   _RichNavLink(
                     label: 'Privacy Policy',
                     route: '/privacy-policy',
-                    isActive: widget.currentRoute == '/privacy-policy',
+                    isActive: currentRoute == '/privacy-policy',
                     onTap: () => setState(() => _isMobileMenuOpen = false),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
                   _RichNavLink(
                     label: 'Terms & Conditions',
                     route: '/terms-conditions',
-                    isActive: widget.currentRoute == '/terms-conditions',
+                    isActive: currentRoute == '/terms-conditions',
                     onTap: () => setState(() => _isMobileMenuOpen = false),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
                   _RichNavLink(
                     label: 'Contact',
                     route: '/contact',
-                    isActive: widget.currentRoute == '/contact',
+                    isActive: currentRoute == '/contact',
                     onTap: () => setState(() => _isMobileMenuOpen = false),
                   ),
                 ],
@@ -211,7 +200,7 @@ class _RichNavLinkState extends State<_RichNavLink> with SingleTickerProviderSta
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
             curve: Curves.easeInOut,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             decoration: BoxDecoration(
               color: widget.isActive
                   ? AppTheme.accentBlue.withValues(alpha: 0.14)

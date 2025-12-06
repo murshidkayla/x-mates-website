@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../application/providers/navigation_provider.dart';
 import '../widgets/navbar.dart';
 import '../widgets/footer.dart';
 import '../widgets/logo.dart';
@@ -22,18 +24,23 @@ class HowToDeletePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width <= 768;
+    
+    // Set route when page loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<NavigationProvider>(context, listen: false).setCurrentRoute('/how-to-delete');
+    });
 
     return Scaffold(
       backgroundColor: AppTheme.surfaceWhite,
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const Navbar(currentRoute: '/how-to-delete'),
+            const Navbar(),
             // Header Section
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 24 : 100,
-                vertical: 160,
+                horizontal: isMobile ? 20 : 100,
+                vertical: isMobile ? 40 : 100,
               ),
               decoration: const BoxDecoration(
                 color: AppTheme.primaryBlack,
@@ -41,41 +48,70 @@ class HowToDeletePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.white.withValues(alpha: 0.05),
-                              blurRadius: 30,
-                              spreadRadius: 5,
+                  isMobile
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.white.withValues(alpha: 0.05),
+                                    blurRadius: 30,
+                                    spreadRadius: 5,
+                                  ),
+                                ],
+                              ),
+                              child: const XMatezLogo(size: 80, isDark: true),
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              'How to Delete Your Account',
+                              style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                                color: Colors.white,
+                                fontSize: 22,
+                                letterSpacing: -1,
+                              ),
+                            ),
+                          ],
+                        )
+                      : Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.white.withValues(alpha: 0.05),
+                                    blurRadius: 30,
+                                    spreadRadius: 5,
+                                  ),
+                                ],
+                              ),
+                              child: const XMatezLogo(size: 120, isDark: true),
+                            ),
+                            const SizedBox(width: 28),
+                            Expanded(
+                              child: Text(
+                                'How to Delete Your Account',
+                                style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                                  color: Colors.white,
+                                  fontSize: 36,
+                                  letterSpacing: -1.5,
+                                ),
+                              ),
                             ),
                           ],
                         ),
-                        child: const XMatezLogo(size: 120, isDark: true),
-                      ),
-                      const SizedBox(width: 28),
-                      Expanded(
-                        child: Text(
-                          'How to Delete Your Account',
-                          style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                            color: Colors.white,
-                            fontSize: 44,
-                            letterSpacing: -1.5,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: isMobile ? 12 : 16),
                   Text(
                     'Follow these simple steps to permanently delete your account',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Colors.white.withValues(alpha: 0.85),
-                      fontSize: 20,
+                      fontSize: isMobile ? 16 : 20,
                     ),
                   ),
                 ],
@@ -84,11 +120,13 @@ class HowToDeletePage extends StatelessWidget {
             // Steps Section
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 24 : 100,
-                vertical: 120,
+                horizontal: isMobile ? 20 : 100,
+                vertical: isMobile ? 40 : 80,
               ),
               color: AppTheme.surfaceWhite,
-              constraints: const BoxConstraints(maxWidth: 900),
+              constraints: BoxConstraints(
+                maxWidth: isMobile ? double.infinity : 900,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -100,7 +138,7 @@ class HowToDeletePage extends StatelessWidget {
                     icon: Icons.person_outline,
                     color: AppTheme.accentBlue,
                   ),
-                  const SizedBox(height: 40),
+                  SizedBox(height: isMobile ? 20 : 32),
                   _StepCard(
                     stepNumber: 2,
                     title: 'Go to Account Settings',
@@ -109,7 +147,7 @@ class HowToDeletePage extends StatelessWidget {
                     icon: Icons.settings_outlined,
                     color: AppTheme.accentPurple,
                   ),
-                  const SizedBox(height: 40),
+                  SizedBox(height: isMobile ? 20 : 32),
                   _StepCard(
                     stepNumber: 3,
                     title: 'Find Delete Account Option',
@@ -118,7 +156,7 @@ class HowToDeletePage extends StatelessWidget {
                     icon: Icons.delete_outline,
                     color: AppTheme.accentPink,
                   ),
-                  const SizedBox(height: 40),
+                  SizedBox(height: isMobile ? 20 : 32),
                   _StepCard(
                     stepNumber: 4,
                     title: 'Confirm Account Deletion',
@@ -133,15 +171,17 @@ class HowToDeletePage extends StatelessWidget {
             // Important Notice Section
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 24 : 100,
-                vertical: 120,
+                horizontal: isMobile ? 20 : 100,
+                vertical: isMobile ? 40 : 80,
               ),
               color: AppTheme.lightGray,
               child: Column(
                 children: [
                   Container(
-                    constraints: const BoxConstraints(maxWidth: 900),
-                    padding: const EdgeInsets.all(48),
+                    constraints: BoxConstraints(
+                      maxWidth: isMobile ? double.infinity : 900,
+                    ),
+                    padding: EdgeInsets.all(isMobile ? 20 : 36),
                     decoration: BoxDecoration(
                       color: AppTheme.surfaceWhite,
                       borderRadius: BorderRadius.circular(28),
@@ -163,35 +203,37 @@ class HowToDeletePage extends StatelessWidget {
                         Row(
                           children: [
                             Container(
-                              width: 56,
-                              height: 56,
+                              width: isMobile ? 48 : 56,
+                              height: isMobile ? 48 : 56,
                               decoration: BoxDecoration(
                                 color: AppTheme.accentPink.withValues(alpha: 0.14),
                                 borderRadius: BorderRadius.circular(16),
                               ),
-                              child: const Icon(
+                              child: Icon(
                                 Icons.warning_amber_rounded,
                                 color: AppTheme.accentPink,
-                                size: 32,
+                                size: isMobile ? 28 : 32,
                               ),
                             ),
-                            const SizedBox(width: 20),
-                            Text(
-                              'Important Notice',
-                              style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                                color: AppTheme.textPrimary,
-                                fontSize: 32,
-                                letterSpacing: -1,
+                            SizedBox(width: isMobile ? 16 : 20),
+                            Flexible(
+                              child: Text(
+                                'Important Notice',
+                                style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                                  color: AppTheme.textPrimary,
+                                  fontSize: isMobile ? 22 : 28,
+                                  letterSpacing: -1,
+                                ),
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 28),
+                        SizedBox(height: isMobile ? 16 : 24),
                         Text(
                           'Account deletion is permanent and cannot be undone. All your data, including profile information, messages, and app history will be permanently removed from our servers. Please make sure you want to proceed before confirming the deletion.',
                           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             color: AppTheme.textPrimary,
-                            fontSize: 18,
+                            fontSize: isMobile ? 16 : 18,
                             height: 1.6,
                             letterSpacing: 0.2,
                           ),
@@ -205,15 +247,15 @@ class HowToDeletePage extends StatelessWidget {
             // Need Help Section
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 24 : 100,
-                vertical: 120,
+                horizontal: isMobile ? 20 : 100,
+                vertical: isMobile ? 40 : 80,
               ),
               color: AppTheme.surfaceWhite,
               child: Column(
                 children: [
                   Container(
-                    width: 80,
-                    height: 80,
+                    width: isMobile ? 64 : 80,
+                    height: isMobile ? 64 : 80,
                     decoration: BoxDecoration(
                       color: AppTheme.accentBlue.withValues(alpha: 0.14),
                       borderRadius: BorderRadius.circular(24),
@@ -225,40 +267,49 @@ class HowToDeletePage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.help_outline,
-                      size: 40,
+                      size: isMobile ? 32 : 40,
                       color: AppTheme.accentBlue,
                     ),
                   ),
-                  const SizedBox(height: 40),
+                  SizedBox(height: isMobile ? 20 : 32),
                   Text(
                     'Need Help?',
                     style: Theme.of(context).textTheme.displaySmall?.copyWith(
                       color: AppTheme.textPrimary,
-                      fontSize: 36,
+                      fontSize: isMobile ? 24 : 32,
                       letterSpacing: -1,
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: isMobile ? 16 : 24),
                   ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 640),
-                    child: Text(
-                      'If you\'re having trouble deleting your account or have questions about the process, please contact our support team.',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: AppTheme.textSecondary,
-                        fontSize: 18,
-                        height: 1.6,
-                        letterSpacing: 0.2,
+                    constraints: BoxConstraints(
+                      maxWidth: isMobile ? double.infinity : 640,
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isMobile ? 8 : 0,
+                      ),
+                      child: Text(
+                        'If you\'re having trouble deleting your account or have questions about the process, please contact our support team.',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: AppTheme.textSecondary,
+                          fontSize: isMobile ? 16 : 18,
+                          height: 1.6,
+                          letterSpacing: 0.2,
+                        ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 48),
+                  SizedBox(height: isMobile ? 24 : 36),
                   Container(
-                    constraints: const BoxConstraints(maxWidth: 500),
-                    padding: const EdgeInsets.all(40),
+                    constraints: BoxConstraints(
+                      maxWidth: isMobile ? double.infinity : 500,
+                    ),
+                    padding: EdgeInsets.all(isMobile ? 20 : 32),
                     decoration: BoxDecoration(
                       color: AppTheme.surfaceWhite,
                       borderRadius: BorderRadius.circular(24),
@@ -282,30 +333,32 @@ class HowToDeletePage extends StatelessWidget {
                             Icon(
                               Icons.email_outlined,
                               color: AppTheme.accentBlue,
-                              size: 24,
+                              size: isMobile ? 20 : 24,
                             ),
-                            const SizedBox(width: 12),
+                            SizedBox(width: isMobile ? 10 : 12),
                             Text(
                               'Email',
                               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                 color: AppTheme.textPrimary,
-                                fontSize: 20,
+                                fontSize: isMobile ? 18 : 20,
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 16),
+                        SizedBox(height: isMobile ? 12 : 16),
                         GestureDetector(
                           onTap: _launchEmail,
                           child: Text(
                             'xmatezsolutionpvtlimited390@gmail.com',
+                            textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: isMobile ? 15 : 18,
                               color: AppTheme.accentBlue,
                               fontWeight: FontWeight.w600,
                               decoration: TextDecoration.underline,
                               decorationColor: AppTheme.accentBlue,
                             ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
@@ -339,8 +392,9 @@ class _StepCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width <= 768;
     return Container(
-      padding: const EdgeInsets.all(40),
+      padding: EdgeInsets.all(isMobile ? 24 : 40),
       decoration: BoxDecoration(
         color: AppTheme.surfaceWhite,
         borderRadius: BorderRadius.circular(24),
@@ -356,57 +410,62 @@ class _StepCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.14),
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: color.withValues(alpha: 0.2),
-                  blurRadius: 25,
-                  spreadRadius: 2,
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '$stepNumber',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w800,
-                    color: color,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 32),
-          Expanded(
-            child: Column(
+      child: isMobile
+          ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
-                    Icon(
-                      icon,
-                      color: color,
-                      size: 28,
+                    Container(
+                      width: 64,
+                      height: 64,
+                      decoration: BoxDecoration(
+                        color: color.withValues(alpha: 0.14),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: color.withValues(alpha: 0.2),
+                            blurRadius: 25,
+                            spreadRadius: 2,
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '$stepNumber',
+                            style: TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.w800,
+                              color: color,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(width: 12),
-                    Text(
-                      title,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: AppTheme.textPrimary,
-                        fontSize: 28,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: -0.8,
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Icon(
+                            icon,
+                            color: color,
+                            size: 24,
+                          ),
+                          const SizedBox(width: 10),
+                          Flexible(
+                            child: Text(
+                              title,
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                color: AppTheme.textPrimary,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: -0.8,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -416,16 +475,83 @@ class _StepCard extends StatelessWidget {
                   description,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: AppTheme.textSecondary,
-                    fontSize: 18,
+                    fontSize: 15,
                     height: 1.6,
                     letterSpacing: 0.2,
                   ),
                 ),
               ],
+            )
+          : Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.14),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: color.withValues(alpha: 0.2),
+                        blurRadius: 25,
+                        spreadRadius: 2,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '$stepNumber',
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w800,
+                          color: color,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 32),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            icon,
+                            color: color,
+                            size: 28,
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            title,
+                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              color: AppTheme.textPrimary,
+                              fontSize: 28,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: -0.8,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        description,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: AppTheme.textSecondary,
+                          fontSize: 18,
+                          height: 1.6,
+                          letterSpacing: 0.2,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }
