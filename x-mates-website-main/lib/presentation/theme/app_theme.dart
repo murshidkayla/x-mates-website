@@ -13,7 +13,7 @@ class AppTheme {
   static const Color textPrimary = Color(0xFF1C1C1E);
   static const Color textSecondary = Color(0xFF8E8E93);
   static const Color textTertiary = Color(0xFFC7C7CC);
-  static const Color borderLight = Color(0xFFE5E5EA);
+  static const Color borderLight    = Color(0xFFE5E5EA);
 
   static ThemeData get lightTheme {
     return ThemeData(
