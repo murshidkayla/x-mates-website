@@ -41,10 +41,16 @@ class HomePage extends StatelessWidget {
     }
 
     return Scaffold(
-      body: Stack(
-        children: [
-          // Fixed background gradient - stays in viewport
-          Positioned.fill(
+      backgroundColor: AppTheme.lightBackground,
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Container(
+              color: AppTheme.primaryColor,
+              child: const PandoraNavbar(),
+            ),
+          ),
+          SliverToBoxAdapter(
             child: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -58,39 +64,45 @@ class HomePage extends StatelessWidget {
                   stops: gradientStops,
                 ),
               ),
-            ),
-          ),
-          // Scrollable content
-          CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(child: const PandoraNavbar()),
-          SliverToBoxAdapter(
-            child: AnimatedSection(
-              delay: const Duration(milliseconds: 100),
-              child: _EnhancedHeroSection(),
+              child: AnimatedSection(
+                delay: const Duration(milliseconds: 100),
+                child: _EnhancedHeroSection(),
+              ),
             ),
           ),
           SliverToBoxAdapter(
-            child: AnimatedSection(
-              delay: const Duration(milliseconds: 300),
-              child: _StatsSection(),
+            child: Container(
+              color: AppTheme.lightBackground,
+              child: AnimatedSection(
+                delay: const Duration(milliseconds: 300),
+                child: _StatsSection(),
+              ),
             ),
           ),
           SliverToBoxAdapter(
-            child: AnimatedSection(
-              delay: const Duration(milliseconds: 500),
-              child: _SafetyGuidelinesSection(),
+            child: Container(
+              color: AppTheme.lightBackground,
+              child: AnimatedSection(
+                delay: const Duration(milliseconds: 500),
+                child: _SafetyGuidelinesSection(),
+              ),
             ),
           ),
           SliverToBoxAdapter(
-            child: AnimatedSection(
-              delay: const Duration(milliseconds: 700),
-              child: _CTASection(),
+            child: Container(
+              color: AppTheme.lightBackground,
+              child: AnimatedSection(
+                delay: const Duration(milliseconds: 700),
+                child: _CTASection(),
+              ),
             ),
           ),
-          SliverToBoxAdapter(child: const Footer()),
-        ],
-        ),
+          SliverToBoxAdapter(
+            child: Container(
+              color: AppTheme.lightBackground,
+              child: const Footer(),
+            ),
+          ),
         ],
       ),
     );
