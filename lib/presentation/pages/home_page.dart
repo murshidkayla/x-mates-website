@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
-import '../../application/providers/ui_state_provider.dart';
 import '../../application/providers/navigation_provider.dart';
-import '../widgets/navbar.dart';
+import '../widgets/pandora_navbar.dart';
+import '../widgets/pandora_button.dart';
+import '../widgets/modern_chat_card.dart';
 import '../widgets/footer.dart';
-import '../widgets/logo.dart';
+import '../widgets/animated_section.dart';
 import '../theme/app_theme.dart';
 
 class HomePage extends StatelessWidget {
@@ -13,696 +13,492 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => UIStateProvider(),
-      child: const _HomePageContent(),
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<NavigationProvider>(context, listen: false).setCurrentRoute('/');
+    });
+
+    // Responsive gradient stops based on screen size and orientation
+    final size = MediaQuery.of(context).size;
+    final isMobile = size.width <= 768;
+    final isTablet = size.width > 768 && size.width <= 1024;
+    final isLandscape = size.width > size.height;
+    
+    // Adjust gradient stops based on device and orientation
+    // Blue at top, white at bottom
+    List<double> gradientStops;
+    if (isLandscape) {
+      // Landscape: more gradual transition
+      gradientStops = const [0.0, 0.5, 1.0];
+    } else if (isMobile) {
+      // Mobile portrait: keep more blue at top
+      gradientStops = const [0.0, 0.35, 1.0];
+    } else if (isTablet) {
+      // Tablet portrait: balanced transition
+      gradientStops = const [0.0, 0.4, 1.0];
+    } else {
+      // Desktop: standard transition
+      gradientStops = const [0.0, 0.4, 1.0];
+    }
+
+    return Scaffold(
+      body: Stack(
+        children: [
+          // Fixed background gradient - stays in viewport
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    AppTheme.primaryColor,
+                    AppTheme.primaryColor,
+                    AppTheme.lightBackground,
+                  ],
+                  stops: gradientStops,
+                ),
+              ),
+            ),
+          ),
+          // Scrollable content
+          CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(child: const PandoraNavbar()),
+          SliverToBoxAdapter(
+            child: AnimatedSection(
+              delay: const Duration(milliseconds: 100),
+              child: _EnhancedHeroSection(),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: AnimatedSection(
+              delay: const Duration(milliseconds: 300),
+              child: _StatsSection(),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: AnimatedSection(
+              delay: const Duration(milliseconds: 500),
+              child: _SafetyGuidelinesSection(),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: AnimatedSection(
+              delay: const Duration(milliseconds: 700),
+              child: _CTASection(),
+            ),
+          ),
+          SliverToBoxAdapter(child: const Footer()),
+        ],
+        ),
+        ],
+      ),
     );
   }
 }
 
-class _HomePageContent extends StatelessWidget {
-  const _HomePageContent();
-
+// Ultra-Modern Hero Section
+class _EnhancedHeroSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width <= 768;
-    
-    // Set route when page loads
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<NavigationProvider>(context, listen: false).setCurrentRoute('/');
-    });
-    
-    return Scaffold(
-      backgroundColor: AppTheme.surfaceWhite,
-      body: SingleChildScrollView(
+
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 24 : 140,
+        vertical: isMobile ? 100 : 140,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Image and Text side by side on desktop, stacked on mobile
+          if (isMobile)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Image first on mobile
+                Center(
+                  child: Container(
+                    constraints: BoxConstraints(
+                      maxWidth: 300,
+                      maxHeight: 400,
+                    ),
+                    child: Image.asset(
+                      'assets/Hand and iPhone 16 Pro.png',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 40),
+                // Text content
+                _HeroTextContent(isMobile: isMobile),
+              ],
+            )
+          else
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Image on the left
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    constraints: BoxConstraints(
+                      maxWidth: 500,
+                      maxHeight: 600,
+                    ),
+                    child: Image.asset(
+                      'assets/Hand and iPhone 16 Pro.png',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 60),
+                // Text content on the right
+                Expanded(
+                  flex: 1,
+                  child: _HeroTextContent(isMobile: isMobile),
+                ),
+              ],
+            ),
+          SizedBox(height: isMobile ? 64 : 88),
+          // Premium CTA button with enhanced styling
+          Center(
+            child: PandoraButton(
+            label: 'Get Started',
+            isLarge: true,
+              icon: Icons.chat_rounded,
+            onTap: () => Navigator.of(context).pushReplacementNamed('/contact'),
+          ),
+          ),
+          SizedBox(height: isMobile ? 48 : 64),
+          // Trust indicators
+          if (isMobile)
+            Column(
+        children: [
+                _TrustIndicator(
+                  icon: Icons.verified_rounded,
+                  text: 'Verified',
+                  isMobile: isMobile,
+                ),
+                SizedBox(height: 16),
+                _TrustIndicator(
+                  icon: Icons.lock_rounded,
+                  text: '100% Confidential',
+                  isMobile: isMobile,
+                ),
+                SizedBox(height: 16),
+                _TrustIndicator(
+                  icon: Icons.access_time_rounded,
+                  text: '24/7 Available',
+                  isMobile: isMobile,
+                ),
+              ],
+            )
+          else
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _TrustIndicator(
+                  icon: Icons.verified_rounded,
+                  text: 'Verified',
+                  isMobile: isMobile,
+                ),
+                SizedBox(width: 32),
+                _TrustIndicator(
+                  icon: Icons.lock_rounded,
+                  text: '100% Confidential',
+                  isMobile: isMobile,
+                ),
+                SizedBox(width: 32),
+                _TrustIndicator(
+                  icon: Icons.access_time_rounded,
+                  text: '24/7 Available',
+                  isMobile: isMobile,
+          ),
+                    ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TrustIndicator extends StatelessWidget {
+  final IconData icon;
+  final String text;
+  final bool isMobile;
+
+  const _TrustIndicator({
+    required this.icon,
+    required this.text,
+    required this.isMobile,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 12 : 16,
+        vertical: isMobile ? 8 : 10,
+      ),
+      decoration: BoxDecoration(
+        color: AppTheme.primaryColor.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: AppTheme.primaryColor.withOpacity(0.15),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: isMobile ? 16 : 18,
+                  color: AppTheme.primaryColor,
+          ),
+          SizedBox(width: 8),
+              Text(
+            text,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  fontSize: isMobile ? 13 : 15,
+                  fontWeight: FontWeight.w600,
+                            color: AppTheme.textPrimary,
+                  letterSpacing: 0.2,
+                ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Ultra-Modern Stats Section
+class _StatsSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width <= 768;
+
+    final stats = [
+      {'number': '50K+', 'label': 'Connections', 'icon': Icons.people_rounded},
+      {'number': '24/7', 'label': 'Available', 'icon': Icons.access_time_rounded},
+      {'number': '100%', 'label': 'Confidential', 'icon': Icons.lock_rounded},
+      {'number': '98%', 'label': 'Satisfaction', 'icon': Icons.favorite_rounded},
+    ];
+
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 24 : 140,
+        vertical: isMobile ? 60 : 100,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 5,
+                height: 56,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+                      AppTheme.primaryColor,
+                      AppTheme.primaryColorLight,
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(3),
+                ),
+              ),
+              SizedBox(width: 20),
+              Text(
+                'Trusted by Many',
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                      fontWeight: FontWeight.w900,
+                      fontSize: isMobile ? 28 : 40,
+                      color: AppTheme.textPrimary,
+                      letterSpacing: -1,
+                    ),
+              ),
+            ],
+          ),
+          SizedBox(height: isMobile ? 48 : 72),
+          GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: isMobile ? 2 : 4,
+              crossAxisSpacing: isMobile ? 16 : 24,
+              mainAxisSpacing: isMobile ? 16 : 24,
+              childAspectRatio: isMobile ? 1.0 : 1.15,
+        ),
+        itemCount: stats.length,
+        itemBuilder: (context, index) {
+          final stat = stats[index];
+          return TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0.0, end: 1.0),
+            duration: Duration(milliseconds: 400 + (index * 100)),
+            curve: Curves.easeOutCubic,
+            builder: (context, value, child) {
+              return Opacity(
+                opacity: value,
+                child: Transform.scale(
+                  scale: 0.8 + (0.2 * value),
+                  child: Transform.translate(
+                    offset: Offset(0, 20 * (1 - value)),
+                    child: child,
+                  ),
+                ),
+              );
+            },
+            child: ModernChatCard(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+          Container(
+            width: isMobile ? 56 : 64,
+            height: isMobile ? 56 : 64,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  AppTheme.primaryColor.withOpacity(0.15),
+                  AppTheme.primaryColorLight.withOpacity(0.1),
+                ],
+              ),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: AppTheme.primaryColor.withOpacity(0.2),
+                width: 1.5,
+              ),
+            ),
+            child: Icon(
+              stat['icon'] as IconData,
+              color: AppTheme.primaryColor,
+              size: isMobile ? 28 : 32,
+            ),
+          ),
+          SizedBox(height: isMobile ? 12 : 16),
+          Flexible(
+            child: Text(
+              stat['number'] as String,
+              style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                color: AppTheme.primaryColor,
+                fontWeight: FontWeight.w900,
+                fontSize: isMobile ? 24 : 36,
+                letterSpacing: -0.5,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          SizedBox(height: isMobile ? 6 : 8),
+          Flexible(
+            child: Text(
+              stat['label'] as String,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textSecondary,
+                fontSize: isMobile ? 12 : 15,
+                letterSpacing: 0.2,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+            ),
+          );
+        },
+      ),
+        ],
+      ),
+    );
+  }
+}
+
+
+// Ultra-Modern CTA Section
+class _CTASection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width <= 768;
+
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 24 : 140,
+        vertical: isMobile ? 60 : 100,
+      ),
+      child: ModernChatCard(
+        backgroundColor: AppTheme.lightSurface,
+        padding: EdgeInsets.all(isMobile ? 28 : 40),
         child: Column(
           children: [
-            const Navbar(),
-            // Full-Width Hero Section
             Container(
-              width: double.infinity,
+              padding: EdgeInsets.symmetric(
+                horizontal: isMobile ? 16 : 20,
+                vertical: isMobile ? 8 : 10,
+              ),
+              decoration: BoxDecoration(
+                color: AppTheme.primaryColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: AppTheme.primaryColor.withOpacity(0.3),
+                  width: 1.5,
+                ),
+              ),
+              child: Text(
+                'Get Started Today',
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: AppTheme.primaryColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: isMobile ? 12 : 14,
+                      letterSpacing: 0.5,
+                    ),
+              ),
+            ),
+            SizedBox(height: isMobile ? 20 : 28),
+            Text(
+              'Ready to Find Relief?',
+              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                    fontWeight: FontWeight.w900,
+                    fontSize: isMobile ? 32 : 44,
+                    color: AppTheme.textPrimary,
+                    letterSpacing: -1.5,
+                    height: 1.2,
+                  ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: isMobile ? 20 : 24),
+            ConstrainedBox(
               constraints: BoxConstraints(
-                minHeight: isMobile 
-                    ? MediaQuery.of(context).size.height * 0.5
-                    : MediaQuery.of(context).size.height * 0.6,
+                maxWidth: isMobile ? double.infinity : 650,
               ),
-              decoration: BoxDecoration(
-                color: AppTheme.primaryBlack,
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    AppTheme.primaryBlack,
-                    AppTheme.primaryBlack,
-                    AppTheme.darkGray.withValues(alpha: 0.3),
-                  ],
-                ),
-              ),
-              child: Stack(
-                children: [
-                  // Animated Background Glow Effects
-                  Positioned.fill(
-                    child: TweenAnimationBuilder<double>(
-                      tween: Tween(begin: 0.0, end: 1.0),
-                      duration: const Duration(milliseconds: 2000),
-                      curve: Curves.easeOut,
-                      builder: (context, value, child) {
-                        return Stack(
-                          children: [
-                            Positioned(
-                              top: -100,
-                              right: -100,
-                              child: Container(
-                                width: (isMobile ? 200 : 400) * value,
-                                height: (isMobile ? 200 : 400) * value,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  gradient: RadialGradient(
-                                    colors: [
-                                      AppTheme.accentBlue.withValues(alpha: 0.15 * value),
-                                      Colors.transparent,
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              bottom: -150,
-                              left: -150,
-                              child: Container(
-                                width: (isMobile ? 250 : 500) * value,
-                                height: (isMobile ? 250 : 500) * value,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  gradient: RadialGradient(
-                                    colors: [
-                                      AppTheme.accentPurple.withValues(alpha: 0.12 * value),
-                                      Colors.transparent,
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
+              child: Text(
+                'Join our waitlist and be among the first to experience compassionate support and meaningful connections. Your journey to peace and wellbeing starts here.',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontSize: isMobile ? 16 : 18,
+                      height: 1.7,
+                      color: AppTheme.textSecondary,
+                      letterSpacing: 0.2,
                   ),
-                  // Main Content
-                  Center(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isMobile ? 20 : 100,
-                        vertical: isMobile ? 30 : 50,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Animated Logo with Simple Hover Effect
-                          TweenAnimationBuilder<double>(
-                            tween: Tween(begin: 0.0, end: 1.0),
-                            duration: const Duration(milliseconds: 1500),
-                            curve: Curves.easeOut,
-                            builder: (context, value, child) {
-                              return Opacity(
-                                opacity: value,
-                                child: Consumer<UIStateProvider>(
-                                  builder: (context, provider, child) {
-                                    final isHovered = provider.isHovered('hero_logo');
-                                    return MouseRegion(
-                                      onEnter: (_) => provider.setHovered('hero_logo', true),
-                                      onExit: (_) => provider.setHovered('hero_logo', false),
-                                      child: TweenAnimationBuilder<double>(
-                                        tween: Tween(begin: 1.0, end: isHovered ? 1.15 : 1.0),
-                                        duration: const Duration(milliseconds: 800),
-                                        curve: Curves.easeInOut,
-                                        builder: (context, scaleValue, child) {
-                                          return Transform.scale(
-                                            scale: (0.7 + (value * 0.3)) * scaleValue,
-                                            alignment: Alignment.center,
-                                            child: XMatezLogo(
-                                              size: isMobile ? 140 : 240,
-                                              isDark: true,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                          ),
-                          SizedBox(height: isMobile ? 24 : 40),
-                          // Enhanced Title with Fade Animation
-                          TweenAnimationBuilder<double>(
-                            tween: Tween(begin: 0.0, end: 1.0),
-                            duration: const Duration(milliseconds: 1200),
-                            curve: Curves.easeOut,
-                            builder: (context, value, child) {
-                              return Opacity(
-                                opacity: value,
-                                child: Transform.translate(
-                                  offset: Offset(0, 30 * (1 - value)),
-                                  child: ShaderMask(
-                                    shaderCallback: (bounds) => LinearGradient(
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                      colors: [
-                                        Colors.white,
-                                        Colors.white.withValues(alpha: 0.95),
-                                        Colors.white.withValues(alpha: 0.9),
-                                      ],
-                                    ).createShader(bounds),
-                                    child: Text(
-                                      'Connect, Chat & Share Moments',
-                                      style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                                        color: Colors.white,
-                                        height: 1.1,
-                                        letterSpacing: isMobile ? -1.5 : -2.5,
-                                        fontSize: isMobile ? 24 : 44,
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                      maxLines: 3,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          SizedBox(height: isMobile ? 24 : 40),
-                          // Enhanced Subtitle
-                          TweenAnimationBuilder<double>(
-                            tween: Tween(begin: 0.0, end: 1.0),
-                            duration: const Duration(milliseconds: 1400),
-                            curve: Curves.easeOut,
-                            builder: (context, value, child) {
-                              return Opacity(
-                                opacity: value,
-                                child: Transform.translate(
-                                  offset: Offset(0, 20 * (1 - value)),
-                                  child: ConstrainedBox(
-                                    constraints: BoxConstraints(
-                                      maxWidth: isMobile ? double.infinity : 800,
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: isMobile ? 8 : 0,
-                                      ),
-                                      child: Text(
-                                        'Looking for a space to talk and express yourself? We provide a platform where you can share your feelings, seek emotional support, and connect with others who understand. Your privacy and trust matter to us, and we\'re committed to creating a supportive community.',
-                                        textAlign: TextAlign.center,
-                                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                          color: Colors.white.withValues(alpha: 0.92),
-                                          fontSize: isMobile ? 15 : 20,
-                                          height: 1.6,
-                                          letterSpacing: 0.2,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          SizedBox(height: isMobile ? 28 : 48),
-                          // Enhanced CTA Buttons
-                          TweenAnimationBuilder<double>(
-                            tween: Tween(begin: 0.0, end: 1.0),
-                            duration: const Duration(milliseconds: 1600),
-                            curve: Curves.easeOut,
-                            builder: (context, value, child) {
-                              return Opacity(
-                                opacity: value,
-                                child: Transform.translate(
-                                  offset: Offset(0, 20 * (1 - value)),
-                                  child: Wrap(
-                                    alignment: WrapAlignment.center,
-                                    spacing: isMobile ? 16 : 24,
-                                    runSpacing: isMobile ? 16 : 24,
-                                    children: [
-                                      _PremiumButton(
-                                        hoverKey: 'button_legal_docs',
-                                        label: isMobile ? 'Legal Docs' : '📋 View Legal Docs',
-                                        icon: Icons.description_outlined,
-                                        color: AppTheme.accentBlue,
-                                        onTap: () => Navigator.of(context).pushReplacementNamed('/privacy-policy'),
-                                      ),
-                                      _PremiumButton(
-                                        hoverKey: 'button_contact_support',
-                                        label: isMobile ? 'Contact' : '💬 Contact Support',
-                                        icon: Icons.chat_bubble_outline,
-                                        color: AppTheme.surfaceWhite,
-                                        isOutlined: true,
-                                        onTap: () => Navigator.of(context).pushReplacementNamed('/contact'),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              textAlign: TextAlign.center,
             ),
-            // Enhanced Features Section
-            Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 20 : 100,
-                vertical: isMobile ? 60 : 120,
-              ),
-              color: AppTheme.lightGray,
-              child: Column(
-                children: [
-                  Text(
-                    'Transparency & Trust',
-                    style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                      color: AppTheme.textPrimary,
-                      letterSpacing: -1.5,
-                      fontSize: isMobile ? 28 : 40,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: isMobile ? 16 : 24),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxWidth: isMobile ? double.infinity : 680,
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isMobile ? 8 : 0,
-                      ),
-                      child: Text(
-                        'We believe in complete transparency about how we handle your data and what terms govern our service. All our legal documents are designed to protect your rights while enabling us to provide you with the best possible experience.',
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: AppTheme.textSecondary,
-                          fontSize: isMobile ? 15 : 18,
-                          height: 1.6,
-                          letterSpacing: 0.2,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: isMobile ? 28 : 56),
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      final isMobileLayout = constraints.maxWidth < 768;
-                      if (isMobileLayout) {
-                        return GridView.count(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
-                          childAspectRatio: 0.75,
-                          children: [
-                            _PremiumFeatureCard(
-                              hoverKey: 'feature_safe_community',
-                              icon: Icons.shield_outlined,
-                              title: 'Safe',
-                              subtitle: 'Community',
-                              description: 'Your safety is our priority',
-                              color: AppTheme.accentGreen,
-                            ),
-                            _PremiumFeatureCard(
-                              hoverKey: 'feature_private_conversations',
-                              icon: Icons.lock_outline,
-                              title: 'Private',
-                              subtitle: 'Conversations',
-                              description: 'End-to-end privacy protection',
-                              color: AppTheme.accentPurple,
-                            ),
-                            _PremiumFeatureCard(
-                              hoverKey: 'feature_24_7_available',
-                              icon: Icons.access_time,
-                              title: '24/7',
-                              subtitle: 'Available',
-                              description: 'Round-the-clock support',
-                              color: AppTheme.accentBlue,
-                            ),
-                            _PremiumFeatureCard(
-                              hoverKey: 'feature_supportive_environment',
-                              icon: Icons.favorite_outline,
-                              title: 'Supportive',
-                              subtitle: 'Environment',
-                              description: 'Caring community space',
-                              color: AppTheme.accentPink,
-                            ),
-                          ],
-                        );
-                      } else {
-                        return IntrinsicHeight(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 12),
-                                  child: _PremiumFeatureCard(
-                                    hoverKey: 'feature_safe_community',
-                                    icon: Icons.shield_outlined,
-                                    title: 'Safe',
-                                    subtitle: 'Community',
-                                    description: 'Your safety is our priority',
-                                    color: AppTheme.accentGreen,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                                  child: _PremiumFeatureCard(
-                                    hoverKey: 'feature_private_conversations',
-                                    icon: Icons.lock_outline,
-                                    title: 'Private',
-                                    subtitle: 'Conversations',
-                                    description: 'End-to-end privacy protection',
-                                    color: AppTheme.accentPurple,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                                  child: _PremiumFeatureCard(
-                                    hoverKey: 'feature_24_7_available',
-                                    icon: Icons.access_time,
-                                    title: '24/7',
-                                    subtitle: 'Available',
-                                    description: 'Round-the-clock support',
-                                    color: AppTheme.accentBlue,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 12),
-                                  child: _PremiumFeatureCard(
-                                    hoverKey: 'feature_supportive_environment',
-                                    icon: Icons.favorite_outline,
-                                    title: 'Supportive',
-                                    subtitle: 'Environment',
-                                    description: 'Caring community space',
-                                    color: AppTheme.accentPink,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                ],
-              ),
             ),
-            // Enhanced Legal Documents Section
-            Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 20 : 100,
-                vertical: isMobile ? 60 : 120,
-              ),
-              color: AppTheme.surfaceWhite,
-              child: Column(
-                children: [
-                  Text(
-                    'Legal Documents',
-                    style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                      color: AppTheme.textPrimary,
-                      letterSpacing: -1.5,
-                      fontSize: isMobile ? 28 : 40,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: isMobile ? 28 : 56),
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      final isMobileLayout = constraints.maxWidth < 768;
-                      if (isMobileLayout) {
-                        return Column(
-                          children: [
-                            _PremiumLegalCard(
-                              hoverKey: 'legal_privacy_policy',
-                              icon: Icons.privacy_tip_outlined,
-                              title: 'Privacy Policy',
-                              description: 'Learn how we collect, use, and protect your personal information in our supportive community. Your conversations and emotional well-being are our top priority.',
-                              buttonText: 'Read Privacy Policy',
-                              color: AppTheme.accentBlue,
-                              onTap: () => Navigator.of(context).pushReplacementNamed('/privacy-policy'),
-                            ),
-                            const SizedBox(height: 32),
-                            _PremiumLegalCard(
-                              hoverKey: 'legal_terms_conditions',
-                              icon: Icons.gavel_outlined,
-                              title: 'Terms & Conditions',
-                              description: 'Understand the terms that govern your use of X Matez. These terms ensure a safe, supportive environment for emotional expression and community connection.',
-                              buttonText: 'View Terms',
-                              color: AppTheme.accentPurple,
-                              onTap: () => Navigator.of(context).pushReplacementNamed('/terms-conditions'),
-                            ),
-                          ],
-                        );
-                      } else {
-                        return IntrinsicHeight(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 16),
-                                  child: _PremiumLegalCard(
-                                    hoverKey: 'legal_privacy_policy',
-                                    icon: Icons.privacy_tip_outlined,
-                                    title: 'Privacy Policy',
-                                    description: 'Learn how we collect, use, and protect your personal information in our supportive community. Your conversations and emotional well-being are our top priority.',
-                                    buttonText: 'Read Privacy Policy',
-                                    color: AppTheme.accentBlue,
-                                    onTap: () => Navigator.of(context).pushReplacementNamed('/privacy-policy'),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 16),
-                                  child: _PremiumLegalCard(
-                                    hoverKey: 'legal_terms_conditions',
-                                    icon: Icons.gavel_outlined,
-                                    title: 'Terms & Conditions',
-                                    description: 'Understand the terms that govern your use of X Matez. These terms ensure a safe, supportive environment for emotional expression and community connection.',
-                                    buttonText: 'View Terms',
-                                    color: AppTheme.accentPurple,
-                                    onTap: () => Navigator.of(context).pushReplacementNamed('/terms-conditions'),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                ],
-              ),
+            SizedBox(height: isMobile ? 36 : 48),
+            PandoraButton(
+              label: 'Start Your Journey',
+              isLarge: true,
+              icon: Icons.chat_rounded,
+              onTap: () => Navigator.of(context).pushReplacementNamed('/contact'),
             ),
-            // Enhanced Need Help or Support Section - Full Width
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 20 : 100,
-                vertical: isMobile ? 40 : 80,
-              ),
-              decoration: BoxDecoration(
-                color: AppTheme.primaryBlack,
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    AppTheme.primaryBlack,
-                    const Color(0xFF1a0d2e),
-                    AppTheme.primaryBlack,
-                  ],
-                ),
-              ),
-              child: Column(
-                children: [
-                  // Consumer<UIStateProvider>(
-                  //   builder: (context, provider, child) {
-                  //     final isHovered = provider.isHovered('support_logo');
-                  //     return MouseRegion(
-                  //       onEnter: (_) => provider.setHovered('support_logo', true),
-                  //       onExit: (_) => provider.setHovered('support_logo', false),
-                  //       child: TweenAnimationBuilder<double>(
-                  //         tween: Tween(begin: 1.0, end: isHovered ? 1.15 : 1.0),
-                  //         duration: const Duration(milliseconds: 800),
-                  //         curve: Curves.easeInOut,
-                  //         builder: (context, scaleValue, child) {
-                  //           return Transform.scale(
-                  //             scale: scaleValue,
-                  //             alignment: Alignment.center,
-                  //             child: XMatezLogo(
-                  //               size: isMobile ? 100 : 160,
-                  //               isDark: true,
-                  //             ),
-                  //           );
-                  //         },
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
-                  SizedBox(height: isMobile ? 24 : 36),
-                  Text(
-                    'Need Help or Support?',
-                    style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                      color: Colors.white,
-                      letterSpacing: -1.5,
-                      fontSize: isMobile ? 24 : 36,
-                      fontWeight: FontWeight.w700,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: isMobile ? 16 : 24),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxWidth: isMobile ? double.infinity : 800,
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isMobile ? 8 : 0,
-                      ),
-                      child: Text(
-                        'If you have any questions about our platform, need assistance, or want to report any concerns about our community, don\'t hesitate to reach out to us.',
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Colors.white.withValues(alpha: 0.9),
-                          fontSize: isMobile ? 15 : 20,
-                          height: 1.6,
-                          letterSpacing: 0.2,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: isMobile ? 28 : 48),
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      final isMobileLayout = constraints.maxWidth < 768;
-                      return                       Container(
-                        width: double.infinity,
-                        constraints: BoxConstraints(
-                          maxWidth: isMobileLayout ? double.infinity : 1200,
-                        ),
-                        child: isMobileLayout
-                            ? Column(
-                                children: [
-                                  _ContactInfoCard(
-                                    hoverKey: 'contact_email',
-                                    icon: Icons.email_outlined,
-                                    label: 'Email',
-                                    value: 'xmatezsolutionpvtlimited390@gmail.com',
-                                    onTap: () async {
-                                      final Uri emailUri = Uri(
-                                        scheme: 'mailto',
-                                        path: 'xmatezsolutionpvtlimited390@gmail.com',
-                                        query: 'subject=Contact from X Matez Website',
-                                      );
-                                      if (await canLaunchUrl(emailUri)) {
-                                        await launchUrl(emailUri);
-                                      }
-                                    },
-                                  ),
-                                  SizedBox(height: 16),
-                                  _ContactInfoCard(
-                                    hoverKey: 'contact_phone',
-                                    icon: Icons.phone_outlined,
-                                    label: 'Phone',
-                                    value: '+91 9495270656',
-                                    onTap: () async {
-                                      final Uri phoneUri = Uri(scheme: 'tel', path: '+919495270656');
-                                      if (await canLaunchUrl(phoneUri)) {
-                                        await launchUrl(phoneUri);
-                                      }
-                                    },
-                                  ),
-                                ],
-                              )
-                            : IntrinsicHeight(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(right: 16),
-                                        child: _ContactInfoCard(
-                                          hoverKey: 'contact_email',
-                                          icon: Icons.email_outlined,
-                                          label: 'Email',
-                                          value: 'xmatezsolutionpvtlimited390@gmail.com',
-                                          onTap: () async {
-                                            final Uri emailUri = Uri(
-                                              scheme: 'mailto',
-                                              path: 'xmatezsolutionpvtlimited390@gmail.com',
-                                              query: 'subject=Contact from X Matez Website',
-                                            );
-                                            if (await canLaunchUrl(emailUri)) {
-                                              await launchUrl(emailUri);
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 16),
-                                        child: _ContactInfoCard(
-                                          hoverKey: 'contact_phone',
-                                          icon: Icons.phone_outlined,
-                                          label: 'Phone',
-                                          value: '+91 9495270656',
-                                          onTap: () async {
-                                            final Uri phoneUri = Uri(scheme: 'tel', path: '+919495270656');
-                                            if (await canLaunchUrl(phoneUri)) {
-                                              await launchUrl(phoneUri);
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                      );
-                    },
-                  ),
-                  SizedBox(height: isMobile ? 24 : 40),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: isMobile ? 8 : 0,
-                    ),
-                    child: Text(
-                      'Or use our email form for a quick response.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: isMobile ? 14 : 16,
-                        color: Colors.white.withValues(alpha: 0.8),
-                        fontStyle: FontStyle.italic,
-                        letterSpacing: 0.2,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Footer(),
           ],
         ),
       ),
@@ -710,454 +506,252 @@ class _HomePageContent extends StatelessWidget {
   }
 }
 
-class _PremiumButton extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final Color color;
-  final bool isOutlined;
-  final VoidCallback onTap;
-  final String hoverKey;
+// Safety Guidelines Section - Chat Style
+// Animated Guideline Card with Hover Effect
+class _AnimatedGuidelineCard extends StatefulWidget {
+  final String guideline;
+  final int index;
+  final bool isMobile;
+  final double screenWidth;
+  final double widthPercentage;
 
-  const _PremiumButton({
-    required this.label,
-    required this.icon,
-    required this.color,
-    this.isOutlined = false,
-    required this.onTap,
-    required this.hoverKey,
+  const _AnimatedGuidelineCard({
+    required this.guideline,
+    required this.index,
+    required this.isMobile,
+    required this.screenWidth,
+    required this.widthPercentage,
   });
 
   @override
+  State<_AnimatedGuidelineCard> createState() => _AnimatedGuidelineCardState();
+}
+
+class _AnimatedGuidelineCardState extends State<_AnimatedGuidelineCard>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _hoverController;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _shadowAnimation;
+  bool _isHovered = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _hoverController = AnimationController(
+      duration: const Duration(milliseconds: 200),
+      vsync: this,
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.03).animate(
+      CurvedAnimation(parent: _hoverController, curve: Curves.easeOut),
+    );
+    _shadowAnimation = Tween<double>(begin: 0.08, end: 0.15).animate(
+      CurvedAnimation(parent: _hoverController, curve: Curves.easeOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _hoverController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Consumer<UIStateProvider>(
-      builder: (context, provider, child) {
-        final isHovered = provider.isHovered(hoverKey);
-        
-        return MouseRegion(
-          onEnter: (_) => provider.setHovered(hoverKey, true),
-          onExit: (_) => provider.setHovered(hoverKey, false),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.easeInOut,
-            transform: Matrix4.identity()..scale(isHovered ? 0.96 : 1.0),
-            decoration: BoxDecoration(
-              color: isOutlined ? Colors.transparent : color,
-              borderRadius: BorderRadius.circular(22),
-              border: isOutlined
-                  ? Border.all(
-                      color: Colors.white.withValues(alpha: isHovered ? 0.75 : 0.5),
-                      width: 2.5,
-                    )
-                  : null,
-              boxShadow: isOutlined
-                  ? null
-                  : [
-                      BoxShadow(
-                        color: color.withValues(alpha: isHovered ? 0.5 : 0.35),
-                        blurRadius: isHovered ? 40 : 25,
-                        offset: Offset(0, isHovered ? 18 : 10),
-                      ),
-                    ],
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: onTap,
-                borderRadius: BorderRadius.circular(22),
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width <= 768 ? 24 : 36,
-                    vertical: MediaQuery.of(context).size.width <= 768 ? 16 : 18,
+    return MouseRegion(
+      onEnter: (_) {
+        setState(() => _isHovered = true);
+        _hoverController.forward();
+      },
+      onExit: (_) {
+        setState(() => _isHovered = false);
+        _hoverController.reverse();
+      },
+      child: AnimatedBuilder(
+        animation: _hoverController,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _scaleAnimation.value,
+            child: Container(
+              constraints: BoxConstraints(
+                maxWidth: (widget.screenWidth - (widget.isMobile ? 40 : 160)) *
+                    widget.widthPercentage,
+              ),
+              padding: EdgeInsets.symmetric(
+                horizontal: widget.isMobile ? 18 : 22,
+                vertical: widget.isMobile ? 14 : 18,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
+                  bottomLeft: Radius.circular(4),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(_shadowAnimation.value),
+                    blurRadius: _isHovered ? 20 : 12,
+                    offset: Offset(0, _isHovered ? 4 : 2),
+                    spreadRadius: _isHovered ? 2 : 0,
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        icon,
-                        size: MediaQuery.of(context).size.width <= 768 ? 20 : 22,
-                        color: Colors.white,
-                      ),
-                      SizedBox(width: MediaQuery.of(context).size.width <= 768 ? 8 : 12),
-                      Flexible(
-                        child: Text(
-                          label,
-                          style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width <= 768 ? 15 : 17,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                            letterSpacing: 0.4,
-                          ),
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.ellipsis,
+                  if (_isHovered)
+                    BoxShadow(
+                      color: AppTheme.primaryColor.withOpacity(0.1),
+                      blurRadius: 15,
+                      offset: Offset(0, 2),
+                      spreadRadius: 0,
+                    ),
+                ],
+              ),
+              child: Text(
+                widget.guideline,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontSize: widget.isMobile ? 15 : 17,
+                      fontWeight: _isHovered ? FontWeight.w600 : FontWeight.w500,
+                      color: _isHovered ? AppTheme.primaryColor : Colors.black87,
+                      height: 1.5,
+                      letterSpacing: 0.1,
+                    ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _SafetyGuidelinesSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width <= 768;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    final guidelines = [
+      'Stay safe, stay kind every call matters.',
+      'Talk nice, talk real respect makes every call better.',
+      'Talk freely, but stay smart no personal info needed.',
+      'We value your safety never send money or personal info.',
+    ];
+
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 24 : 140,
+        vertical: isMobile ? 60 : 100,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: isMobile ? 20 : 40),
+          ...guidelines.asMap().entries.map((entry) {
+            final index = entry.key;
+            final guideline = entry.value;
+            // Progressive width: 60%, 70%, 80%, 90%
+            final widthPercentage = 0.6 + (index * 0.1);
+            return TweenAnimationBuilder<double>(
+              tween: Tween(begin: 0.0, end: 1.0),
+              duration: Duration(milliseconds: 600 + (index * 100)),
+              curve: Curves.easeOutCubic,
+              builder: (context, value, child) {
+                return Opacity(
+                  opacity: value,
+                  child: Transform.translate(
+                    offset: Offset(-30 * (1 - value), 0),
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: isMobile ? 12 : 16),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: _AnimatedGuidelineCard(
+                          guideline: guideline,
+                          index: index,
+                          isMobile: isMobile,
+                          screenWidth: screenWidth,
+                          widthPercentage: widthPercentage,
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _PremiumFeatureCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final String description;
-  final Color color;
-  final String hoverKey;
-
-  const _PremiumFeatureCard({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.description,
-    required this.color,
-    required this.hoverKey,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<UIStateProvider>(
-      builder: (context, provider, child) {
-        final isHovered = provider.isHovered(hoverKey);
-        
-        return MouseRegion(
-          onEnter: (_) => provider.setHovered(hoverKey, true),
-          onExit: (_) => provider.setHovered(hoverKey, false),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 250),
-            curve: Curves.easeOut,
-            transform: Matrix4.identity()..scale(isHovered ? 1.03 : 1.0),
-            decoration: BoxDecoration(
-              color: AppTheme.surfaceWhite,
-              borderRadius: BorderRadius.circular(36),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: isHovered ? 0.1 : 0.06),
-                  blurRadius: isHovered ? 80 : 50,
-                  offset: Offset(0, isHovered ? 27 : 15),
-                ),
-              ],
-            ),
-            padding: EdgeInsets.all(MediaQuery.of(context).size.width <= 768 ? 20 : 48),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 250),
-                  width: MediaQuery.of(context).size.width <= 768
-                      ? (isHovered ? 60 : 56)
-                      : (isHovered ? 100 : 96),
-                  height: MediaQuery.of(context).size.width <= 768
-                      ? (isHovered ? 60 : 56)
-                      : (isHovered ? 100 : 96),
-                  decoration: BoxDecoration(
-                    color: color.withValues(alpha: isHovered ? 0.18 : 0.14),
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: [
-                      BoxShadow(
-                        color: color.withValues(alpha: isHovered ? 0.3 : 0.22),
-                        blurRadius: isHovered ? 45 : 30,
-                        spreadRadius: isHovered ? 4 : 2,
-                      ),
-                    ],
-                  ),
-                  child: Icon(
-                    icon,
-                    size: MediaQuery.of(context).size.width <= 768
-                        ? (isHovered ? 30 : 28)
-                        : (isHovered ? 50 : 48),
-                    color: color,
-                  ),
-                ),
-                SizedBox(height: MediaQuery.of(context).size.width <= 768 ? 12 : 28),
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: AppTheme.textPrimary,
-                    fontSize: MediaQuery.of(context).size.width <= 768 ? 18 : 28,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: -0.8,
-                  ),
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                SizedBox(height: MediaQuery.of(context).size.width <= 768 ? 4 : 12),
-                Text(
-                  subtitle,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppTheme.textSecondary,
-                    fontSize: MediaQuery.of(context).size.width <= 768 ? 13 : 18,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.3,
-                  ),
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                SizedBox(height: MediaQuery.of(context).size.width <= 768 ? 6 : 14),
-                Flexible(
-                  child: Text(
-                    description,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppTheme.textSecondary.withValues(alpha: 0.8),
-                      fontSize: MediaQuery.of(context).size.width <= 768 ? 12 : 16,
-                      height: 1.4,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+                );
+              },
+            );
+          }),
+          SizedBox(height: isMobile ? 20 : 40),
+        ],
+      ),
     );
   }
 }
 
-class _PremiumLegalCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String description;
-  final String buttonText;
-  final Color color;
-  final VoidCallback onTap;
-  final String hoverKey;
+// Hero Text Content Widget
+class _HeroTextContent extends StatelessWidget {
+  final bool isMobile;
 
-  const _PremiumLegalCard({
-    required this.icon,
-    required this.title,
-    required this.description,
-    required this.buttonText,
-    required this.color,
-    required this.onTap,
-    required this.hoverKey,
-  });
+  const _HeroTextContent({required this.isMobile});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UIStateProvider>(
-      builder: (context, provider, child) {
-        final isHovered = provider.isHovered(hoverKey);
-        
-        return MouseRegion(
-          onEnter: (_) => provider.setHovered(hoverKey, true),
-          onExit: (_) => provider.setHovered(hoverKey, false),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 250),
-            curve: Curves.easeOut,
-            transform: Matrix4.identity()..scale(isHovered ? 1.02 : 1.0),
-            decoration: BoxDecoration(
-              color: AppTheme.surfaceWhite,
-            borderRadius: BorderRadius.circular(28),
-            border: Border.all(
-              color: AppTheme.borderLight.withValues(alpha: isHovered ? 0.5 : 1.0),
-              width: 1,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: isHovered ? 0.08 : 0.05),
-                blurRadius: isHovered ? 60 : 40,
-                offset: Offset(0, isHovered ? 20 : 12),
-              ),
-            ],
-          ),
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: onTap,
-              borderRadius: BorderRadius.circular(28),
-              child: Container(
-                padding: EdgeInsets.all(MediaQuery.of(context).size.width <= 768 ? 32 : 48),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 250),
-                      width: MediaQuery.of(context).size.width <= 768
-                          ? (isHovered ? 56 : 52)
-                          : (isHovered ? 72 : 64),
-                      height: MediaQuery.of(context).size.width <= 768
-                          ? (isHovered ? 56 : 52)
-                          : (isHovered ? 72 : 64),
-                      decoration: BoxDecoration(
-                        color: color.withValues(alpha: isHovered ? 0.16 : 0.14),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: color.withValues(alpha: isHovered ? 0.28 : 0.22),
-                            blurRadius: isHovered ? 30 : 25,
-                            spreadRadius: isHovered ? 3 : 2,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Massive headline with modern typography
+        TweenAnimationBuilder<double>(
+          tween: Tween(begin: 0.0, end: 1.0),
+          duration: const Duration(milliseconds: 2000),
+          curve: Curves.easeOutCubic,
+          builder: (context, value, child) {
+            return Opacity(
+              opacity: value,
+              child: Transform.translate(
+                offset: Offset(0, 30 * (1 - value)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+                      'Find peace through',
+                      textAlign: TextAlign.left,
+                      style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                            fontSize: isMobile ? 40 : 64,
+                            fontWeight: FontWeight.w900,
+                            height: 1.0,
+                            letterSpacing: -2.5,
+                            color: AppTheme.lightTextPrimary,
                           ),
-                        ],
-                      ),
-                      child: Icon(
-                        icon,
-                        size: MediaQuery.of(context).size.width <= 768
-                            ? (isHovered ? 28 : 26)
-                            : (isHovered ? 36 : 32),
-                        color: color,
-                      ),
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.width <= 768 ? 20 : 28),
+                    SizedBox(height: isMobile ? 12 : 16),
                     Text(
-                      title,
-                      style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                        color: AppTheme.textPrimary,
-                        letterSpacing: -1.2,
-                        fontSize: MediaQuery.of(context).size.width <= 768 ? 26 : 36,
-                      ),
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.width <= 768 ? 16 : 20),
-                    Flexible(
-                      child: Text(
-                        description,
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: AppTheme.textSecondary,
-                          fontSize: MediaQuery.of(context).size.width <= 768 ? 15 : 18,
-                          height: 1.6,
-                          letterSpacing: 0.3,
-                        ),
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    const Spacer(),
-                    SizedBox(height: MediaQuery.of(context).size.width <= 768 ? 20 : 28),
-                    Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            buttonText,
-                            style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.width <= 768 ? 16 : 18,
-                              fontWeight: FontWeight.w600,
-                              color: color,
-                              letterSpacing: 0.4,
-                            ),
-                            overflow: TextOverflow.ellipsis,
+                      'meaningful connections',
+                      textAlign: TextAlign.left,
+                      style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                            fontSize: isMobile ? 40 : 64,
+                            fontWeight: FontWeight.w900,
+                            height: 1.0,
+                            letterSpacing: -2.5,
+                            color: Colors.white.withOpacity(0.85),
                           ),
-                        ),
-                        SizedBox(width: MediaQuery.of(context).size.width <= 768 ? 8 : 12),
-                        Icon(
-                          Icons.arrow_forward_rounded,
-                          size: MediaQuery.of(context).size.width <= 768 ? 18 : 20,
-                          color: color,
-                        ),
-                      ],
                     ),
-                    ],
-                  ),
-                ),
-              ),
+        ],
+      ),
             ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _ContactInfoCard extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String value;
-  final VoidCallback onTap;
-  final String hoverKey;
-
-  const _ContactInfoCard({
-    required this.icon,
-    required this.label,
-    required this.value,
-    required this.onTap,
-    required this.hoverKey,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<UIStateProvider>(
-      builder: (context, provider, child) {
-        final isHovered = provider.isHovered(hoverKey);
-        
-        return MouseRegion(
-          onEnter: (_) => provider.setHovered(hoverKey, true),
-          onExit: (_) => provider.setHovered(hoverKey, false),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.easeOut,
-            padding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width <= 768 ? 20 : 32,
-              vertical: MediaQuery.of(context).size.width <= 768 ? 20 : 28,
-            ),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: isHovered ? 0.15 : 0.1),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: Colors.white.withValues(alpha: isHovered ? 0.3 : 0.2),
-                width: 1,
-              ),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: onTap,
-                borderRadius: BorderRadius.circular(16),
-                child: Row(
-                  children: [
-                    Icon(
-                      icon,
-                      size: MediaQuery.of(context).size.width <= 768 ? 20 : 24,
-                      color: Colors.white.withValues(alpha: 0.9),
-                    ),
-                    SizedBox(width: MediaQuery.of(context).size.width <= 768 ? 12 : 16),
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            label,
-                            style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.width <= 768 ? 12 : 14,
-                              color: Colors.white.withValues(alpha: 0.7),
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: 0.2,
-                            ),
+          );
+        },
+      ),
+        SizedBox(height: isMobile ? 32 : 40),
+        // Premium description with better styling
+                    Text(
+          'Connect with compassionate listeners who understand. Share your thoughts, release your stress, and find calm through meaningful connections.',
+          textAlign: TextAlign.left,
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                fontSize: isMobile ? 18 : 22,
+                height: 1.8,
+                fontWeight: FontWeight.w400,
+                            color: AppTheme.textSecondary,
+                letterSpacing: 0.3,
                           ),
-                          SizedBox(height: MediaQuery.of(context).size.width <= 768 ? 3 : 4),
-                          Text(
-                            value,
-                            style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.width <= 768 ? 13 : 16,
-                              color: Colors.white.withValues(alpha: 0.95),
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 0.1,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                          ),
-                        ],
-                      ),
                     ),
                   ],
-                ),
-              ),
-            ),
-          ),
-        );
-      },
     );
   }
 }
+
+

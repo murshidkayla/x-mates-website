@@ -9,30 +9,26 @@ class Footer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 30),
-      decoration: const BoxDecoration(
-        color: AppTheme.primaryBlack,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
+      decoration: BoxDecoration(
+        color: AppTheme.lightBackground,
         border: Border(
-          top: BorderSide(color: AppTheme.darkGray, width: 1),
+          top: BorderSide(
+            color: AppTheme.borderLight.withOpacity(0.5),
+            width: 1.5,
+          ),
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 20,
+            offset: Offset(0, -4),
+            spreadRadius: 0,
+          ),
+        ],
       ),
       child: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.all(40),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: AppTheme.accentBlue.withValues(alpha: 0.18),
-                  blurRadius: 60,
-                  spreadRadius: 12,
-                ),
-              ],
-            ),
-           
-          ),
-          const SizedBox(height: 64),
           LayoutBuilder(
             builder: (context, constraints) {
               final isMobile = constraints.maxWidth < 768;
@@ -86,26 +82,29 @@ class Footer extends StatelessWidget {
               }
             },
           ),
-          const SizedBox(height: 80),
-          const Divider(
-            color: AppTheme.darkGray,
-            thickness: 1,
-          ),
-          const SizedBox(height: 56),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(width: 16),
-              Text(
-                '© 2025 X Matez. All rights reserved.',
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.78),
-                  fontSize: 17,
-                  fontWeight: FontWeight.w400,
-                  letterSpacing: 0.4,
-                ),
+          const SizedBox(height: 48),
+          Container(
+            width: 80,
+            height: 3,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  AppTheme.primaryColor,
+                  AppTheme.primaryColorLight,
+                ],
               ),
-            ],
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(height: 36),
+          Text(
+            '© 2025 X Matez. All rights reserved.',
+            style: TextStyle(
+              color: AppTheme.textSecondary,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.4,
+            ),
           ),
         ],
       ),
@@ -168,14 +167,20 @@ class _RichFooterLinkState extends State<_RichFooterLink> with SingleTickerProvi
             Provider.of<NavigationProvider>(context, listen: false).setCurrentRoute(widget.route);
           },
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: _isHovered
+                  ? AppTheme.primaryColor.withOpacity(0.08)
+                  : Colors.transparent,
+            ),
             child: Text(
               widget.label,
               style: TextStyle(
-                color: Colors.white.withValues(alpha: _isHovered ? 1.0 : 0.85),
-                fontSize: 17,
-                fontWeight: _isHovered ? FontWeight.w600 : FontWeight.w500,
-                letterSpacing: 0.4,
+                color: _isHovered ? AppTheme.primaryColor : AppTheme.textPrimary,
+                fontSize: 15,
+                fontWeight: _isHovered ? FontWeight.w700 : FontWeight.w500,
+                letterSpacing: 0.3,
               ),
             ),
           ),

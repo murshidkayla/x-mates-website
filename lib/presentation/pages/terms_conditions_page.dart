@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../application/providers/navigation_provider.dart';
-import '../widgets/navbar.dart';
+import '../widgets/pandora_navbar.dart';
 import '../widgets/footer.dart';
 import '../theme/app_theme.dart';
 
@@ -18,61 +18,99 @@ class TermsConditionsPage extends StatelessWidget {
     });
 
     return Scaffold(
-      backgroundColor: AppTheme.surfaceWhite,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const Navbar(),
-            // Header Section with Dark Background
+      backgroundColor: Colors.transparent,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              AppTheme.lightBackground,
+              AppTheme.primaryColor.withOpacity(0.05),
+              AppTheme.primaryColor.withOpacity(0.02),
+              AppTheme.lightBackground,
+            ],
+            stops: const [0.0, 0.3, 0.7, 1.0],
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const PandoraNavbar(),
+            // Ultra-Modern Header Section
             Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 20 : 100,
-                vertical: isMobile ? 40 : 100,
+                horizontal: isMobile ? 20 : 80,
+                vertical: isMobile ? 50 : 100,
               ),
-              decoration: const BoxDecoration(
-                color: AppTheme.primaryBlack,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    AppTheme.primaryColor,
+                    AppTheme.primaryColorDark,
+                  ],
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Terms & Conditions',
-                    style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                    style: Theme.of(context).textTheme.displayLarge?.copyWith(
                       color: Colors.white,
-                      fontSize: isMobile ? 24 : 36,
-                      letterSpacing: isMobile ? -1 : -1.5,
+                      fontSize: isMobile ? 32 : 48,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -1.5,
+                      height: 1.2,
                     ),
                   ),
-                  SizedBox(height: isMobile ? 12 : 16),
+                  SizedBox(height: isMobile ? 16 : 20),
                   Text(
                     'Your rights and responsibilities when using X Matez',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Colors.white.withValues(alpha: 0.85),
-                      fontSize: isMobile ? 16 : 20,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Colors.white.withValues(alpha: 0.9),
+                      fontSize: isMobile ? 16 : 18,
+                      height: 1.5,
                     ),
                   ),
                   SizedBox(height: isMobile ? 12 : 16),
-                  Text(
-                    'Effective: September 6, 2025',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.white.withValues(alpha: 0.7),
-                      fontSize: isMobile ? 14 : 16,
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isMobile ? 12 : 16,
+                      vertical: isMobile ? 6 : 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: Colors.white.withOpacity(0.3),
+                        width: 1.5,
+                      ),
+                    ),
+                    child: Text(
+                      'Effective: September 6, 2025',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Colors.white,
+                        fontSize: isMobile ? 14 : 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-            // Content Section with White Background
+            // Ultra-Modern Content Section
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 20 : 100,
-                vertical: isMobile ? 40 : 80,
+                horizontal: isMobile ? 20 : 80,
+                vertical: isMobile ? 40 : 60,
               ),
               constraints: BoxConstraints(
-                maxWidth: isMobile ? double.infinity : 900,
+                maxWidth: isMobile ? double.infinity : 1000,
               ),
-              color: AppTheme.surfaceWhite,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -458,6 +496,7 @@ class TermsConditionsPage extends StatelessWidget {
             ),
             const Footer(),
           ],
+          ),
         ),
       ),
     );

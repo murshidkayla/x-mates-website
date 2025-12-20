@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../application/providers/navigation_provider.dart';
-import '../widgets/navbar.dart';
+import '../widgets/pandora_navbar.dart';
 import '../widgets/footer.dart';
 import '../widgets/logo.dart';
 import '../theme/app_theme.dart';
@@ -31,19 +31,33 @@ class HowToDeletePage extends StatelessWidget {
     });
 
     return Scaffold(
-      backgroundColor: AppTheme.surfaceWhite,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const Navbar(),
-            // Header Section
+      backgroundColor: Colors.transparent,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              AppTheme.lightBackground,
+              AppTheme.primaryColor.withOpacity(0.05),
+              AppTheme.primaryColor.withOpacity(0.02),
+              AppTheme.lightBackground,
+            ],
+            stops: const [0.0, 0.3, 0.7, 1.0],
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const PandoraNavbar(),
+            // Ultra-Modern Header Section
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 20 : 100,
-                vertical: isMobile ? 40 : 100,
+                horizontal: isMobile ? 16 : 60,
+                vertical: isMobile ? 30 : 60,
               ),
               decoration: const BoxDecoration(
-                color: AppTheme.primaryBlack,
+                color: AppTheme.primaryColor,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,26 +67,33 @@ class HowToDeletePage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              padding: const EdgeInsets.all(12),
+                              padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
+                                color: Colors.white.withOpacity(0.1),
+                                border: Border.all(
+                                  color: Colors.white.withOpacity(0.2),
+                                  width: 1,
+                                ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.white.withValues(alpha: 0.05),
-                                    blurRadius: 30,
-                                    spreadRadius: 5,
+                                    color: Colors.white.withValues(alpha: 0.1),
+                                    blurRadius: 12,
+                                    spreadRadius: 3,
                                   ),
                                 ],
                               ),
-                              child: const XMatezLogo(size: 80, isDark: true),
+                              child: const XMatezLogo(size: 50, isDark: true),
                             ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 12),
                             Text(
-                              'How to Delete Your Account',
-                              style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                              'How to Delete\nYour Account',
+                              style: Theme.of(context).textTheme.displayLarge?.copyWith(
                                 color: Colors.white,
                                 fontSize: 22,
-                                letterSpacing: -1,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: -0.8,
+                                height: 1.2,
                               ),
                             ),
                           ],
@@ -80,52 +101,92 @@ class HowToDeletePage extends StatelessWidget {
                       : Row(
                           children: [
                             Container(
-                              padding: const EdgeInsets.all(16),
+                              padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
+                                color: Colors.white.withOpacity(0.1),
+                                border: Border.all(
+                                  color: Colors.white.withOpacity(0.2),
+                                  width: 1,
+                                ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.white.withValues(alpha: 0.05),
-                                    blurRadius: 30,
+                                    color: Colors.white.withValues(alpha: 0.1),
+                                    blurRadius: 20,
                                     spreadRadius: 5,
                                   ),
                                 ],
                               ),
-                              child: const XMatezLogo(size: 120, isDark: true),
+                              child: const XMatezLogo(size: 70, isDark: true),
                             ),
-                            const SizedBox(width: 28),
+                            const SizedBox(width: 16),
                             Expanded(
-                              child: Text(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
                                 'How to Delete Your Account',
-                                style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                                    style: Theme.of(context).textTheme.displayLarge?.copyWith(
                                   color: Colors.white,
-                                  fontSize: 36,
-                                  letterSpacing: -1.5,
-                                ),
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.w700,
+                                      letterSpacing: -1,
+                                      height: 1.2,
+                                    ),
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    'Follow these simple steps to permanently delete your account',
+                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Colors.white.withValues(alpha: 0.9),
+                                      fontSize: 14,
+                                      height: 1.4,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
-                        ),
-                  SizedBox(height: isMobile ? 12 : 16),
-                  Text(
-                    'Follow these simple steps to permanently delete your account',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Colors.white.withValues(alpha: 0.85),
-                      fontSize: isMobile ? 16 : 20,
-                    ),
                   ),
                 ],
               ),
             ),
-            // Steps Section
+            // Ultra-Modern Steps Section
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 20 : 100,
-                vertical: isMobile ? 40 : 80,
+                horizontal: isMobile ? 16 : 60,
+                vertical: isMobile ? 24 : 40,
               ),
               color: AppTheme.surfaceWhite,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 5,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          color: AppTheme.primaryColor,
+                          borderRadius: BorderRadius.circular(3),
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      Text(
+                        'Step-by-Step Guide',
+                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          fontSize: isMobile ? 20 : 28,
+                          color: AppTheme.textPrimary,
+                          letterSpacing: -0.8,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: isMobile ? 16 : 24),
+                  ConstrainedBox(
               constraints: BoxConstraints(
-                maxWidth: isMobile ? double.infinity : 900,
+                      maxWidth: isMobile ? double.infinity : 1000,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,64 +197,135 @@ class HowToDeletePage extends StatelessWidget {
                     description:
                         'Navigate to your profile section in the app. This is usually found in the main menu or by tapping your profile picture/avatar.',
                     icon: Icons.person_outline,
-                    color: AppTheme.accentBlue,
+                          color: AppTheme.primaryColor,
+                          imagePath: 'assets/profileUi.png',
                   ),
-                  SizedBox(height: isMobile ? 20 : 32),
+                        SizedBox(height: isMobile ? 12 : 16),
                   _StepCard(
                     stepNumber: 2,
                     title: 'Go to Account Settings',
                     description:
-                        'Once in your profile, look for "Account Settings" or "Settings" option. Tap on it to access your account management options.',
+                              'Once in your profile, look for "Settings" option in the menu list. Tap on it to access your account management options.',
                     icon: Icons.settings_outlined,
-                    color: AppTheme.accentPurple,
+                          color: AppTheme.primaryColor,
+                          imagePath: 'assets/settingui.png',
                   ),
-                  SizedBox(height: isMobile ? 20 : 32),
+                        SizedBox(height: isMobile ? 12 : 16),
                   _StepCard(
                     stepNumber: 3,
                     title: 'Find Delete Account Option',
                     description:
-                        'In the account settings menu, scroll down to find the "Delete Account" option. This is usually located towards the bottom of the settings page.',
+                              'In the settings menu, scroll down to find the "Delete Account" option. This is usually located towards the bottom of the settings page.',
                     icon: Icons.delete_outline,
-                    color: AppTheme.accentPink,
+                          color: AppTheme.primaryColor,
+                          imagePath: 'assets/settingui.png',
                   ),
-                  SizedBox(height: isMobile ? 20 : 32),
+                        SizedBox(height: isMobile ? 12 : 16),
                   _StepCard(
                     stepNumber: 4,
                     title: 'Confirm Account Deletion',
                     description:
-                        'After clicking "Delete Account", you\'ll see an alert dialogue asking for confirmation. Tap "Yes" to proceed with the account deletion.',
+                              'After clicking "Delete Account", you\'ll see a confirmation dialog asking "Are you sure you want to permanently Delete your account?". Tap "Yes" to proceed with the account deletion.',
                     icon: Icons.check_circle_outline,
-                    color: AppTheme.accentGreen,
+                          color: AppTheme.primaryColor,
+                          imagePath: 'assets/deleteDailague.png',
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-            // Important Notice Section
+            // Additional Information Section
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 20 : 100,
-                vertical: isMobile ? 40 : 80,
+                horizontal: isMobile ? 16 : 60,
+                vertical: isMobile ? 24 : 40,
               ),
-              color: AppTheme.lightGray,
+              color: AppTheme.lightBackground,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 5,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: AppTheme.primaryColor,
+                          borderRadius: BorderRadius.circular(3),
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      Text(
+                        'Additional Information',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          fontSize: isMobile ? 18 : 24,
+                          color: AppTheme.textPrimary,
+                          letterSpacing: -0.8,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: isMobile ? 16 : 20),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: isMobile ? double.infinity : 900,
+                    ),
+                    child: Column(
+                      children: [
+                        _InfoCard(
+                          icon: Icons.access_time_rounded,
+                          title: 'Processing Time',
+                          description: 'Account deletion is processed immediately. However, it may take up to 30 days for all data to be completely removed from our backup systems.',
+                        ),
+                        SizedBox(height: isMobile ? 12 : 16),
+                        _InfoCard(
+                          icon: Icons.download_rounded,
+                          title: 'Export Your Data First',
+                          description: 'Before deleting your account, we recommend exporting your data. You can do this from the Settings menu under "Data Export". This ensures you have a backup of all your information.',
+                        ),
+                        SizedBox(height: isMobile ? 12 : 16),
+                        _InfoCard(
+                          icon: Icons.refresh_rounded,
+                          title: 'Cannot Be Undone',
+                          description: 'Once your account is deleted, this action cannot be reversed. You will need to create a new account if you wish to use X Matez again in the future.',
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Ultra-Modern Important Notice Section
+            Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: isMobile ? 16 : 60,
+                vertical: isMobile ? 24 : 40,
+              ),
+              decoration: const BoxDecoration(
+                color: AppTheme.lightBackground,
+              ),
               child: Column(
                 children: [
                   Container(
                     constraints: BoxConstraints(
-                      maxWidth: isMobile ? double.infinity : 900,
+                      maxWidth: isMobile ? double.infinity : 800,
                     ),
-                    padding: EdgeInsets.all(isMobile ? 20 : 36),
+                    padding: EdgeInsets.all(isMobile ? 16 : 20),
                     decoration: BoxDecoration(
                       color: AppTheme.surfaceWhite,
-                      borderRadius: BorderRadius.circular(28),
+                      borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: AppTheme.accentPink.withValues(alpha: 0.3),
-                        width: 2,
+                        color: AppTheme.primaryColor.withOpacity(0.2),
+                        width: 1,
                       ),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withValues(alpha: 0.05),
-                          blurRadius: 40,
-                          offset: const Offset(0, 12),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
                         ),
                       ],
                     ),
@@ -203,39 +335,44 @@ class HowToDeletePage extends StatelessWidget {
                         Row(
                           children: [
                             Container(
-                              width: isMobile ? 48 : 56,
-                              height: isMobile ? 48 : 56,
+                              width: isMobile ? 40 : 48,
+                              height: isMobile ? 40 : 48,
                               decoration: BoxDecoration(
-                                color: AppTheme.accentPink.withValues(alpha: 0.14),
-                                borderRadius: BorderRadius.circular(16),
+                                color: AppTheme.primaryColor.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: AppTheme.primaryColor.withOpacity(0.2),
+                                  width: 1,
+                                ),
                               ),
                               child: Icon(
                                 Icons.warning_amber_rounded,
-                                color: AppTheme.accentPink,
-                                size: isMobile ? 28 : 32,
+                                color: AppTheme.primaryColor,
+                                size: isMobile ? 20 : 24,
                               ),
                             ),
-                            SizedBox(width: isMobile ? 16 : 20),
-                            Flexible(
+                            SizedBox(width: isMobile ? 12 : 16),
+                            Expanded(
                               child: Text(
                                 'Important Notice',
-                                style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                   color: AppTheme.textPrimary,
-                                  fontSize: isMobile ? 22 : 28,
-                                  letterSpacing: -1,
+                                  fontSize: isMobile ? 18 : 22,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: -0.8,
                                 ),
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(height: isMobile ? 16 : 24),
+                        SizedBox(height: isMobile ? 12 : 16),
                         Text(
                           'Account deletion is permanent and cannot be undone. All your data, including profile information, messages, and app history will be permanently removed from our servers. Please make sure you want to proceed before confirming the deletion.',
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: AppTheme.textPrimary,
-                            fontSize: isMobile ? 16 : 18,
-                            height: 1.6,
-                            letterSpacing: 0.2,
+                            fontSize: isMobile ? 13 : 15,
+                            height: 1.5,
+                            letterSpacing: 0.1,
                           ),
                         ),
                       ],
@@ -244,119 +381,118 @@ class HowToDeletePage extends StatelessWidget {
                 ],
               ),
             ),
-            // Need Help Section
+            // Ultra-Modern Need Help Section
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 20 : 100,
-                vertical: isMobile ? 40 : 80,
+                horizontal: isMobile ? 16 : 60,
+                vertical: isMobile ? 24 : 40,
               ),
-              color: AppTheme.surfaceWhite,
+              decoration: BoxDecoration(
+                color: AppTheme.lightSurfaceElevated,
+              ),
               child: Column(
                 children: [
                   Container(
-                    width: isMobile ? 64 : 80,
-                    height: isMobile ? 64 : 80,
+                    width: isMobile ? 48 : 56,
+                    height: isMobile ? 48 : 56,
                     decoration: BoxDecoration(
-                      color: AppTheme.accentBlue.withValues(alpha: 0.14),
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppTheme.accentBlue.withValues(alpha: 0.2),
-                          blurRadius: 30,
-                          spreadRadius: 3,
-                        ),
-                      ],
+                      color: AppTheme.primaryColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: AppTheme.primaryColor.withOpacity(0.2),
+                        width: 1,
+                      ),
                     ),
                     child: Icon(
                       Icons.help_outline,
-                      size: isMobile ? 32 : 40,
-                      color: AppTheme.accentBlue,
+                      size: isMobile ? 24 : 28,
+                      color: AppTheme.primaryColor,
                     ),
                   ),
-                  SizedBox(height: isMobile ? 20 : 32),
+                  SizedBox(height: isMobile ? 16 : 20),
                   Text(
                     'Need Help?',
-                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: AppTheme.textPrimary,
-                      fontSize: isMobile ? 24 : 32,
+                      fontSize: isMobile ? 22 : 28,
+                      fontWeight: FontWeight.w700,
                       letterSpacing: -1,
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: isMobile ? 16 : 24),
+                  SizedBox(height: isMobile ? 12 : 16),
                   ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxWidth: isMobile ? double.infinity : 640,
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isMobile ? 8 : 0,
-                      ),
-                      child: Text(
-                        'If you\'re having trouble deleting your account or have questions about the process, please contact our support team.',
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: AppTheme.textSecondary,
-                          fontSize: isMobile ? 16 : 18,
-                          height: 1.6,
-                          letterSpacing: 0.2,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: isMobile ? 24 : 36),
-                  Container(
                     constraints: BoxConstraints(
                       maxWidth: isMobile ? double.infinity : 500,
                     ),
-                    padding: EdgeInsets.all(isMobile ? 20 : 32),
+                    child: Text(
+                      'If you\'re having trouble deleting your account or have questions about the process, please contact our support team.',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: AppTheme.textSecondary,
+                        fontSize: isMobile ? 13 : 15,
+                        height: 1.5,
+                        letterSpacing: 0.1,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: isMobile ? 20 : 24),
+                  Container(
+                    constraints: BoxConstraints(
+                      maxWidth: isMobile ? double.infinity : 450,
+                    ),
+                    padding: EdgeInsets.all(isMobile ? 16 : 20),
                     decoration: BoxDecoration(
                       color: AppTheme.surfaceWhite,
-                      borderRadius: BorderRadius.circular(24),
+                      borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: AppTheme.borderLight,
+                        color: AppTheme.primaryColor.withOpacity(0.2),
                         width: 1,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.05),
-                          blurRadius: 30,
-                          offset: const Offset(0, 8),
+                          color: AppTheme.primaryColor.withOpacity(0.06),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
                         ),
                       ],
                     ),
                     child: Column(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.email_outlined,
-                              color: AppTheme.accentBlue,
-                              size: isMobile ? 20 : 24,
-                            ),
-                            SizedBox(width: isMobile ? 10 : 12),
-                            Text(
-                              'Email',
-                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                color: AppTheme.textPrimary,
-                                fontSize: isMobile ? 18 : 20,
-                              ),
-                            ),
-                          ],
+                        Container(
+                          padding: EdgeInsets.all(isMobile ? 10 : 12),
+                          decoration: BoxDecoration(
+                            color: AppTheme.primaryColor.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Icon(
+                            Icons.email_outlined,
+                            color: AppTheme.primaryColor,
+                            size: isMobile ? 20 : 24,
+                          ),
                         ),
                         SizedBox(height: isMobile ? 12 : 16),
+                        Text(
+                          'Email Support',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: AppTheme.textPrimary,
+                            fontSize: isMobile ? 18 : 20,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(height: isMobile ? 10 : 12),
                         GestureDetector(
                           onTap: _launchEmail,
                           child: Text(
                             'xmatezsolutionpvtlimited390@gmail.com',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: isMobile ? 15 : 18,
-                              color: AppTheme.accentBlue,
+                              fontSize: isMobile ? 13 : 15,
+                              color: AppTheme.primaryColor,
                               fontWeight: FontWeight.w600,
                               decoration: TextDecoration.underline,
-                              decorationColor: AppTheme.accentBlue,
+                              decorationColor: AppTheme.primaryColor,
+                              decorationThickness: 1.5,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -369,6 +505,7 @@ class HowToDeletePage extends StatelessWidget {
             ),
             const Footer(),
           ],
+          ),
         ),
       ),
     );
@@ -381,6 +518,7 @@ class _StepCard extends StatelessWidget {
   final String description;
   final IconData icon;
   final Color color;
+  final String? imagePath;
 
   const _StepCard({
     required this.stepNumber,
@@ -388,25 +526,31 @@ class _StepCard extends StatelessWidget {
     required this.description,
     required this.icon,
     required this.color,
+    this.imagePath,
   });
 
   @override
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width <= 768;
     return Container(
-      padding: EdgeInsets.all(isMobile ? 24 : 40),
+      padding: EdgeInsets.all(isMobile ? 16 : 20),
       decoration: BoxDecoration(
         color: AppTheme.surfaceWhite,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: AppTheme.borderLight,
-          width: 1,
+          color: AppTheme.primaryColor.withOpacity(0.2),
+          width: 2,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppTheme.primaryColor.withOpacity(0.08),
             blurRadius: 30,
             offset: const Offset(0, 8),
+          ),
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 40,
+            offset: const Offset(0, 12),
           ),
         ],
       ),
@@ -417,16 +561,27 @@ class _StepCard extends StatelessWidget {
                 Row(
                   children: [
                     Container(
-                      width: 64,
-                      height: 64,
+                      width: isMobile ? 48 : 56,
+                      height: isMobile ? 48 : 56,
                       decoration: BoxDecoration(
-                        color: color.withValues(alpha: 0.14),
-                        borderRadius: BorderRadius.circular(20),
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            color.withOpacity(0.2),
+                            color.withOpacity(0.1),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: color.withOpacity(0.3),
+                          width: 1,
+                        ),
                         boxShadow: [
                           BoxShadow(
-                            color: color.withValues(alpha: 0.2),
-                            blurRadius: 25,
-                            spreadRadius: 2,
+                            color: color.withOpacity(0.15),
+                            blurRadius: 8,
+                            spreadRadius: 1,
                           ),
                         ],
                       ),
@@ -436,8 +591,8 @@ class _StepCard extends StatelessWidget {
                           Text(
                             '$stepNumber',
                             style: TextStyle(
-                              fontSize: 26,
-                              fontWeight: FontWeight.w800,
+                              fontSize: isMobile ? 18 : 22,
+                              fontWeight: FontWeight.w700,
                               color: color,
                             ),
                           ),
@@ -451,17 +606,17 @@ class _StepCard extends StatelessWidget {
                           Icon(
                             icon,
                             color: color,
-                            size: 24,
+                            size: 20,
                           ),
-                          const SizedBox(width: 10),
+                          const SizedBox(width: 8),
                           Flexible(
                             child: Text(
                               title,
-                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                 color: AppTheme.textPrimary,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: -0.8,
+                                fontSize: isMobile ? 16 : 18,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: -0.3,
                               ),
                             ),
                           ),
@@ -470,90 +625,246 @@ class _StepCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: isMobile ? 10 : 12),
                 Text(
                   description,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: AppTheme.textSecondary,
-                    fontSize: 15,
-                    height: 1.6,
-                    letterSpacing: 0.2,
+                    fontSize: isMobile ? 13 : 14,
+                    height: 1.5,
+                    letterSpacing: 0.1,
                   ),
                 ),
-              ],
-            )
-          : Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.14),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: color.withValues(alpha: 0.2),
-                        blurRadius: 25,
-                        spreadRadius: 2,
+                if (imagePath != null) ...[
+                  SizedBox(height: isMobile ? 16 : 20),
+                  Center(
+                    child: Container(
+                      constraints: BoxConstraints(
+                        maxWidth: isMobile ? 220 : 300,
                       ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '$stepNumber',
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w800,
-                          color: color,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: AppTheme.primaryColor.withOpacity(0.2),
+                          width: 1.5,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppTheme.primaryColor.withOpacity(0.08),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.asset(
+                          imagePath!,
+                          fit: BoxFit.contain,
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
-                const SizedBox(width: 32),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            icon,
-                            color: color,
-                            size: 28,
+                ],
+              ],
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                    Container(
+                      width: 56,
+                      height: 56,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            color.withOpacity(0.2),
+                            color.withOpacity(0.1),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: color.withOpacity(0.3),
+                          width: 1.5,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: color.withOpacity(0.15),
+                            blurRadius: 10,
+                            spreadRadius: 1,
                           ),
-                          const SizedBox(width: 12),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
                           Text(
-                            title,
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              color: AppTheme.textPrimary,
-                              fontSize: 28,
+                            '$stepNumber',
+                            style: TextStyle(
+                              fontSize: 22,
                               fontWeight: FontWeight.w700,
-                              letterSpacing: -0.8,
+                              color: color,
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
-                      Text(
-                        description,
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: AppTheme.textSecondary,
-                          fontSize: 18,
-                          height: 1.6,
-                          letterSpacing: 0.2,
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                icon,
+                                color: color,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  title,
+                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    color: AppTheme.textPrimary,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                    letterSpacing: -0.3,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            description,
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: AppTheme.textSecondary,
+                              fontSize: 14,
+                              height: 1.5,
+                              letterSpacing: 0.1,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                if (imagePath != null) ...[
+                  SizedBox(height: 16),
+                  Center(
+                    child: Container(
+                      constraints: BoxConstraints(
+                        maxWidth: 300,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: AppTheme.primaryColor.withOpacity(0.2),
+                          width: 1.5,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppTheme.primaryColor.withOpacity(0.08),
+                            blurRadius: 16,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: Image.asset(
+                          imagePath!,
+                          fit: BoxFit.contain,
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ],
             ),
     );
   }
 }
 
+class _InfoCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String description;
 
+  const _InfoCard({
+    required this.icon,
+    required this.title,
+    required this.description,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width <= 768;
+    return Container(
+      padding: EdgeInsets.all(isMobile ? 14 : 16),
+      decoration: BoxDecoration(
+        color: AppTheme.lightSurface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: AppTheme.primaryColor.withOpacity(0.15),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppTheme.primaryColor.withOpacity(0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: isMobile ? 40 : 44,
+            height: isMobile ? 40 : 44,
+            decoration: BoxDecoration(
+              color: AppTheme.primaryColor.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(
+              icon,
+              color: AppTheme.primaryColor,
+              size: isMobile ? 20 : 22,
+            ),
+          ),
+          SizedBox(width: isMobile ? 12 : 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    fontSize: isMobile ? 16 : 18,
+                    color: AppTheme.textPrimary,
+                  ),
+                ),
+                SizedBox(height: isMobile ? 6 : 8),
+                Text(
+                  description,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontSize: isMobile ? 12 : 13,
+                    height: 1.5,
+                    color: AppTheme.textSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
