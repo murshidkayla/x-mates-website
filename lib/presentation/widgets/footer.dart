@@ -12,21 +12,13 @@ class Footer extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
       decoration: BoxDecoration(
-        color: AppTheme.lightBackground,
+        color: AppTheme.primaryColor,
         border: Border(
           top: BorderSide(
-            color: AppTheme.borderLight.withOpacity(0.5),
+            color: Colors.white.withOpacity(0.1),
             width: 1.5,
           ),
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.02),
-            blurRadius: 20,
-            offset: Offset(0, -4),
-            spreadRadius: 0,
-          ),
-        ],
       ),
       child: Column(
         children: [
@@ -88,12 +80,7 @@ class Footer extends StatelessWidget {
             width: 80,
             height: 3,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  AppTheme.primaryColor,
-                  AppTheme.primaryColorLight,
-                ],
-              ),
+              color: Colors.white.withOpacity(0.3),
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -101,7 +88,7 @@ class Footer extends StatelessWidget {
           Text(
             '© 2025 X Matez. All rights reserved.',
             style: TextStyle(
-              color: AppTheme.textSecondary,
+              color: Colors.white.withOpacity(0.8),
               fontSize: 14,
               fontWeight: FontWeight.w500,
               letterSpacing: 0.4,
@@ -172,13 +159,13 @@ class _RichFooterLinkState extends State<_RichFooterLink> with SingleTickerProvi
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               color: _isHovered
-                  ? AppTheme.primaryColor.withOpacity(0.08)
+                  ? Colors.white.withOpacity(0.15)
                   : Colors.transparent,
             ),
             child: Text(
               widget.label,
               style: TextStyle(
-                color: _isHovered ? AppTheme.primaryColor : AppTheme.textPrimary,
+                color: _isHovered ? Colors.white : Colors.white.withOpacity(0.9),
                 fontSize: 15,
                 fontWeight: _isHovered ? FontWeight.w700 : FontWeight.w500,
                 letterSpacing: 0.3,

@@ -17,39 +17,10 @@ class HomePage extends StatelessWidget {
       Provider.of<NavigationProvider>(context, listen: false).setCurrentRoute('/');
     });
 
-    // Responsive gradient stops based on screen size and orientation
-    final size = MediaQuery.of(context).size;
-    final isMobile = size.width <= 768;
-    final isTablet = size.width > 768 && size.width <= 1024;
-    final isLandscape = size.width > size.height;
-    
-    // Adjust gradient stops based on device and orientation
-    // Blue at top, white at bottom
-    List<double> gradientStops;
-    if (isLandscape) {
-      // Landscape: more gradual transition
-      gradientStops = const [0.0, 0.5, 1.0];
-    } else if (isMobile) {
-      // Mobile portrait: keep more blue at top
-      gradientStops = const [0.0, 0.35, 1.0];
-    } else if (isTablet) {
-      // Tablet portrait: balanced transition
-      gradientStops = const [0.0, 0.4, 1.0];
-    } else {
-      // Desktop: standard transition
-      gradientStops = const [0.0, 0.4, 1.0];
-    }
-
     return Scaffold(
       backgroundColor: AppTheme.lightBackground,
       body: CustomScrollView(
         slivers: [
-          SliverToBoxAdapter(
-            child: Container(
-              color: AppTheme.primaryColor,
-              child: const PandoraNavbar(),
-            ),
-          ),
           SliverToBoxAdapter(
             child: Container(
               decoration: BoxDecoration(
@@ -59,14 +30,33 @@ class HomePage extends StatelessWidget {
                   colors: [
                     AppTheme.primaryColor,
                     AppTheme.primaryColor,
+                    AppTheme.primaryColor.withOpacity(0.8),
                     AppTheme.lightBackground,
                   ],
-                  stops: gradientStops,
+                  stops: const [0.0, 0.4, 0.7, 1.0],
                 ),
               ),
-              child: AnimatedSection(
-                delay: const Duration(milliseconds: 100),
-                child: _EnhancedHeroSection(),
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: CustomPaint(
+                      painter: _GridBackgroundPainter(),
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      const PandoraNavbar(),
+                      AnimatedSection(
+                        delay: Duration.zero,
+                        child: _EnhancedHeroSection(),
+                      ),
+                      AnimatedSection(
+                        delay: const Duration(milliseconds: 100),
+                        child: _SafetyGuidelinesSection(),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
@@ -74,8 +64,8 @@ class HomePage extends StatelessWidget {
             child: Container(
               color: AppTheme.lightBackground,
               child: AnimatedSection(
-                delay: const Duration(milliseconds: 300),
-                child: _StatsSection(),
+                delay: const Duration(milliseconds: 150),
+                child: _AppShowcaseSection(),
               ),
             ),
           ),
@@ -83,16 +73,7 @@ class HomePage extends StatelessWidget {
             child: Container(
               color: AppTheme.lightBackground,
               child: AnimatedSection(
-                delay: const Duration(milliseconds: 500),
-                child: _SafetyGuidelinesSection(),
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Container(
-              color: AppTheme.lightBackground,
-              child: AnimatedSection(
-                delay: const Duration(milliseconds: 700),
+                delay: const Duration(milliseconds: 200),
                 child: _CTASection(),
               ),
             ),
@@ -118,7 +99,7 @@ class _EnhancedHeroSection extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: isMobile ? 24 : 140,
-        vertical: isMobile ? 100 : 140,
+        vertical: isMobile ? 60 : 80,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -142,7 +123,7 @@ class _EnhancedHeroSection extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 40),
+                SizedBox(height: 32),
                 // Text content
                 _HeroTextContent(isMobile: isMobile),
               ],
@@ -165,7 +146,7 @@ class _EnhancedHeroSection extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(width: 60),
+                SizedBox(width: 48),
                 // Text content on the right
                 Expanded(
                   flex: 1,
@@ -173,17 +154,8 @@ class _EnhancedHeroSection extends StatelessWidget {
                 ),
               ],
             ),
-          SizedBox(height: isMobile ? 64 : 88),
-          // Premium CTA button with enhanced styling
-          Center(
-            child: PandoraButton(
-            label: 'Get Started',
-            isLarge: true,
-              icon: Icons.chat_rounded,
-            onTap: () => Navigator.of(context).pushReplacementNamed('/contact'),
-          ),
-          ),
-          SizedBox(height: isMobile ? 48 : 64),
+          SizedBox(height: isMobile ? 40 : 56),
+   
           // Trust indicators
           if (isMobile)
             Column(
@@ -193,13 +165,13 @@ class _EnhancedHeroSection extends StatelessWidget {
                   text: 'Verified',
                   isMobile: isMobile,
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: 12),
                 _TrustIndicator(
                   icon: Icons.lock_rounded,
                   text: '100% Confidential',
                   isMobile: isMobile,
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: 12),
                 _TrustIndicator(
                   icon: Icons.access_time_rounded,
                   text: '24/7 Available',
@@ -216,13 +188,13 @@ class _EnhancedHeroSection extends StatelessWidget {
                   text: 'Verified',
                   isMobile: isMobile,
                 ),
-                SizedBox(width: 32),
+                SizedBox(width: 24),
                 _TrustIndicator(
                   icon: Icons.lock_rounded,
                   text: '100% Confidential',
                   isMobile: isMobile,
                 ),
-                SizedBox(width: 32),
+                SizedBox(width: 24),
                 _TrustIndicator(
                   icon: Icons.access_time_rounded,
                   text: '24/7 Available',
@@ -255,12 +227,19 @@ class _TrustIndicator extends StatelessWidget {
         vertical: isMobile ? 8 : 10,
       ),
       decoration: BoxDecoration(
-        color: AppTheme.primaryColor.withOpacity(0.08),
+        color: Colors.white.withOpacity(0.2),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: AppTheme.primaryColor.withOpacity(0.15),
-          width: 1,
+          color: Colors.white.withOpacity(0.4),
+          width: 1.5,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -268,15 +247,15 @@ class _TrustIndicator extends StatelessWidget {
           Icon(
             icon,
             size: isMobile ? 16 : 18,
-                  color: AppTheme.primaryColor,
+            color: Colors.white,
           ),
           SizedBox(width: 8),
-              Text(
+          Text(
             text,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontSize: isMobile ? 13 : 15,
                   fontWeight: FontWeight.w600,
-                            color: AppTheme.textPrimary,
+                  color: Colors.white,
                   letterSpacing: 0.2,
                 ),
           ),
@@ -286,23 +265,16 @@ class _TrustIndicator extends StatelessWidget {
   }
 }
 
-// Ultra-Modern Stats Section
-class _StatsSection extends StatelessWidget {
+// App Showcase Section with iPhone
+class _AppShowcaseSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width <= 768;
 
-    final stats = [
-      {'number': '50K+', 'label': 'Connections', 'icon': Icons.people_rounded},
-      {'number': '24/7', 'label': 'Available', 'icon': Icons.access_time_rounded},
-      {'number': '100%', 'label': 'Confidential', 'icon': Icons.lock_rounded},
-      {'number': '98%', 'label': 'Satisfaction', 'icon': Icons.favorite_rounded},
-    ];
-
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: isMobile ? 24 : 140,
-        vertical: isMobile ? 60 : 100,
+        vertical: isMobile ? 48 : 72,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -312,11 +284,11 @@ class _StatsSection extends StatelessWidget {
               Container(
                 width: 5,
                 height: 56,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
                       AppTheme.primaryColor,
                       AppTheme.primaryColorLight,
                     ],
@@ -326,7 +298,7 @@ class _StatsSection extends StatelessWidget {
               ),
               SizedBox(width: 20),
               Text(
-                'Trusted by Many',
+                'Experience the App',
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                       fontWeight: FontWeight.w900,
                       fontSize: isMobile ? 28 : 40,
@@ -336,106 +308,181 @@ class _StatsSection extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: isMobile ? 48 : 72),
-          GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: isMobile ? 2 : 4,
-              crossAxisSpacing: isMobile ? 16 : 24,
-              mainAxisSpacing: isMobile ? 16 : 24,
-              childAspectRatio: isMobile ? 1.0 : 1.15,
-        ),
-        itemCount: stats.length,
-        itemBuilder: (context, index) {
-          final stat = stats[index];
-          return TweenAnimationBuilder<double>(
-            tween: Tween(begin: 0.0, end: 1.0),
-            duration: Duration(milliseconds: 400 + (index * 100)),
-            curve: Curves.easeOutCubic,
-            builder: (context, value, child) {
-              return Opacity(
-                opacity: value,
-                child: Transform.scale(
-                  scale: 0.8 + (0.2 * value),
-                  child: Transform.translate(
-                    offset: Offset(0, 20 * (1 - value)),
-                    child: child,
+          SizedBox(height: isMobile ? 32 : 48),
+          if (isMobile)
+            Column(
+              children: [
+                Container(
+                  constraints: BoxConstraints(
+                    maxWidth: 300,
+                    maxHeight: 500,
+                  ),
+                  child: Image.asset(
+                    'assets/iPhone 16.png',
+                    fit: BoxFit.contain,
                   ),
                 ),
-              );
-            },
-            child: ModernChatCard(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-          Container(
-            width: isMobile ? 56 : 64,
-            height: isMobile ? 56 : 64,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  AppTheme.primaryColor.withOpacity(0.15),
-                  AppTheme.primaryColorLight.withOpacity(0.1),
-                ],
-              ),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: AppTheme.primaryColor.withOpacity(0.2),
-                width: 1.5,
-              ),
+                SizedBox(height: 32),
+                _AppShowcaseContent(isMobile: isMobile),
+              ],
+            )
+          else
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    constraints: BoxConstraints(
+                      maxWidth: 500,
+                      maxHeight: 700,
+                    ),
+                    child: Image.asset(
+                      'assets/iPhone 16.png',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 48),
+                Expanded(
+                  flex: 1,
+                  child: _AppShowcaseContent(isMobile: isMobile),
+                ),
+              ],
             ),
-            child: Icon(
-              stat['icon'] as IconData,
-              color: AppTheme.primaryColor,
-              size: isMobile ? 28 : 32,
-            ),
-          ),
-          SizedBox(height: isMobile ? 12 : 16),
-          Flexible(
-            child: Text(
-              stat['number'] as String,
-              style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                color: AppTheme.primaryColor,
-                fontWeight: FontWeight.w900,
-                fontSize: isMobile ? 24 : 36,
-                letterSpacing: -0.5,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          SizedBox(height: isMobile ? 6 : 8),
-          Flexible(
-            child: Text(
-              stat['label'] as String,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: AppTheme.textSecondary,
-                fontSize: isMobile ? 12 : 15,
-                letterSpacing: 0.2,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ],
-      ),
-            ),
-          );
-        },
-      ),
         ],
       ),
     );
   }
 }
 
+class _AppShowcaseContent extends StatelessWidget {
+  final bool isMobile;
+
+  const _AppShowcaseContent({required this.isMobile});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Your Voice Deserves to Be Heard',
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.w800,
+                fontSize: isMobile ? 24 : 36,
+                color: AppTheme.textPrimary,
+                letterSpacing: -1,
+                height: 1.2,
+              ),
+        ),
+        SizedBox(height: isMobile ? 16 : 24),
+        Text(
+          'Connect with compassionate listeners who understand. Our app makes it easy to find someone who\'s here to listen, anytime, anywhere.',
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                fontSize: isMobile ? 16 : 18,
+                height: 1.6,
+                color: AppTheme.textSecondary,
+                letterSpacing: 0.2,
+              ),
+        ),
+        SizedBox(height: isMobile ? 20 : 28),
+        _FeatureItem(
+          icon: Icons.phone_rounded,
+          title: 'Voice & Video Calls',
+          description: 'Connect through voice or video calls with verified listeners',
+          isMobile: isMobile,
+        ),
+        SizedBox(height: isMobile ? 14 : 18),
+        _FeatureItem(
+          icon: Icons.chat_bubble_rounded,
+          title: 'Instant Messaging',
+          description: 'Chat with compassionate listeners in real-time',
+          isMobile: isMobile,
+        ),
+        SizedBox(height: isMobile ? 14 : 18),
+        _FeatureItem(
+          icon: Icons.verified_user_rounded,
+          title: 'Verified Listeners',
+          description: 'All our listeners are verified and trained to provide support',
+          isMobile: isMobile,
+        ),
+      ],
+    );
+  }
+}
+
+class _FeatureItem extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String description;
+  final bool isMobile;
+
+  const _FeatureItem({
+    required this.icon,
+    required this.title,
+    required this.description,
+    required this.isMobile,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: isMobile ? 48 : 56,
+          height: isMobile ? 48 : 56,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                AppTheme.primaryColor.withOpacity(0.15),
+                AppTheme.primaryColorLight.withOpacity(0.1),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: AppTheme.primaryColor.withOpacity(0.2),
+              width: 1.5,
+            ),
+          ),
+          child: Icon(
+            icon,
+            color: AppTheme.primaryColor,
+            size: isMobile ? 24 : 28,
+          ),
+        ),
+        SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      fontSize: isMobile ? 16 : 18,
+                      color: AppTheme.textPrimary,
+                    ),
+              ),
+              SizedBox(height: 6),
+              Text(
+                description,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontSize: isMobile ? 14 : 15,
+                      color: AppTheme.textSecondary,
+                      height: 1.5,
+                    ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
 
 // Ultra-Modern CTA Section
 class _CTASection extends StatelessWidget {
@@ -446,11 +493,11 @@ class _CTASection extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: isMobile ? 24 : 140,
-        vertical: isMobile ? 60 : 100,
+        vertical: isMobile ? 48 : 72,
       ),
       child: ModernChatCard(
         backgroundColor: AppTheme.lightSurface,
-        padding: EdgeInsets.all(isMobile ? 28 : 40),
+        padding: EdgeInsets.all(isMobile ? 24 : 36),
         child: Column(
           children: [
             Container(
@@ -476,7 +523,7 @@ class _CTASection extends StatelessWidget {
                     ),
               ),
             ),
-            SizedBox(height: isMobile ? 20 : 28),
+            SizedBox(height: isMobile ? 16 : 24),
             Text(
               'Ready to Find Relief?',
               style: Theme.of(context).textTheme.headlineLarge?.copyWith(
@@ -488,7 +535,7 @@ class _CTASection extends StatelessWidget {
                   ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: isMobile ? 20 : 24),
+            SizedBox(height: isMobile ? 16 : 20),
             ConstrainedBox(
               constraints: BoxConstraints(
                 maxWidth: isMobile ? double.infinity : 650,
@@ -497,14 +544,14 @@ class _CTASection extends StatelessWidget {
                 'Join our waitlist and be among the first to experience compassionate support and meaningful connections. Your journey to peace and wellbeing starts here.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontSize: isMobile ? 16 : 18,
-                      height: 1.7,
+                      height: 1.6,
                       color: AppTheme.textSecondary,
                       letterSpacing: 0.2,
                   ),
               textAlign: TextAlign.center,
             ),
             ),
-            SizedBox(height: isMobile ? 36 : 48),
+            SizedBox(height: isMobile ? 28 : 40),
             PandoraButton(
               label: 'Start Your Journey',
               isLarge: true,
@@ -650,12 +697,12 @@ class _SafetyGuidelinesSection extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: isMobile ? 24 : 140,
-        vertical: isMobile ? 60 : 100,
+        vertical: isMobile ? 48 : 72,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: isMobile ? 20 : 40),
+          SizedBox(height: isMobile ? 16 : 32),
           ...guidelines.asMap().entries.map((entry) {
             final index = entry.key;
             final guideline = entry.value;
@@ -671,7 +718,7 @@ class _SafetyGuidelinesSection extends StatelessWidget {
                   child: Transform.translate(
                     offset: Offset(-30 * (1 - value), 0),
                     child: Padding(
-                      padding: EdgeInsets.only(bottom: isMobile ? 12 : 16),
+                      padding: EdgeInsets.only(bottom: isMobile ? 10 : 14),
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: _AnimatedGuidelineCard(
@@ -688,11 +735,54 @@ class _SafetyGuidelinesSection extends StatelessWidget {
               },
             );
           }),
-          SizedBox(height: isMobile ? 20 : 40),
+          SizedBox(height: isMobile ? 16 : 32),
         ],
       ),
     );
   }
+}
+
+// Grid Background Painter
+class _GridBackgroundPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    const squareSize = 40.0; // Bigger grid squares
+    const spacing = 1.0; // Narrower spacing between squares
+    const baseOpacity = 0.05; // Base opacity at top
+    const fadeStartRatio = 0.3; // Start fading at 30% from top
+
+    final totalSize = squareSize + spacing;
+
+    // Draw grid of squares with fade effect at bottom
+    for (double x = 0; x < size.width; x += totalSize) {
+      for (double y = 0; y < size.height; y += totalSize) {
+        // Calculate fade based on y position
+        final yRatio = y / size.height;
+        double opacity;
+        
+        if (yRatio < fadeStartRatio) {
+          // Full opacity at top
+          opacity = baseOpacity;
+        } else {
+          // Fade out towards bottom
+          final fadeProgress = (yRatio - fadeStartRatio) / (1.0 - fadeStartRatio);
+          opacity = baseOpacity * (1.0 - fadeProgress * fadeProgress); // Quadratic fade for smoother transition
+        }
+
+        final paint = Paint()
+          ..color = Colors.black.withOpacity(opacity)
+          ..style = PaintingStyle.fill;
+
+        canvas.drawRect(
+          Rect.fromLTWH(x, y, squareSize, squareSize),
+          paint,
+        );
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 // Hero Text Content Widget
@@ -748,14 +838,14 @@ class _HeroTextContent extends StatelessWidget {
           );
         },
       ),
-        SizedBox(height: isMobile ? 32 : 40),
+        SizedBox(height: isMobile ? 24 : 32),
         // Premium description with better styling
                     Text(
           'Connect with compassionate listeners who understand. Share your thoughts, release your stress, and find calm through meaningful connections.',
           textAlign: TextAlign.left,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontSize: isMobile ? 18 : 22,
-                height: 1.8,
+                height: 1.7,
                 fontWeight: FontWeight.w400,
                             color: AppTheme.textSecondary,
                 letterSpacing: 0.3,
@@ -765,5 +855,6 @@ class _HeroTextContent extends StatelessWidget {
     );
   }
 }
+
 
 

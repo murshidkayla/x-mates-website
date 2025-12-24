@@ -26,7 +26,7 @@ class _AnimatedSectionState extends State<AnimatedSection>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 400),
       vsync: this,
     );
 
@@ -38,7 +38,7 @@ class _AnimatedSectionState extends State<AnimatedSection>
     );
 
     _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.25),
+      begin: const Offset(0, 0.15),
       end: Offset.zero,
     ).animate(
       CurvedAnimation(
@@ -47,7 +47,12 @@ class _AnimatedSectionState extends State<AnimatedSection>
       ),
     );
 
-    Future.delayed(widget.delay, () {
+    // Start animation immediately or with minimal delay
+    final effectiveDelay = widget.delay.inMilliseconds > 200 
+        ? Duration(milliseconds: 50) 
+        : Duration.zero;
+    
+    Future.delayed(effectiveDelay, () {
       if (mounted) {
         _controller.forward();
       }

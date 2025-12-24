@@ -31,21 +31,9 @@ class HowToDeletePage extends StatelessWidget {
     });
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppTheme.lightBackground,
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              AppTheme.lightBackground,
-              AppTheme.primaryColor.withOpacity(0.05),
-              AppTheme.primaryColor.withOpacity(0.02),
-              AppTheme.lightBackground,
-            ],
-            stops: const [0.0, 0.3, 0.7, 1.0],
-          ),
-        ),
+        color: AppTheme.lightBackground,
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -236,271 +224,146 @@ class HowToDeletePage extends StatelessWidget {
                 ],
               ),
             ),
-            // Additional Information Section
+            // Need Help Section
+            // Container(
+            //   padding: EdgeInsets.symmetric(
+            //     horizontal: isMobile ? 16 : 60,
+            //     vertical: isMobile ? 24 : 40,
+            //   ),
+            //   decoration: const BoxDecoration(
+            //     color: AppTheme.lightBackground,
+            //   ),
+            //   child: Column(
+            //     children: [
+            //       Container(
+            //         constraints: BoxConstraints(
+            //           maxWidth: isMobile ? double.infinity : 800,
+            //         ),
+            //         padding: EdgeInsets.all(isMobile ? 16 : 20),
+            //         decoration: BoxDecoration(
+            //           color: AppTheme.surfaceWhite,
+            //           borderRadius: BorderRadius.circular(16),
+            //           border: Border.all(
+            //             color: AppTheme.primaryColor.withOpacity(0.2),
+            //             width: 1,
+            //           ),
+            //           boxShadow: [
+            //             BoxShadow(
+            //               color: Colors.black.withValues(alpha: 0.05),
+            //               blurRadius: 8,
+            //               offset: const Offset(0, 2),
+            //             ),
+            //           ],
+            //         ),
+            //         child: Column(
+            //           crossAxisAlignment: CrossAxisAlignment.start,
+            //           children: [
+            //             Row(
+            //               children: [
+            //                 Container(
+            //                   width: isMobile ? 40 : 48,
+            //                   height: isMobile ? 40 : 48,
+            //                   decoration: BoxDecoration(
+            //                     color: AppTheme.primaryColor.withOpacity(0.1),
+            //                     borderRadius: BorderRadius.circular(12),
+            //                     border: Border.all(
+            //                       color: AppTheme.primaryColor.withOpacity(0.2),
+            //                       width: 1,
+            //                     ),
+            //                   ),
+            //                   child: Icon(
+            //                     Icons.warning_amber_rounded,
+            //                     color: AppTheme.primaryColor,
+            //                     size: isMobile ? 20 : 24,
+            //                   ),
+            //                 ),
+            //                 SizedBox(width: isMobile ? 12 : 16),
+            //                 Expanded(
+            //                   child: Text(
+            //                     'Important Notice',
+            //                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            //                       color: AppTheme.textPrimary,
+            //                       fontSize: isMobile ? 18 : 22,
+            //                       fontWeight: FontWeight.w700,
+            //                       letterSpacing: -0.8,
+            //                     ),
+            //                   ),
+            //                 ),
+            //               ],
+            //             ),
+            //             SizedBox(height: isMobile ? 12 : 16),
+            //             Text(
+            //               'Account deletion is permanent and cannot be undone. All your data, including profile information, messages, and app history will be permanently removed from our servers. Please make sure you want to proceed before confirming the deletion.',
+            //               style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            //                 color: AppTheme.textPrimary,
+            //                 fontSize: isMobile ? 13 : 15,
+            //                 height: 1.5,
+            //                 letterSpacing: 0.1,
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // Need Help Section
             Container(
               padding: EdgeInsets.symmetric(
                 horizontal: isMobile ? 16 : 60,
                 vertical: isMobile ? 24 : 40,
               ),
               color: AppTheme.lightBackground,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 5,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          color: AppTheme.primaryColor,
-                          borderRadius: BorderRadius.circular(3),
-                        ),
+              child: Center(
+                child: Container(
+                  constraints: BoxConstraints(
+                    maxWidth: isMobile ? double.infinity : 600,
+                  ),
+                  padding: EdgeInsets.all(isMobile ? 24 : 32),
+                  decoration: BoxDecoration(
+                    color: AppTheme.surfaceWhite,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: AppTheme.primaryColor.withOpacity(0.15),
+                      width: 1,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
                       ),
-                      SizedBox(width: 20),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
                       Text(
-                        'Additional Information',
+                        'Need Help?',
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          fontSize: isMobile ? 18 : 24,
                           color: AppTheme.textPrimary,
-                          letterSpacing: -0.8,
+                          fontSize: isMobile ? 20 : 24,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: isMobile ? 16 : 20),
+                      GestureDetector(
+                        onTap: _launchEmail,
+                        child: Text(
+                          'xmatezsolutionpvtlimited390@gmail.com',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: isMobile ? 14 : 16,
+                            color: AppTheme.primaryColor,
+                            fontWeight: FontWeight.w500,
+                            decoration: TextDecoration.underline,
+                            decorationColor: AppTheme.primaryColor,
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: isMobile ? 16 : 20),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxWidth: isMobile ? double.infinity : 900,
-                    ),
-                    child: Column(
-                      children: [
-                        _InfoCard(
-                          icon: Icons.access_time_rounded,
-                          title: 'Processing Time',
-                          description: 'Account deletion is processed immediately. However, it may take up to 30 days for all data to be completely removed from our backup systems.',
-                        ),
-                        SizedBox(height: isMobile ? 12 : 16),
-                        _InfoCard(
-                          icon: Icons.download_rounded,
-                          title: 'Export Your Data First',
-                          description: 'Before deleting your account, we recommend exporting your data. You can do this from the Settings menu under "Data Export". This ensures you have a backup of all your information.',
-                        ),
-                        SizedBox(height: isMobile ? 12 : 16),
-                        _InfoCard(
-                          icon: Icons.refresh_rounded,
-                          title: 'Cannot Be Undone',
-                          description: 'Once your account is deleted, this action cannot be reversed. You will need to create a new account if you wish to use X Matez again in the future.',
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // Ultra-Modern Important Notice Section
-            Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 16 : 60,
-                vertical: isMobile ? 24 : 40,
-              ),
-              decoration: const BoxDecoration(
-                color: AppTheme.lightBackground,
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    constraints: BoxConstraints(
-                      maxWidth: isMobile ? double.infinity : 800,
-                    ),
-                    padding: EdgeInsets.all(isMobile ? 16 : 20),
-                    decoration: BoxDecoration(
-                      color: AppTheme.surfaceWhite,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: AppTheme.primaryColor.withOpacity(0.2),
-                        width: 1,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.05),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              width: isMobile ? 40 : 48,
-                              height: isMobile ? 40 : 48,
-                              decoration: BoxDecoration(
-                                color: AppTheme.primaryColor.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: AppTheme.primaryColor.withOpacity(0.2),
-                                  width: 1,
-                                ),
-                              ),
-                              child: Icon(
-                                Icons.warning_amber_rounded,
-                                color: AppTheme.primaryColor,
-                                size: isMobile ? 20 : 24,
-                              ),
-                            ),
-                            SizedBox(width: isMobile ? 12 : 16),
-                            Expanded(
-                              child: Text(
-                                'Important Notice',
-                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                  color: AppTheme.textPrimary,
-                                  fontSize: isMobile ? 18 : 22,
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: -0.8,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: isMobile ? 12 : 16),
-                        Text(
-                          'Account deletion is permanent and cannot be undone. All your data, including profile information, messages, and app history will be permanently removed from our servers. Please make sure you want to proceed before confirming the deletion.',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppTheme.textPrimary,
-                            fontSize: isMobile ? 13 : 15,
-                            height: 1.5,
-                            letterSpacing: 0.1,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // Ultra-Modern Need Help Section
-            Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 16 : 60,
-                vertical: isMobile ? 24 : 40,
-              ),
-              decoration: BoxDecoration(
-                color: AppTheme.lightSurfaceElevated,
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    width: isMobile ? 48 : 56,
-                    height: isMobile ? 48 : 56,
-                    decoration: BoxDecoration(
-                      color: AppTheme.primaryColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: AppTheme.primaryColor.withOpacity(0.2),
-                        width: 1,
-                      ),
-                    ),
-                    child: Icon(
-                      Icons.help_outline,
-                      size: isMobile ? 24 : 28,
-                      color: AppTheme.primaryColor,
-                    ),
-                  ),
-                  SizedBox(height: isMobile ? 16 : 20),
-                  Text(
-                    'Need Help?',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: AppTheme.textPrimary,
-                      fontSize: isMobile ? 22 : 28,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: -1,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: isMobile ? 12 : 16),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxWidth: isMobile ? double.infinity : 500,
-                    ),
-                    child: Text(
-                      'If you\'re having trouble deleting your account or have questions about the process, please contact our support team.',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppTheme.textSecondary,
-                        fontSize: isMobile ? 13 : 15,
-                        height: 1.5,
-                        letterSpacing: 0.1,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: isMobile ? 20 : 24),
-                  Container(
-                    constraints: BoxConstraints(
-                      maxWidth: isMobile ? double.infinity : 450,
-                    ),
-                    padding: EdgeInsets.all(isMobile ? 16 : 20),
-                    decoration: BoxDecoration(
-                      color: AppTheme.surfaceWhite,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: AppTheme.primaryColor.withOpacity(0.2),
-                        width: 1,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppTheme.primaryColor.withOpacity(0.06),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(isMobile ? 10 : 12),
-                          decoration: BoxDecoration(
-                            color: AppTheme.primaryColor.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Icon(
-                            Icons.email_outlined,
-                            color: AppTheme.primaryColor,
-                            size: isMobile ? 20 : 24,
-                          ),
-                        ),
-                        SizedBox(height: isMobile ? 12 : 16),
-                        Text(
-                          'Email Support',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: AppTheme.textPrimary,
-                            fontSize: isMobile ? 18 : 20,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        SizedBox(height: isMobile ? 10 : 12),
-                        GestureDetector(
-                          onTap: _launchEmail,
-                          child: Text(
-                            'xmatezsolutionpvtlimited390@gmail.com',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: isMobile ? 13 : 15,
-                              color: AppTheme.primaryColor,
-                              fontWeight: FontWeight.w600,
-                              decoration: TextDecoration.underline,
-                              decorationColor: AppTheme.primaryColor,
-                              decorationThickness: 1.5,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
             const Footer(),
@@ -787,84 +650,6 @@ class _StepCard extends StatelessWidget {
                 ],
               ],
             ),
-    );
-  }
-}
-
-class _InfoCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String description;
-
-  const _InfoCard({
-    required this.icon,
-    required this.title,
-    required this.description,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width <= 768;
-    return Container(
-      padding: EdgeInsets.all(isMobile ? 14 : 16),
-      decoration: BoxDecoration(
-        color: AppTheme.lightSurface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppTheme.primaryColor.withOpacity(0.15),
-          width: 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: AppTheme.primaryColor.withOpacity(0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: isMobile ? 40 : 44,
-            height: isMobile ? 40 : 44,
-            decoration: BoxDecoration(
-              color: AppTheme.primaryColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(
-              icon,
-              color: AppTheme.primaryColor,
-              size: isMobile ? 20 : 22,
-            ),
-          ),
-          SizedBox(width: isMobile ? 12 : 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    fontSize: isMobile ? 16 : 18,
-                    color: AppTheme.textPrimary,
-                  ),
-                ),
-                SizedBox(height: isMobile ? 6 : 8),
-                Text(
-                  description,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontSize: isMobile ? 12 : 13,
-                    height: 1.5,
-                    color: AppTheme.textSecondary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

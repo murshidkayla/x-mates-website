@@ -113,15 +113,19 @@ class _PandoraButtonState extends State<PandoraButton>
                     ),
                     SizedBox(width: 12),
                   ],
-                  Text(
-                    widget.label,
-                    style: TextStyle(
-                      color: widget.isOutlined
-                          ? AppTheme.primaryColor
-                          : Colors.white,
-                      fontSize: widget.isLarge ? 17 : 16,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.5,
+                  Flexible(
+                    child: Text(
+                      widget.label,
+                      style: TextStyle(
+                        color: widget.isOutlined
+                            ? AppTheme.primaryColor
+                            : Colors.white,
+                        fontSize: widget.isLarge ? 17 : 16,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.5,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
                   ),
                 ],
