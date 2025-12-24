@@ -23,40 +23,24 @@ class HomePage extends StatelessWidget {
         slivers: [
           SliverToBoxAdapter(
             child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    AppTheme.primaryColor,
-                    AppTheme.primaryColor,
-                    AppTheme.primaryColor.withOpacity(0.8),
-                    AppTheme.lightBackground,
-                  ],
-                  stops: const [0.0, 0.4, 0.7, 1.0],
-                ),
-              ),
-              child: Stack(
+              color: AppTheme.primaryColor,
+              child: Column(
                 children: [
-                  Positioned.fill(
-                    child: CustomPaint(
-                      painter: _GridBackgroundPainter(),
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      const PandoraNavbar(),
-                      AnimatedSection(
-                        delay: Duration.zero,
-                        child: _EnhancedHeroSection(),
-                      ),
-                      AnimatedSection(
-                        delay: const Duration(milliseconds: 100),
-                        child: _SafetyGuidelinesSection(),
-                      ),
-                    ],
+                  const PandoraNavbar(),
+                  AnimatedSection(
+                    delay: Duration.zero,
+                    child: _EnhancedHeroSection(),
                   ),
                 ],
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              color: AppTheme.lightBackground,
+              child: AnimatedSection(
+                delay: const Duration(milliseconds: 100),
+                child: _SafetyGuidelinesSection(),
               ),
             ),
           ),
@@ -97,9 +81,11 @@ class _EnhancedHeroSection extends StatelessWidget {
     final isMobile = MediaQuery.of(context).size.width <= 768;
 
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 24 : 140,
-        vertical: isMobile ? 60 : 80,
+      padding: EdgeInsets.only(
+        left: isMobile ? 24 : 140,
+        right: isMobile ? 24 : 140,
+        top: isMobile ? 60 : 80,
+        bottom: isMobile ? 40 : 60,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -110,29 +96,30 @@ class _EnhancedHeroSection extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Image first on mobile
+                // Text content first on mobile
+                _HeroTextContent(isMobile: isMobile),
+                SizedBox(height: 32),
+                // Image below text on mobile with 3D effect
                 Center(
-                  child: Container(
-                    constraints: BoxConstraints(
-                      maxWidth: 300,
-                      maxHeight: 400,
-                    ),
-                    child: Image.asset(
-                      'assets/Hand and iPhone 16 Pro.png',
-                      fit: BoxFit.contain,
-                    ),
+                  child: _ThreeDPhoneImage(
+                    imagePath: 'assets/Hand and iPhone 16 Pro.png',
+                    maxWidth: 300,
+                    maxHeight: 400,
                   ),
                 ),
-                SizedBox(height: 32),
-                // Text content
-                _HeroTextContent(isMobile: isMobile),
               ],
             )
           else
             Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                // Image on the left
+                // Text content on the left
+                Expanded(
+                  flex: 1,
+                  child: _HeroTextContent(isMobile: isMobile),
+                ),
+                SizedBox(width: 48),
+                // Image on the right, aligned to bottom
                 Expanded(
                   flex: 1,
                   child: Container(
@@ -146,12 +133,6 @@ class _EnhancedHeroSection extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(width: 48),
-                // Text content on the right
-                Expanded(
-                  flex: 1,
-                  child: _HeroTextContent(isMobile: isMobile),
-                ),
               ],
             ),
           SizedBox(height: isMobile ? 40 : 56),
@@ -159,7 +140,7 @@ class _EnhancedHeroSection extends StatelessWidget {
           // Trust indicators
           if (isMobile)
             Column(
-        children: [
+              children: [
                 _TrustIndicator(
                   icon: Icons.verified_rounded,
                   text: 'Verified',
@@ -199,9 +180,9 @@ class _EnhancedHeroSection extends StatelessWidget {
                   icon: Icons.access_time_rounded,
                   text: '24/7 Available',
                   isMobile: isMobile,
-          ),
-                    ],
-          ),
+                ),
+              ],
+            ),
         ],
       ),
     );
@@ -412,7 +393,7 @@ class _AppShowcaseContent extends StatelessWidget {
   }
 }
 
-class _FeatureItem extends StatelessWidget {
+class _FeatureItem extends StatefulWidget {
   final IconData icon;
   final String title;
   final String description;
@@ -426,60 +407,161 @@ class _FeatureItem extends StatelessWidget {
   });
 
   @override
+  State<_FeatureItem> createState() => _FeatureItemState();
+}
+
+class _FeatureItemState extends State<_FeatureItem>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _iconScaleAnimation;
+  bool _isHovered = false;
+  double _rotationX = 0.0;
+  double _rotationY = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 200),
+      vsync: this,
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.02).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
+    _iconScaleAnimation = Tween<double>(begin: 1.0, end: 1.15).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _updateRotation(Offset position, Size size) {
+    setState(() {
+      final centerX = size.width / 2;
+      final centerY = size.height / 2;
+      _rotationY = (position.dx - centerX) / centerX * 0.1;
+      _rotationX = -(position.dy - centerY) / centerY * 0.1;
+    });
+  }
+
+  void _resetRotation() {
+    setState(() {
+      _rotationX = 0.0;
+      _rotationY = 0.0;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: isMobile ? 48 : 56,
-          height: isMobile ? 48 : 56,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                AppTheme.primaryColor.withOpacity(0.15),
-                AppTheme.primaryColorLight.withOpacity(0.1),
+    return MouseRegion(
+      onEnter: (_) {
+        setState(() => _isHovered = true);
+        _controller.forward();
+      },
+      onExit: (_) {
+        setState(() => _isHovered = false);
+        _controller.reverse();
+        _resetRotation();
+      },
+      onHover: (event) {
+        if (_isHovered) {
+          _updateRotation(event.localPosition, context.size ?? Size.zero);
+        }
+      },
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return Transform(
+            transform: Matrix4.identity()
+              ..setEntry(3, 2, 0.001)
+              ..rotateX(_rotationX)
+              ..rotateY(_rotationY)
+              ..scale(_scaleAnimation.value),
+            alignment: FractionalOffset.center,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Transform.scale(
+                  scale: _iconScaleAnimation.value,
+                  child: Container(
+                    width: widget.isMobile ? 48 : 56,
+                    height: widget.isMobile ? 48 : 56,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: _isHovered
+                            ? [
+                                AppTheme.primaryColor,
+                                AppTheme.primaryColorLight,
+                              ]
+                            : [
+                                AppTheme.primaryColor.withOpacity(0.15),
+                                AppTheme.primaryColorLight.withOpacity(0.1),
+                              ],
+                      ),
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(
+                        color: _isHovered
+                            ? AppTheme.primaryColor
+                            : AppTheme.primaryColor.withOpacity(0.2),
+                        width: _isHovered ? 2 : 1.5,
+                      ),
+                      boxShadow: _isHovered
+                          ? [
+                              BoxShadow(
+                                color: AppTheme.primaryColor.withOpacity(0.4),
+                                blurRadius: 20,
+                                offset: const Offset(0, 8),
+                                spreadRadius: 2,
+                              ),
+                            ]
+                          : null,
+                    ),
+                    child: Icon(
+                      widget.icon,
+                      color: _isHovered ? Colors.white : AppTheme.primaryColor,
+                      size: widget.isMobile ? 24 : 28,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.title,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              fontSize: widget.isMobile ? 16 : 18,
+                              color: _isHovered
+                                  ? AppTheme.primaryColor
+                                  : AppTheme.textPrimary,
+                            ),
+                      ),
+                      SizedBox(height: 6),
+                      Text(
+                        widget.description,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              fontSize: widget.isMobile ? 14 : 15,
+                              color: AppTheme.textSecondary,
+                              height: 1.5,
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: AppTheme.primaryColor.withOpacity(0.2),
-              width: 1.5,
-            ),
-          ),
-          child: Icon(
-            icon,
-            color: AppTheme.primaryColor,
-            size: isMobile ? 24 : 28,
-          ),
-        ),
-        SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      fontSize: isMobile ? 16 : 18,
-                      color: AppTheme.textPrimary,
-                    ),
-              ),
-              SizedBox(height: 6),
-              Text(
-                description,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontSize: isMobile ? 14 : 15,
-                      color: AppTheme.textSecondary,
-                      height: 1.5,
-                    ),
-              ),
-            ],
-          ),
-        ),
-      ],
+          );
+        },
+      ),
     );
   }
 }
@@ -592,6 +674,8 @@ class _AnimatedGuidelineCardState extends State<_AnimatedGuidelineCard>
   late Animation<double> _scaleAnimation;
   late Animation<double> _shadowAnimation;
   bool _isHovered = false;
+  double _rotationX = 0.0;
+  double _rotationY = 0.0;
 
   @override
   void initState() {
@@ -600,10 +684,10 @@ class _AnimatedGuidelineCardState extends State<_AnimatedGuidelineCard>
       duration: const Duration(milliseconds: 200),
       vsync: this,
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.03).animate(
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.05).animate(
       CurvedAnimation(parent: _hoverController, curve: Curves.easeOut),
     );
-    _shadowAnimation = Tween<double>(begin: 0.08, end: 0.15).animate(
+    _shadowAnimation = Tween<double>(begin: 0.08, end: 0.2).animate(
       CurvedAnimation(parent: _hoverController, curve: Curves.easeOut),
     );
   }
@@ -612,6 +696,22 @@ class _AnimatedGuidelineCardState extends State<_AnimatedGuidelineCard>
   void dispose() {
     _hoverController.dispose();
     super.dispose();
+  }
+
+  void _updateRotation(Offset position, Size size) {
+    setState(() {
+      final centerX = size.width / 2;
+      final centerY = size.height / 2;
+      _rotationY = (position.dx - centerX) / centerX * 0.15;
+      _rotationX = -(position.dy - centerY) / centerY * 0.15;
+    });
+  }
+
+  void _resetRotation() {
+    setState(() {
+      _rotationX = 0.0;
+      _rotationY = 0.0;
+    });
   }
 
   @override
@@ -624,12 +724,23 @@ class _AnimatedGuidelineCardState extends State<_AnimatedGuidelineCard>
       onExit: (_) {
         setState(() => _isHovered = false);
         _hoverController.reverse();
+        _resetRotation();
+      },
+      onHover: (event) {
+        if (_isHovered) {
+          _updateRotation(event.localPosition, context.size ?? Size.zero);
+        }
       },
       child: AnimatedBuilder(
         animation: _hoverController,
         builder: (context, child) {
-          return Transform.scale(
-            scale: _scaleAnimation.value,
+          return Transform(
+            transform: Matrix4.identity()
+              ..setEntry(3, 2, 0.001)
+              ..rotateX(_rotationX)
+              ..rotateY(_rotationY)
+              ..scale(_scaleAnimation.value),
+            alignment: FractionalOffset.center,
             child: Container(
               constraints: BoxConstraints(
                 maxWidth: (widget.screenWidth - (widget.isMobile ? 40 : 160)) *
@@ -742,48 +853,6 @@ class _SafetyGuidelinesSection extends StatelessWidget {
   }
 }
 
-// Grid Background Painter
-class _GridBackgroundPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    const squareSize = 40.0; // Bigger grid squares
-    const spacing = 1.0; // Narrower spacing between squares
-    const baseOpacity = 0.05; // Base opacity at top
-    const fadeStartRatio = 0.3; // Start fading at 30% from top
-
-    final totalSize = squareSize + spacing;
-
-    // Draw grid of squares with fade effect at bottom
-    for (double x = 0; x < size.width; x += totalSize) {
-      for (double y = 0; y < size.height; y += totalSize) {
-        // Calculate fade based on y position
-        final yRatio = y / size.height;
-        double opacity;
-        
-        if (yRatio < fadeStartRatio) {
-          // Full opacity at top
-          opacity = baseOpacity;
-        } else {
-          // Fade out towards bottom
-          final fadeProgress = (yRatio - fadeStartRatio) / (1.0 - fadeStartRatio);
-          opacity = baseOpacity * (1.0 - fadeProgress * fadeProgress); // Quadratic fade for smoother transition
-        }
-
-        final paint = Paint()
-          ..color = Colors.black.withOpacity(opacity)
-          ..style = PaintingStyle.fill;
-
-        canvas.drawRect(
-          Rect.fromLTWH(x, y, squareSize, squareSize),
-          paint,
-        );
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
 
 // Hero Text Content Widget
 class _HeroTextContent extends StatelessWidget {
@@ -856,5 +925,197 @@ class _HeroTextContent extends StatelessWidget {
   }
 }
 
+// 3D Interactive Phone Image with Tilt Effect
+class _ThreeDPhoneImage extends StatefulWidget {
+  final String imagePath;
+  final double maxWidth;
+  final double maxHeight;
 
+  const _ThreeDPhoneImage({
+    required this.imagePath,
+    required this.maxWidth,
+    required this.maxHeight,
+  });
+
+  @override
+  State<_ThreeDPhoneImage> createState() => _ThreeDPhoneImageState();
+}
+
+class _ThreeDPhoneImageState extends State<_ThreeDPhoneImage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _floatController;
+  late Animation<double> _floatAnimation;
+  double _rotationX = 0.0;
+  double _rotationY = 0.0;
+  double _scale = 1.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _floatController = AnimationController(
+      duration: const Duration(milliseconds: 3000),
+      vsync: this,
+    )..repeat(reverse: true);
+    
+    _floatAnimation = Tween<double>(begin: -15.0, end: 15.0).animate(
+      CurvedAnimation(parent: _floatController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _floatController.dispose();
+    super.dispose();
+  }
+
+  void _updateRotation(Offset position, Size size) {
+    setState(() {
+      final centerX = size.width / 2;
+      final centerY = size.height / 2;
+      
+      _rotationY = (position.dx - centerX) / centerX * 0.2;
+      _rotationX = -(position.dy - centerY) / centerY * 0.2;
+      _scale = 1.05;
+    });
+  }
+
+  void _resetRotation() {
+    setState(() {
+      _rotationX = 0.0;
+      _rotationY = 0.0;
+      _scale = 1.0;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onHover: (event) => _updateRotation(event.localPosition, context.size ?? Size.zero),
+      onExit: (_) => _resetRotation(),
+      child: AnimatedBuilder(
+        animation: _floatAnimation,
+        builder: (context, child) {
+          return Transform(
+            transform: Matrix4.identity()
+              ..setEntry(3, 2, 0.001) // Perspective
+              ..rotateX(_rotationX)
+              ..rotateY(_rotationY)
+              ..scale(_scale)
+              ..translate(0.0, _floatAnimation.value),
+            alignment: FractionalOffset.center,
+            child: Container(
+              constraints: BoxConstraints(
+                maxWidth: widget.maxWidth,
+                maxHeight: widget.maxHeight,
+              ),
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.white.withOpacity(0.3),
+                    blurRadius: 40,
+                    spreadRadius: 10,
+                    offset: Offset(0, _floatAnimation.value * 0.5),
+                  ),
+                  BoxShadow(
+                    color: AppTheme.primaryColor.withOpacity(0.2),
+                    blurRadius: 60,
+                    spreadRadius: 20,
+                    offset: Offset(0, _floatAnimation.value * 0.3),
+                  ),
+                ],
+              ),
+              child: Image.asset(
+                widget.imagePath,
+                fit: BoxFit.contain,
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+// Animated Background Particles
+class _AnimatedBackgroundParticles extends StatefulWidget {
+  @override
+  State<_AnimatedBackgroundParticles> createState() => _AnimatedBackgroundParticlesState();
+}
+
+class _AnimatedBackgroundParticlesState extends State<_AnimatedBackgroundParticles>
+    with TickerProviderStateMixin {
+  late List<AnimationController> _controllers;
+  late List<Animation<double>> _animations;
+
+  @override
+  void initState() {
+    super.initState();
+    _controllers = List.generate(
+      8,
+      (index) => AnimationController(
+        duration: Duration(milliseconds: 4000 + (index * 500)),
+        vsync: this,
+      )..repeat(),
+    );
+    
+    _animations = _controllers.map((controller) {
+      return Tween<double>(begin: 0.0, end: 1.0).animate(
+        CurvedAnimation(parent: controller, curve: Curves.easeInOut),
+      );
+    }).toList();
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned.fill(
+      child: AnimatedBuilder(
+        animation: Listenable.merge(_animations),
+        builder: (context, child) {
+          return CustomPaint(
+            painter: _ParticlesPainter(_animations),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _ParticlesPainter extends CustomPainter {
+  final List<Animation<double>> animations;
+
+  _ParticlesPainter(this.animations);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..style = PaintingStyle.fill
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 30);
+
+    // Animated floating particles/circles
+    for (int i = 0; i < animations.length; i++) {
+      final progress = animations[i].value;
+      final offset = Offset(
+        size.width * (0.1 + (i * 0.12)) +
+            (80 * (i % 2 == 0 ? 1 : -1) * (progress - 0.5)),
+        size.height * (0.15 + (i * 0.1)) +
+            (50 * (i % 3 == 0 ? 1 : -1) * (progress - 0.5)),
+      );
+      final radius = 60 + (40 * (0.5 - (progress - 0.5).abs()));
+
+      paint.color = Colors.white.withOpacity(0.05 + (0.03 * progress));
+      canvas.drawCircle(offset, radius, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
 
