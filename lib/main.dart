@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'presentation/theme/app_theme.dart';
 import 'application/providers/navigation_provider.dart';
+import 'application/providers/ui_state_provider.dart';
 import 'infrastructure/router/app_router.dart';
 
 void main() {
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => NavigationProvider()),
+        ChangeNotifierProvider(create: (_) => UIStateProvider()),
       ],
       child: MaterialApp(
         title: 'X Matez',

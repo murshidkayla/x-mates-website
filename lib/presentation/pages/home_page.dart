@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../application/providers/navigation_provider.dart';
+import '../../application/providers/ui_state_provider.dart';
 import '../../appimages/images.dart';
 import '../widgets/pandora_navbar.dart';
 import '../widgets/footer.dart';
@@ -881,7 +882,6 @@ class _GetStartedButtonState extends State<_GetStartedButton>
     with SingleTickerProviderStateMixin {
   late AnimationController _pressController;
   late Animation<double> _scaleAnimation;
-  bool _isPressed = false;
 
   @override
   void initState() {
@@ -902,17 +902,17 @@ class _GetStartedButtonState extends State<_GetStartedButton>
   }
 
   void _handleTapDown(TapDownDetails details) {
-    setState(() => _isPressed = true);
+    Provider.of<UIStateProvider>(context, listen: false).setButtonPressed(true);
     _pressController.forward();
   }
 
   void _handleTapUp(TapUpDetails details) {
-    setState(() => _isPressed = false);
+    Provider.of<UIStateProvider>(context, listen: false).setButtonPressed(false);
     _pressController.reverse();
   }
 
   void _handleTapCancel() {
-    setState(() => _isPressed = false);
+    Provider.of<UIStateProvider>(context, listen: false).setButtonPressed(false);
     _pressController.reverse();
   }
 
@@ -926,55 +926,60 @@ class _GetStartedButtonState extends State<_GetStartedButton>
     final verticalPadding = isMobile ? 14.0 : 18.0;
     final fontSize = isMobile ? 14.0 : (isTablet ? 15.0 : 16.0);
     
-    return GestureDetector(
-      onTapDown: _handleTapDown,
-      onTapUp: _handleTapUp,
-      onTapCancel: _handleTapCancel,
-      onTap: () {
-        Navigator.of(context).pushReplacementNamed('/contact');
-        Provider.of<NavigationProvider>(context, listen: false).setCurrentRoute('/contact');
-      },
-      child: AnimatedBuilder(
-        animation: _scaleAnimation,
-        builder: (context, child) {
-          return Transform.scale(
-            scale: _scaleAnimation.value,
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: horizontalPadding,
-                vertical: verticalPadding,
-              ),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: [
-                    Color(0xFFFF8B17), // #FF8B17
-                    Color(0xFFFFB367), // #FFB367
-                  ],
-                ),
-                borderRadius: BorderRadius.circular(50),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color.fromRGBO(201, 77, 0, _isPressed ? 0.5 : 0.75),
-                    offset: Offset(0, _isPressed ? 4 : 7.32),
-                    blurRadius: _isPressed ? 4 : 0,
-                    spreadRadius: 0,
+    return Consumer<UIStateProvider>(
+      builder: (context, uiState, child) {
+        final isPressed = uiState.isButtonPressed;
+        return GestureDetector(
+          onTapDown: _handleTapDown,
+          onTapUp: _handleTapUp,
+          onTapCancel: _handleTapCancel,
+          onTap: () {
+            Navigator.of(context).pushReplacementNamed('/contact');
+            Provider.of<NavigationProvider>(context, listen: false).setCurrentRoute('/contact');
+          },
+          child: AnimatedBuilder(
+            animation: _scaleAnimation,
+            builder: (context, child) {
+              return Transform.scale(
+                scale: _scaleAnimation.value,
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: horizontalPadding,
+                    vertical: verticalPadding,
                   ),
-                ],
-              ),
-              child: Text(
-                'Get Started Today',
-                style: GoogleFonts.poppins(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: fontSize,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [
+                        Color(0xFFFF8B17), 
+                        Color(0xFFFFB367), 
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(50),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color.fromRGBO(201, 77, 0, isPressed ? 0.5 : 0.75),
+                        offset: Offset(0, isPressed ? 4 : 7.32),
+                        blurRadius: isPressed ? 4 : 0,
+                        spreadRadius: 0,
+                      ),
+                    ],
+                  ),
+                  child: Text(
+                    'Get Started Today',
+                    style: GoogleFonts.poppins(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: fontSize,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          );
-        },
-      ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

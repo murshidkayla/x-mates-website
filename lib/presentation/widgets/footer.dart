@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../application/providers/navigation_provider.dart';
+import '../../application/providers/ui_state_provider.dart';
 import '../theme/app_theme.dart';
 
 class Footer extends StatelessWidget {
@@ -101,13 +102,14 @@ class _RichFooterLink extends StatefulWidget {
 }
 
 class _RichFooterLinkState extends State<_RichFooterLink> with SingleTickerProviderStateMixin {
-  bool _isHovered = false;
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
+  late String _hoverKey;
 
   @override
   void initState() {
     super.initState();
+    _hoverKey = 'footer_link_${widget.route}';
     _controller = AnimationController(
       duration: const Duration(milliseconds: 150),
       vsync: this,
@@ -125,42 +127,48 @@ class _RichFooterLinkState extends State<_RichFooterLink> with SingleTickerProvi
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) {
-        setState(() => _isHovered = true);
-        _controller.forward();
-      },
-      onExit: (_) {
-        setState(() => _isHovered = false);
-        _controller.reverse();
-      },
-      child: ScaleTransition(
-        scale: _scaleAnimation,
-          child: GestureDetector(
-          onTap: () {
-            Navigator.of(context).pushReplacementNamed(widget.route);
-            Provider.of<NavigationProvider>(context, listen: false).setCurrentRoute(widget.route);
+    return Consumer<UIStateProvider>(
+      builder: (context, uiState, child) {
+        final isHovered = uiState.isHovered(_hoverKey);
+        
+        return MouseRegion(
+          onEnter: (_) {
+            uiState.setHovered(_hoverKey, true);
+            _controller.forward();
           },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: _isHovered
-                  ? Colors.white.withOpacity(0.1)
-                  : Colors.transparent,
-            ),
-            child: Text(
-              widget.label,
-              style: TextStyle(
-                color: _isHovered ? Colors.white : Colors.white.withOpacity(0.9),
-                fontSize: 15,
-                fontWeight: _isHovered ? FontWeight.w700 : FontWeight.w500,
-                letterSpacing: 0.3,
+          onExit: (_) {
+            uiState.setHovered(_hoverKey, false);
+            _controller.reverse();
+          },
+          child: ScaleTransition(
+            scale: _scaleAnimation,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushReplacementNamed(widget.route);
+                Provider.of<NavigationProvider>(context, listen: false).setCurrentRoute(widget.route);
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: isHovered
+                      ? Colors.white.withOpacity(0.1)
+                      : Colors.transparent,
+                ),
+                child: Text(
+                  widget.label,
+                  style: TextStyle(
+                    color: isHovered ? Colors.white : Colors.white.withOpacity(0.9),
+                    fontSize: 15,
+                    fontWeight: isHovered ? FontWeight.w700 : FontWeight.w500,
+                    letterSpacing: 0.3,
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
