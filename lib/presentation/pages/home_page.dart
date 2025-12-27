@@ -451,7 +451,7 @@ class _CharacterSection extends StatelessWidget {
     
     return Container(
       padding: EdgeInsets.only(
-        left: horizontalPadding,
+        left: isMobile || isTablet ? horizontalPadding : 0,
         right: horizontalPadding,
         top: topPadding,
         bottom: bottomPadding,
@@ -549,80 +549,73 @@ class _CharacterSection extends StatelessWidget {
               : Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Left side - Character images
-                    Expanded(
-                      flex: 1,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Large character image
-                          Container(
-                            constraints: const BoxConstraints(
-                              maxWidth: 400,
-                              maxHeight: 400,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.white,
-                            ),
-                            padding: const EdgeInsets.all(12),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Image.asset(
-                                Images.animeGirl1,
-                                fit: BoxFit.contain,
-                              ),
+                    // Left side - Character images (no margin, aligned to left)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Large character image
+                        Container(
+                          constraints: const BoxConstraints(
+                            maxWidth: 400,
+                            maxHeight: 400,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.white,
+                          ),
+                          padding: const EdgeInsets.all(12),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.asset(
+                              Images.animeGirl1,
+                              fit: BoxFit.contain,
                             ),
                           ),
-                          const SizedBox(height: 24),
-                          // Two smaller character images
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  constraints: const BoxConstraints(
-                                    maxWidth: 200,
-                                    maxHeight: 200,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.white,
-                                  ),
-                                  padding: const EdgeInsets.all(8),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(12),
-                                    child: Image.asset(
-                                      Images.avatarGirl2,
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
+                        ),
+                        const SizedBox(height: 24),
+                        // Two smaller character images
+                        Row(
+                          children: [
+                            Container(
+                              constraints: const BoxConstraints(
+                                maxWidth: 200,
+                                maxHeight: 200,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                              ),
+                              padding: const EdgeInsets.all(8),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.asset(
+                                  Images.avatarGirl2,
+                                  fit: BoxFit.contain,
                                 ),
                               ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: Container(
-                                  constraints: const BoxConstraints(
-                                    maxWidth: 200,
-                                    maxHeight: 200,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.white,
-                                  ),
-                                  padding: const EdgeInsets.all(8),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(12),
-                                    child: Image.asset(
-                                      Images.avatarGirl3,
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
+                            ),
+                            const SizedBox(width: 16),
+                            Container(
+                              constraints: const BoxConstraints(
+                                maxWidth: 200,
+                                maxHeight: 200,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                              ),
+                              padding: const EdgeInsets.all(8),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.asset(
+                                  Images.avatarGirl3,
+                                  fit: BoxFit.contain,
                                 ),
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                     const SizedBox(width: 48),
                     // Right side - Text and speech bubble
