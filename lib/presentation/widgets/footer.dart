@@ -10,15 +10,9 @@ class Footer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
       decoration: BoxDecoration(
         color: AppTheme.primaryColor,
-        border: Border(
-          top: BorderSide(
-            color: Colors.white.withOpacity(0.1),
-            width: 1.5,
-          ),
-        ),
       ),
       child: Column(
         children: [
@@ -32,17 +26,17 @@ class Footer extends StatelessWidget {
                       label: 'Privacy Policy',
                       route: '/privacy-policy',
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 20),
                     _RichFooterLink(
                       label: 'Terms & Conditions',
                       route: '/terms-conditions',
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 20),
                     _RichFooterLink(
                       label: 'Contact',
                       route: '/contact',
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 20),
                     _RichFooterLink(
                       label: 'How to delete',
                       route: '/how-to-delete',
@@ -50,22 +44,24 @@ class Footer extends StatelessWidget {
                   ],
                 );
               } else {
-                return Wrap(
-                  alignment: WrapAlignment.center,
-                  spacing: 48,
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     _RichFooterLink(
                       label: 'Privacy Policy',
                       route: '/privacy-policy',
                     ),
+                    const SizedBox(width: 32),
                     _RichFooterLink(
                       label: 'Terms & Conditions',
                       route: '/terms-conditions',
                     ),
+                    const SizedBox(width: 32),
                     _RichFooterLink(
                       label: 'Contact',
                       route: '/contact',
                     ),
+                    const SizedBox(width: 32),
                     _RichFooterLink(
                       label: 'How to delete',
                       route: '/how-to-delete',
@@ -75,23 +71,14 @@ class Footer extends StatelessWidget {
               }
             },
           ),
-          const SizedBox(height: 48),
-          Container(
-            width: 80,
-            height: 3,
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          const SizedBox(height: 36),
+          const SizedBox(height: 32),
           Text(
             '© 2025 X Matez. All rights reserved.',
             style: TextStyle(
-              color: Colors.white.withOpacity(0.8),
+              color: AppTheme.textPrimary,
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              letterSpacing: 0.4,
+              letterSpacing: 0.2,
             ),
           ),
         ],
@@ -159,13 +146,13 @@ class _RichFooterLinkState extends State<_RichFooterLink> with SingleTickerProvi
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               color: _isHovered
-                  ? Colors.white.withOpacity(0.15)
+                  ? AppTheme.textPrimary.withOpacity(0.1)
                   : Colors.transparent,
             ),
             child: Text(
               widget.label,
               style: TextStyle(
-                color: _isHovered ? Colors.white : Colors.white.withOpacity(0.9),
+                color: _isHovered ? AppTheme.textPrimary : AppTheme.textPrimary.withOpacity(0.9),
                 fontSize: 15,
                 fontWeight: _isHovered ? FontWeight.w700 : FontWeight.w500,
                 letterSpacing: 0.3,

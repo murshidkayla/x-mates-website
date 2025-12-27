@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../application/providers/navigation_provider.dart';
-import '../theme/app_theme.dart';
 
 class PandoraNavbar extends StatefulWidget {
   const PandoraNavbar({super.key});
@@ -80,7 +80,6 @@ class _NavLink extends StatefulWidget {
 }
 
 class _NavLinkState extends State<_NavLink> with SingleTickerProviderStateMixin {
-  bool _isHovered = false;
   late AnimationController _controller;
   late Animation<double> _underlineAnimation;
 
@@ -119,25 +118,13 @@ class _NavLinkState extends State<_NavLink> with SingleTickerProviderStateMixin 
 
   @override
   Widget build(BuildContext context) {
-    // Home page has blue background, others have white background
-    final isHomePage = widget.currentRoute == '/';
-    final selectedColor = isHomePage ? Colors.white : AppTheme.primaryColor;
-    final unselectedColor = isHomePage 
-        ? Colors.white.withOpacity(0.7) 
-        : AppTheme.textPrimary;
-    final hoverColor = isHomePage 
-        ? Colors.white.withOpacity(0.8) 
-        : AppTheme.primaryColor.withOpacity(0.7);
-
     return MouseRegion(
       onEnter: (_) {
-        setState(() => _isHovered = true);
         if (!widget.isActive) {
           _controller.forward();
         }
       },
       onExit: (_) {
-        setState(() => _isHovered = false);
         if (!widget.isActive) {
           _controller.reverse();
         }
@@ -153,14 +140,10 @@ class _NavLinkState extends State<_NavLink> with SingleTickerProviderStateMixin 
           children: [
             Text(
               widget.label,
-              style: TextStyle(
-                color: widget.isActive
-                    ? selectedColor
-                    : (_isHovered
-                        ? hoverColor
-                        : unselectedColor),
-                fontSize: 16,
-                fontWeight: widget.isActive ? FontWeight.w700 : FontWeight.w600,
+              style: GoogleFonts.poppins(
+                color: const Color.fromRGBO(66, 107, 112, 1),
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
                 letterSpacing: 0.4,
               ),
             ),
@@ -168,18 +151,15 @@ class _NavLinkState extends State<_NavLink> with SingleTickerProviderStateMixin 
             AnimatedBuilder(
               animation: _underlineAnimation,
               builder: (context, child) {
-                return Container(
-                  height: 2,
-                  width: 24 * _underlineAnimation.value,
-                  decoration: BoxDecoration(
-                    color: widget.isActive
-                        ? selectedColor
-                        : (_isHovered
-                            ? (isHomePage 
-                                ? Colors.white.withOpacity(0.6) 
-                                : AppTheme.primaryColor.withOpacity(0.6))
-                            : Colors.transparent),
-                    borderRadius: BorderRadius.circular(1),
+                return Opacity(
+                  opacity: _underlineAnimation.value,
+                  child: Container(
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(66, 107, 112, 1),
+                      shape: BoxShape.circle,
+                    ),
                   ),
                 );
               },

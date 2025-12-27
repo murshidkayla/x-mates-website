@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../appimages/images.dart';
 
 class XMatezLogo extends StatelessWidget {
   final double size;
@@ -18,7 +19,7 @@ class XMatezLogo extends StatelessWidget {
     final color = tintColor ?? (isDark ? Colors.white : const Color(0xFF1a1a1a));
     
     return Image.asset(
-      'assets/images/X Z  Png Files-01.png',
+      Images.logo,
       width: size,
       height: size,
       fit: BoxFit.contain,

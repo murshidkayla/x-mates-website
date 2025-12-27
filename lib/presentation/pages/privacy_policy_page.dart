@@ -18,16 +18,17 @@ class PrivacyPolicyPage extends StatelessWidget {
     });
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppTheme.lightBackground,
       body: Container(
         decoration: BoxDecoration(
+          color: AppTheme.lightBackground,
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
               AppTheme.lightBackground,
-              AppTheme.primaryColor.withOpacity(0.05),
-              AppTheme.primaryColor.withOpacity(0.02),
+              AppTheme.primaryColor.withOpacity(0.03),
+              AppTheme.primaryColor.withOpacity(0.01),
               AppTheme.lightBackground,
             ],
             stops: const [0.0, 0.3, 0.7, 1.0],
@@ -53,6 +54,13 @@ class PrivacyPolicyPage extends StatelessWidget {
                     AppTheme.primaryColorDark,
                   ],
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppTheme.primaryColor.withOpacity(0.2),
+                    blurRadius: 20,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,7 +119,7 @@ class PrivacyPolicyPage extends StatelessWidget {
               constraints: BoxConstraints(
                 maxWidth: isMobile ? double.infinity : 1000,
               ),
-              // color: AppTheme.surfaceWhite,
+              color: AppTheme.lightBackground,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

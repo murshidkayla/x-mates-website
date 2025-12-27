@@ -1,0 +1,12 @@
+class Images {
+  Images._();
+
+  static const String logo = 'assets/new/xmatez_logo.png';
+  static const String phoneInHand = 'assets/new/phone_in_hand2.png';
+  static const String animeGirl1 = 'assets/new/anime girl1.png';
+  static const String avatarGirl2 = 'assets/new/avatar girl2.png';
+  static const String avatarGirl3 = 'assets/new/avatar girl3.png';
+  static const String avatarCartoon = 'assets/new/avatar cartoon.png';
+  static const String coinSlice = 'assets/new/coin slice.png';
+}
+
