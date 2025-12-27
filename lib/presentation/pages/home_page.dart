@@ -24,8 +24,8 @@ class HomePage extends StatelessWidget {
             end: Alignment.bottomCenter,
             stops: const [0.0, 1.0],
             colors: [
-              const Color(0xFF65C7DB), // Blue at top
-              const Color(0xFF65C7DB), // Single color at bottom
+              const Color(0xFF65C7DB), // Blue shade at top
+              const Color.fromRGBO(213, 233, 236, 1), // rgba(213, 233, 236, 1) at bottom
             ],
           ),
         ),
@@ -296,7 +296,7 @@ class _iPhone16Section extends StatelessWidget {
                 const SizedBox(height: 32),
                 _iPhone16TextContent(),
                 const SizedBox(height: 32),
-                _iPhone16TextContent(),
+                _iPhone16RightTextContent(),
               ],
             )
           : Column(
@@ -329,7 +329,7 @@ class _iPhone16Section extends StatelessWidget {
                     // Text content on the right
                     Expanded(
                       flex: 1,
-                      child: _iPhone16TextContent(),
+                      child: _iPhone16RightTextContent(),
                     ),
                   ],
                 ),
@@ -371,7 +371,55 @@ class _iPhone16TextContent extends StatelessWidget {
         const SizedBox(height: 24),
         // Italic paragraph text
         Text(
-          'Connect with compassionate listeners who understand. Share your thoughts, release your stress, and find calm through meaningful connections.',
+          'Discover a community where your feelings are validated and your experiences matter. Engage in conversations that inspire growth, healing, and personal transformation.',
+          textAlign: isMobile ? TextAlign.center : TextAlign.left,
+          style: TextStyle(
+            fontSize: descriptionSize,
+            fontStyle: FontStyle.italic,
+            height: 1.6,
+            fontWeight: FontWeight.w400,
+            color: const Color.fromRGBO(227, 250, 255, 1), // rgba(227, 250, 255, 1)
+            letterSpacing: 0.2,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// iPhone 16 Right Side Text Content Widget
+class _iPhone16RightTextContent extends StatelessWidget {
+  const _iPhone16RightTextContent();
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 600;
+    final isTablet = screenWidth >= 600 && screenWidth < 1024;
+    
+    final headlineSize = isMobile ? 24.0 : (isTablet ? 32.0 : 48.0);
+    final descriptionSize = isMobile ? 14.0 : (isTablet ? 16.0 : 18.0);
+    
+    return Column(
+      crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      children: [
+        // Large bold italic heading
+        Text(
+          'BUILD TRUST THROUGH\nAUTHENTIC CONVERSATIONS',
+          textAlign: isMobile ? TextAlign.center : TextAlign.left,
+          style: TextStyle(
+            fontSize: headlineSize,
+            fontWeight: FontWeight.w900,
+            fontStyle: FontStyle.italic,
+            height: 1.1,
+            letterSpacing: -1.0,
+            color: const Color.fromRGBO(227, 250, 255, 1), // rgba(227, 250, 255, 1)
+          ),
+        ),
+        const SizedBox(height: 24),
+        // Italic paragraph text
+        Text(
+          'Create lasting bonds with people who truly care. Share your journey, celebrate your victories, and find strength in a supportive network that empowers you to be your authentic self.',
           textAlign: isMobile ? TextAlign.center : TextAlign.left,
           style: TextStyle(
             fontSize: descriptionSize,
@@ -651,9 +699,9 @@ class _SpeechBubbleClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     final path = Path();
     final borderRadius = 24.0;
-    final tailWidth = 20.0;
-    final tailHeight = 15.0;
-    final tailOffset = size.width * 0.75; // Position tail on the right side
+    final tailWidth = 16.0; // Smaller tail width
+    final tailHeight = 12.0; // Smaller tail height
+    final tailOffset = size.width * 0.85; // Position tail on the bottom right
 
     // Main rounded rectangle
     path.addRRect(
@@ -663,7 +711,7 @@ class _SpeechBubbleClipper extends CustomClipper<Path> {
       ),
     );
     
-    // Add tail pointing down and to the right
+    // Add small tail pointing down and to the right (towards character)
     path.moveTo(tailOffset, size.height);
     path.lineTo(tailOffset + tailWidth / 2, size.height + tailHeight);
     path.lineTo(tailOffset + tailWidth, size.height);
@@ -688,58 +736,63 @@ class _SpeechBubbleWithCharacter extends StatelessWidget {
     
     final descriptionSize = isMobile ? 14.0 : (isTablet ? 16.0 : 18.0);
     
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        // Speech bubble with tail
-        Container(
-          margin: const EdgeInsets.only(bottom: 15),
-          child: ClipPath(
-            clipper: _SpeechBubbleClipper(),
-            child: Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 20,
-                    offset: const Offset(0, 4),
+    final characterSize = isMobile ? 120.0 : (isTablet ? 160.0 : 200.0);
+    
+    return SizedBox(
+      height: isMobile ? 220 : (isTablet ? 280 : 350),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          // Speech bubble positioned on the left
+          Positioned(
+            left: 0,
+            top: 0,
+            right: characterSize + 20,
+            child: ClipPath(
+              clipper: _SpeechBubbleClipper(),
+              child: Container(
+                padding: EdgeInsets.all(isMobile ? 16.0 : (isTablet ? 20.0 : 24.0)),
+                margin: const EdgeInsets.only(bottom: 12), // Smaller space for smaller tail
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(24),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 20,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Text(
+                  'You\'re never alone in your journey. Our platform connects you with understanding companions who offer a safe space to express yourself freely and authentically.',
+                  style: TextStyle(
+                    fontSize: descriptionSize,
+                    fontStyle: FontStyle.italic,
+                    height: 1.6,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.grey.shade700,
+                    letterSpacing: 0.2,
                   ),
-                ],
-              ),
-              child: Text(
-                'Connect with compassionate listeners who understand. Share your thoughts, release your stress, and find calm through meaningful connections.',
-                style: TextStyle(
-                  fontSize: descriptionSize,
-                  fontStyle: FontStyle.italic,
-                  height: 1.6,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.grey.shade700,
-                  letterSpacing: 0.2,
                 ),
               ),
             ),
           ),
-        ),
-        // Character peeking from below
-        Positioned(
-          bottom: -320,
-          right: 20,
-          child: Container(
-            width: isMobile ? 120 : (isTablet ? 160 : 200),
-            height: isMobile ? 120 : (isTablet ? 160 : 200),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-            ),
-            child: Image.asset(
-              Images.avatarCartoon,
-              fit: BoxFit.contain,
+          // Character positioned on the right side
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: Container(
+              width: characterSize,
+              height: characterSize,
+              child: Image.asset(
+                Images.avatarCartoon,
+                fit: BoxFit.contain,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
