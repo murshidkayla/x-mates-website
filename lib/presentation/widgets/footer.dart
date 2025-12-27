@@ -75,7 +75,7 @@ class Footer extends StatelessWidget {
           Text(
             '© 2025 X Matez. All rights reserved.',
             style: TextStyle(
-              color: AppTheme.textPrimary,
+              color: Colors.white,
               fontSize: 14,
               fontWeight: FontWeight.w500,
               letterSpacing: 0.2,
@@ -146,13 +146,13 @@ class _RichFooterLinkState extends State<_RichFooterLink> with SingleTickerProvi
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               color: _isHovered
-                  ? AppTheme.textPrimary.withOpacity(0.1)
+                  ? Colors.white.withOpacity(0.1)
                   : Colors.transparent,
             ),
             child: Text(
               widget.label,
               style: TextStyle(
-                color: _isHovered ? AppTheme.textPrimary : AppTheme.textPrimary.withOpacity(0.9),
+                color: _isHovered ? Colors.white : Colors.white.withOpacity(0.9),
                 fontSize: 15,
                 fontWeight: _isHovered ? FontWeight.w700 : FontWeight.w500,
                 letterSpacing: 0.3,

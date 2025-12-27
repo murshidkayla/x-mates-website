@@ -8,5 +8,7 @@ class Images {
   static const String avatarGirl3 = 'assets/new/avatar girl3.png';
   static const String avatarCartoon = 'assets/new/avatar cartoon.png';
   static const String coinSlice = 'assets/new/coin slice.png';
+  static const String coinXmate = 'assets/new/coin_xmate.png';
+  static const String iPhone16 = 'assets/iPhone 16.png';
 }
 
