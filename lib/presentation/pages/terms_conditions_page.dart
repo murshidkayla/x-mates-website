@@ -77,7 +77,7 @@ class TermsConditionsPage extends StatelessWidget {
                   ),
                   SizedBox(height: isMobile ? 16 : 20),
                   Text(
-                    'Your rights and responsibilities when using X Matez',
+                    'Your rights and responsibilities when using Xmatez',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Colors.white.withValues(alpha: 0.9),
                       fontSize: isMobile ? 16 : 18,
@@ -99,7 +99,7 @@ class TermsConditionsPage extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      'Effective: September 6, 2025',
+                      'Effective: December 10, 2025',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Colors.white,
                         fontSize: isMobile ? 14 : 16,
@@ -124,7 +124,7 @@ class TermsConditionsPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Welcome to X Matez. These Terms & Conditions govern your use of our mobile application and related services. By accessing or using our app, you agree to be bound by these terms.',
+                    'These Terms & Conditions govern your use of the Xmatez mobile application and its related services. By accessing or using our app, you agree to comply with and be bound by these terms.',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: AppTheme.textPrimary,
                       fontSize: isMobile ? 16 : 18,
@@ -136,7 +136,7 @@ class TermsConditionsPage extends StatelessWidget {
                     title: 'ACCEPTANCE OF TERMS',
                     children: [
                       Text(
-                        'By downloading, installing, accessing, or using the X Matez mobile application, you acknowledge that you have read, understood, and agree to be bound by these Terms & Conditions and our Privacy Policy.',
+                        'By downloading, installing, accessing, or using the LoyalMeet mobile application, you acknowledge that you have read, understood, and agree to be bound by these Terms & Conditions and our Privacy Policy.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
                           fontSize: isMobile ? 15 : 17,
@@ -174,7 +174,7 @@ class TermsConditionsPage extends StatelessWidget {
                             SizedBox(width: isMobile ? 12 : 16),
                             Expanded(
                               child: Text(
-                                'Important Notice\n\nThese terms constitute a legally binding agreement between you and X Matez. Please read them carefully before using our services.',
+                                'Important Notice\n\nThese Terms & Conditions form a legally binding agreement between you and LoyalMeet. Please read them carefully before using our services.',
                                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                   color: AppTheme.textPrimary,
                                   fontSize: isMobile ? 15 : 17,
@@ -189,10 +189,10 @@ class TermsConditionsPage extends StatelessWidget {
                     ],
                   ),
                   _Section(
-                    title: 'ABOUT X MATEZ',
+                    title: 'ABOUT XMATEZ',
                     children: [
                       Text(
-                        'X Matez is a mobile application that provides communication and social interaction services. Our app is designed to facilitate meaningful conversations and connections between users.',
+                        'Xmatez is a mobile application that enables seamless communication and social interaction. Our app is designed to help users connect and engage in meaningful conversations.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
                           fontSize: isMobile ? 15 : 17,
@@ -203,11 +203,12 @@ class TermsConditionsPage extends StatelessWidget {
                       _SubSection(
                         title: 'Service Description',
                         content:
-                            'Our services include but are not limited to:\n\n'
+                            'Our services include, but are not limited to:\n\n'
                             '• Real-time messaging and communication features\n'
                             '• User profile creation and management\n'
-                            '• Social interaction and networking capabilities\n'
-                            '• Notification and alert services',
+                            '• Social networking and interaction capabilities\n'
+                            '• Content sharing, including media and files\n'
+                            '• Notifications and alert services',
                       ),
                     ],
                   ),
@@ -217,27 +218,27 @@ class TermsConditionsPage extends StatelessWidget {
                       _SubSection(
                         title: 'Age Requirements',
                         content:
-                            'You must be at least 18 years of age to use X Matez. Our services are intended exclusively for adult users aged 18 and above. By using our app, you represent and warrant that you meet this age requirement.',
+                            'You must be at least 18 years old to use Xmatez. Our services are intended solely for adult users. By accessing or using our app, you confirm that you meet this age requirement.',
                       ),
                       _SubSection(
                         title: 'Age Verification',
                         content:
-                            'If you are under 18 years of age, you are not permitted to access or use X Matez. We reserve the right to request proof of age and to terminate accounts that do not meet this requirement.',
+                            'If you are under 18 years old, you are not allowed to access or use Xmatez. We reserve the right to request proof of age and to terminate any accounts that do not meet this requirement.',
                       ),
                       _SubSection(
                         title: 'Account Creation',
                         content:
-                            'To access certain features of our app, you may need to create an account. When creating an account, you agree to:\n\n'
-                            '• Provide accurate, current, and complete information\n'
-                            '• Maintain and promptly update your account information\n'
+                            'To access certain features of Xmatez, you may be required to create an account. By creating an account, you agree to:\n\n'
+                            '• Provide accurate, up-to-date, and complete information\n'
+                            '• Maintain and promptly update your account information as needed\n'
                             '• Keep your login credentials secure and confidential\n'
-                            '• Accept responsibility for all activities under your account\n'
-                            '• Notify us immediately of any unauthorized account access',
+                            '• Accept responsibility for all activities performed under your account\n'
+                            '• Notify us immediately of any unauthorized access to your account',
                       ),
                       _SubSection(
                         title: 'Account Termination',
                         content:
-                            'We reserve the right to suspend or terminate your account at any time for violations of these terms or for any other reason we deem appropriate.',
+                            'We reserve the right to suspend or terminate your account at any time if you violate these terms or for any other reason we consider appropriate.',
                       ),
                     ],
                   ),
@@ -247,9 +248,9 @@ class TermsConditionsPage extends StatelessWidget {
                       _SubSection(
                         title: 'Acceptable Use',
                         content:
-                            'When using X Matez, you agree to:\n\n'
-                            '• Use the app only for lawful purposes\n'
-                            '• Respect other users\' rights and privacy\n'
+                            'When using Xmatez, you agree to:\n\n'
+                            '• Use the app solely for lawful purposes\n'
+                            '• Respect the rights and privacy of other users\n'
                             '• Communicate in a respectful and appropriate manner\n'
                             '• Comply with all applicable laws and regulations\n'
                             '• Report any inappropriate behavior or content',
@@ -257,7 +258,7 @@ class TermsConditionsPage extends StatelessWidget {
                       _SubSection(
                         title: 'Prohibited Activities',
                         content:
-                            'You agree not to engage in any of the following prohibited activities:\n\n'
+                            ' You must not engage in any of the following:\n\n'
                             '• Harassment, bullying, or intimidation of other users\n'
                             '• Posting or sharing illegal, harmful, or inappropriate content\n'
                             '• Impersonating another person or entity\n'
@@ -270,7 +271,7 @@ class TermsConditionsPage extends StatelessWidget {
                       _SubSection(
                         title: 'Content Responsibility',
                         content:
-                            'You are solely responsible for any content you post, share, or transmit through our app. We do not endorse or take responsibility for user-generated content.',
+                            ' You are solely responsible for any content you post, share, or transmit through Xmatez. We do not endorse or assume responsibility for user-generated content.',
                       ),
                     ],
                   ),
@@ -280,17 +281,17 @@ class TermsConditionsPage extends StatelessWidget {
                       _SubSection(
                         title: 'Our Rights',
                         content:
-                            'X Matez and all related content, features, and functionality are owned by us and are protected by copyright, trademark, and other intellectual property laws.',
+                            'Xmatez, including all content, features, and functionality, is owned by us and protected by copyright, trademark, and other intellectual property laws.',
                       ),
                       _SubSection(
                         title: 'User Content License',
                         content:
-                            'By posting content on our app, you grant us a non-exclusive, royalty-free, worldwide license to use, display, reproduce, and distribute your content in connection with our services.',
+                            'By posting content on LoyalMeet, you grant us a non-exclusive, royalty-free, worldwide license to use, display, reproduce, and distribute your content in connection with our services.',
                       ),
                       _SubSection(
                         title: 'Respect for Third-Party Rights',
                         content:
-                            'You agree not to infringe upon the intellectual property rights of others when using our app.',
+                            'You agree not to infringe upon the intellectual property rights of others while using our app.',
                       ),
                     ],
                   ),
@@ -298,7 +299,7 @@ class TermsConditionsPage extends StatelessWidget {
                     title: 'PRIVACY AND DATA PROTECTION',
                     children: [
                       Text(
-                        'Your privacy is important to us. Our collection, use, and protection of your personal information is governed by our Privacy Policy, which is incorporated into these terms by reference.',
+                        'Your privacy is important to us. The collection, use, and protection of your personal information are governed by our Privacy Policy, which is incorporated into these Terms & Conditions by reference.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
                           fontSize: isMobile ? 15 : 17,
@@ -307,7 +308,7 @@ class TermsConditionsPage extends StatelessWidget {
                       ),
                       SizedBox(height: isMobile ? 10 : 14),
                       Text(
-                        'By using our app, you consent to the collection and use of your information as described in our Privacy Policy.',
+                        'By using Xmatez, you consent to the collection and use of your information as outlined in our Privacy Policy.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
                           fontSize: isMobile ? 15 : 17,
@@ -318,7 +319,7 @@ class TermsConditionsPage extends StatelessWidget {
                       _SubSection(
                         title: 'Data Security',
                         content:
-                            'While we implement reasonable security measures to protect your information, you acknowledge that no method of transmission or storage is completely secure.',
+                            'We implement reasonable security measures to protect your information; however, you acknowledge that no method of transmission or storage is completely secure.',
                       ),
                     ],
                   ),
@@ -328,16 +329,16 @@ class TermsConditionsPage extends StatelessWidget {
                       _SubSection(
                         title: 'Paid Services',
                         content:
-                            'Some features of X Matez may require payment. If you choose to purchase paid services:\n\n'
-                            '• All payments are processed through secure third-party payment providers\n'
-                            '• Prices are subject to change with reasonable notice\n'
+                            'Some features of Xmatez may require payment. By purchasing paid services, you agree to the following:\n\n'
+                            '• All payments are processed securely through third-party payment providers\n'
+                            '• Prices may change with reasonable notice\n'
                             '• Subscriptions automatically renew unless cancelled\n'
-                            '• Refunds are subject to our refund policy and applicable laws',
+                            '• Refunds are governed by our refund policy and applicable laws',
                       ),
                       _SubSection(
                         title: 'Billing',
                         content:
-                            'You authorize us to charge your chosen payment method for any applicable fees. You are responsible for maintaining valid payment information.',
+                            'You authorize us to charge your selected payment method for any applicable fees. It is your responsibility to maintain valid and up-to-date payment information.',
                       ),
                     ],
                   ),
@@ -347,17 +348,17 @@ class TermsConditionsPage extends StatelessWidget {
                       _SubSection(
                         title: 'Service Availability',
                         content:
-                            'We strive to maintain continuous service availability but cannot guarantee uninterrupted access. Our app may be temporarily unavailable due to maintenance, updates, or technical issues.',
+                            'We strive to keep Xmatez available at all times; however, we cannot guarantee uninterrupted access. The app may be temporarily unavailable due to maintenance, updates, or technical issues.',
                       ),
                       _SubSection(
                         title: 'Service Modifications',
                         content:
-                            'We reserve the right to modify, suspend, or discontinue any aspect of our services at any time, with or without notice.',
+                            'We reserve the right to modify, suspend, or discontinue any part of our services at any time, with or without notice.',
                       ),
                       _SubSection(
                         title: 'Updates',
                         content:
-                            'We may release updates to improve functionality, security, or user experience. You agree to accept such updates as part of your use of the app.',
+                            'We may release updates to enhance functionality, security, or user experience. By using the app, you agree to accept these updates as part of your continued use of Xmatez.',
                       ),
                     ],
                   ),
@@ -367,17 +368,17 @@ class TermsConditionsPage extends StatelessWidget {
                       _SubSection(
                         title: 'Service Disclaimer',
                         content:
-                            'X Matez is provided "as is" and "as available" without warranties of any kind, either express or implied. We do not guarantee that our services will meet your specific requirements or be error-free.',
+                            'Xmatez is provided on an "as is" and "as available" basis, without warranties of any kind, either express or implied. We do not guarantee that our services will meet your specific needs or be error-free.',
                       ),
                       _SubSection(
                         title: 'Limitation of Liability',
                         content:
-                            'To the maximum extent permitted by law, we shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of our app.',
+                            'To the fullest extent permitted by law, we shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of Xmatez.',
                       ),
                       _SubSection(
                         title: 'User Interactions',
                         content:
-                            'We are not responsible for the conduct of other users or the content they share. You interact with other users at your own risk.',
+                            'We are not responsible for the behavior of other users or the content they share. Any interactions with other users are at your own risk.',
                       ),
                     ],
                   ),
@@ -385,7 +386,7 @@ class TermsConditionsPage extends StatelessWidget {
                     title: 'INDEMNIFICATION',
                     children: [
                       Text(
-                        'You agree to indemnify and hold harmless X Matez from any claims, damages, losses, or expenses arising from:',
+                        'You agree to indemnify and hold harmless Xmatez from any claims, damages, losses, or expenses resulting from:',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
                           fontSize: isMobile ? 15 : 17,
@@ -395,9 +396,9 @@ class TermsConditionsPage extends StatelessWidget {
                       SizedBox(height: isMobile ? 10 : 14),
                       Text(
                         '• Your use of the app\n'
-                        '• Your violation of these terms\n'
+                        '• Your violation of these Terms & Conditions\n'
                         '• Your infringement of any third-party rights\n'
-                        '• Any content you post or share',
+                        '• Any content you post or share on the app',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
                           fontSize: isMobile ? 15 : 17,
@@ -417,12 +418,12 @@ class TermsConditionsPage extends StatelessWidget {
                       _SubSection(
                         title: 'Termination by Us',
                         content:
-                            'We may terminate or suspend your access immediately, without prior notice, for any breach of these terms or for any other reason we deem appropriate.',
+                            'We may suspend or terminate your access immediately, without prior notice, for any breach of these Terms or for any other reason we consider appropriate.',
                       ),
                       _SubSection(
                         title: 'Effect of Termination',
                         content:
-                            'Upon termination, your right to use the app will cease immediately. Provisions that by their nature should survive termination will remain in effect.',
+                            'Upon termination, your right to use LoyalMeet will end immediately. Any provisions that by their nature should survive termination will continue to remain in effect.',
                       ),
                     ],
                   ),
@@ -432,15 +433,15 @@ class TermsConditionsPage extends StatelessWidget {
                       _SubSection(
                         title: 'Governing Law',
                         content:
-                            'These terms are governed by and construed in accordance with the laws of India, specifically the Information Technology Act, 2000 and related regulations.',
+                            'These Terms & Conditions are governed by and interpreted in accordance with the laws of India, including the Information Technology Act, 2000 and related regulations.',
                       ),
                       _SubSection(
                         title: 'Dispute Resolution',
                         content:
-                            'Any disputes arising from these terms or your use of our app will be resolved through:\n\n'
+                            'Any disputes arising from these Terms or your use of Xmatez will be resolved through the following steps:\n\n'
                             '• Initial good faith negotiations\n'
-                            '• Mediation if negotiations fail\n'
-                            '• Binding arbitration as a final resort',
+                            '• Mediation if negotiations are unsuccessful\n'
+                            '• Binding arbitration as a final recourse',
                       ),
                     ],
                   ),
@@ -448,7 +449,7 @@ class TermsConditionsPage extends StatelessWidget {
                     title: 'CHANGES TO TERMS',
                     children: [
                       Text(
-                        'We may update these Terms & Conditions periodically to reflect changes in our services or applicable laws. We will notify you of significant changes through:',
+                        'We may update these Terms & Conditions from time to time to reflect changes in our services or applicable laws. Significant updates will be communicated through:',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
                           fontSize: isMobile ? 15 : 17,
@@ -460,7 +461,7 @@ class TermsConditionsPage extends StatelessWidget {
                         '• In-app notifications\n'
                         '• Email notifications (if provided)\n'
                         '• Updates posted on our website\n\n'
-                        'Your continued use of the app after changes constitutes acceptance of the updated terms.',
+                        'Your continued use of LoyalMeet after any changes constitutes acceptance of the updated terms.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.textPrimary,
                           fontSize: isMobile ? 15 : 17,
@@ -471,7 +472,7 @@ class TermsConditionsPage extends StatelessWidget {
                       _SubSection(
                         title: 'Review Regularly',
                         content:
-                            'We encourage you to review these terms regularly to stay informed about your rights and responsibilities.',
+                            'We encourage you to review these Terms periodically to stay informed about your rights and responsibilities.',
                       ),
                     ],
                   ),
@@ -481,22 +482,45 @@ class TermsConditionsPage extends StatelessWidget {
                       _SubSection(
                         title: 'Entire Agreement',
                         content:
-                            'These terms, together with our Privacy Policy, constitute the entire agreement between you and X Matez.',
+                            'These Terms, together with our Privacy Policy, constitute the entire agreement between you and Xmatez.',
                       ),
                       _SubSection(
                         title: 'Severability',
                         content:
-                            'If any provision of these terms is found to be unenforceable, the remaining provisions will remain in full force and effect.',
+                            'If any provision of these Terms is found to be unenforceable, the remaining provisions will continue in full force and effect.',
                       ),
                       _SubSection(
                         title: 'Waiver',
                         content:
-                            'Our failure to enforce any provision of these terms does not constitute a waiver of that provision.',
+                            'Our failure to enforce any provision of these Terms does not constitute a waiver of that provision.',
                       ),
                       _SubSection(
                         title: 'Assignment',
                         content:
-                            'We may assign our rights and obligations under these terms. You may not assign your rights without our written consent.',
+                            'We may assign our rights and obligations under these Terms. You may not assign your rights without our prior written consent.',
+                      ),
+                    ],
+                  ),
+                  _Section(
+                    title: 'CONTACT INFORMATION',
+                    children: [
+                      Text(
+                        'For any questions or requests related to your privacy, please reach out to us:',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppTheme.textPrimary,
+                          fontSize: isMobile ? 15 : 17,
+                          height: 1.6,
+                        ),
+                      ),
+                      SizedBox(height: isMobile ? 10 : 14),
+                      Text(
+                        '📧 xmatezsolutionpvtlimited390@gmail.com\n'
+                        '📞 +91 9495270656',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppTheme.textPrimary,
+                          fontSize: isMobile ? 15 : 17,
+                          height: 1.6,
+                        ),
                       ),
                     ],
                   ),

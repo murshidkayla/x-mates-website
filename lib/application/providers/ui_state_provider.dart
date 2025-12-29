@@ -16,6 +16,7 @@ class UIStateProvider extends ChangeNotifier {
     }
   }
 
+
   // Mobile menu state
   bool get isMobileMenuOpen => _isMobileMenuOpen;
 

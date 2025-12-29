@@ -9,6 +9,9 @@ class NavigationProvider extends ChangeNotifier {
     _currentRoute = route;
     notifyListeners();
   }
+
+
+
 }
 
 

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../application/providers/navigation_provider.dart';
-import '../../application/providers/ui_state_provider.dart';
 import '../../appimages/images.dart';
 import '../widgets/pandora_navbar.dart';
 import '../widgets/footer.dart';
@@ -18,6 +17,8 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       body: Container(
+        width: double.infinity,
+        height: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -29,51 +30,17 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ),
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: _TopBarWithLogo(),
-            ),
-            SliverToBoxAdapter(
-              child: _EnhancedHeroSection(),
-            ),
-            SliverToBoxAdapter(
-              child: _iPhone16Section(),
-            ),
-            SliverToBoxAdapter(
-              child: _CharacterSection(),
-            ),
-            SliverToBoxAdapter(
-              child: _OrangeCTASection(),
-            ),
-            // SliverToBoxAdapter(
-            //   child: AnimatedSection(
-            //     delay: const Duration(milliseconds: 100),
-            //     child: _SafetyGuidelinesSection(),
-            //   ),
-            // ),
-            // SliverToBoxAdapter(
-            //   child: AnimatedSection(
-            //     delay: const Duration(milliseconds: 150),
-            //     child: _AvatarTextSection(),
-            //   ),
-            // ),
-            // SliverToBoxAdapter(
-            //   child: AnimatedSection(
-            //     delay: const Duration(milliseconds: 175),
-            //     child: _SpeechBubbleSection(),
-            //   ),
-            // ),
-            // SliverToBoxAdapter(
-            //   child: AnimatedSection(
-            //     delay: const Duration(milliseconds: 200),
-            //     child: _CTASection(),
-            //   ),
-            // ),
-            SliverToBoxAdapter(
-              child: const Footer(),
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _TopBarWithLogo(),
+              _HeroSection(),
+               _iPhoneSection(),
+              _CharacterSection(),
+              _BannerSection(),
+              const Footer(),
+            ],
+          ),
         ),
       ),
     );
@@ -91,13 +58,15 @@ class _TopBarWithLogo extends StatelessWidget {
     final isTablet = screenWidth >= 600 && screenWidth < 1024;
     
     final horizontalPadding = isMobile ? 16.0 : (isTablet ? 40.0 : 120.0);
-    final verticalPadding = isMobile ? 16.0 : 28.0;
+    final verticalPadding = isMobile ? 12.0 : 20.0;
     final logoSize = isMobile ? 80.0 : (isTablet ? 100.0 : 150.0);
     
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: horizontalPadding,
-        vertical: verticalPadding,
+      padding: EdgeInsets.only(
+        left: horizontalPadding,
+        right: horizontalPadding,
+        top: isMobile ? 8.0 : 16.0,
+        bottom: verticalPadding,
       ),
       child: isMobile
           ? Column(
@@ -133,8 +102,10 @@ class _TopBarWithLogo extends StatelessWidget {
   }
 }
 
-// Ultra-Modern Hero Section
-class _EnhancedHeroSection extends StatelessWidget {
+// Hero Section with Text and Phone in Hand
+class _HeroSection extends StatelessWidget {
+  const _HeroSection();
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -142,7 +113,7 @@ class _EnhancedHeroSection extends StatelessWidget {
     final isTablet = screenWidth >= 600 && screenWidth < 1024;
     
     final horizontalPadding = isMobile ? 16.0 : (isTablet ? 40.0 : 140.0);
-    final topPadding = isMobile ? 40.0 : (isTablet ? 60.0 : 80.0);
+    final topPadding = isMobile ? 20.0 : (isTablet ? 30.0 : 40.0);
     final bottomPadding = isMobile ? 40.0 : 60.0;
     
     return Container(
@@ -171,7 +142,7 @@ class _EnhancedHeroSection extends StatelessWidget {
               ],
             )
           : Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // Text content on the left
                 Expanded(
@@ -179,7 +150,7 @@ class _EnhancedHeroSection extends StatelessWidget {
                   child: _HeroTextContent(),
                 ),
                 const SizedBox(width: 48),
-                // Image on the right, aligned to bottom
+                // Phone in hand image on the right
                 Expanded(
                   flex: 1,
                   child: Container(
@@ -199,7 +170,7 @@ class _EnhancedHeroSection extends StatelessWidget {
   }
 }
 
-// Hero Text Content Widget
+// Hero Text Content
 class _HeroTextContent extends StatelessWidget {
   const _HeroTextContent();
 
@@ -209,58 +180,45 @@ class _HeroTextContent extends StatelessWidget {
     final isMobile = screenWidth < 600;
     final isTablet = screenWidth >= 600 && screenWidth < 1024;
     
-    final headlineSize = isMobile ? 28.0 : (isTablet ? 40.0 : 64.0);
-    final descriptionSize = isMobile ? 16.0 : (isTablet ? 18.0 : 22.0);
-    final letterSpacing = isMobile ? -1.0 : (isTablet ? -1.5 : -2.5);
+    final headlineSize = isMobile ? 32.0 : (isTablet ? 42.0 : 56.0);
+    final descriptionSize = isMobile ? 16.0 : (isTablet ? 18.0 : 20.0);
     
     return Column(
       crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [
-        // Massive headline with modern typography
         Text(
-          'Find peace through',
+          'FIND PEACE THROUGH\nMEANINGFUL CONNECTIONS',
           textAlign: isMobile ? TextAlign.center : TextAlign.left,
-          style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                fontSize: headlineSize,
-                fontWeight: FontWeight.w900,
-                height: 1.0,
-                letterSpacing: letterSpacing,
-                color: const Color.fromRGBO(227, 250, 255, 1), // rgba(227, 250, 255, 1)
-              ),
+          style: GoogleFonts.poppins(
+            fontSize: headlineSize,
+            fontWeight: FontWeight.w700,
+            fontStyle: FontStyle.italic,
+            height: 1.1,
+            letterSpacing: -1.0,
+            color: Colors.white,
+          ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 24),
         Text(
-          'meaningful connections',
+          'Your voice deserves to be heard anytime, anywhere. Connect with compassionate listeners who understand your journey. Share your thoughts, release your stress, and find calm through meaningful conversations.',
           textAlign: isMobile ? TextAlign.center : TextAlign.left,
-          style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                fontSize: headlineSize,
-                fontWeight: FontWeight.w900,
-                height: 1.0,
-                letterSpacing: letterSpacing,
-                color: const Color.fromRGBO(227, 250, 255, 1), // rgba(227, 250, 255, 1)
-              ),
-        ),
-        const SizedBox(height: 32),
-        // Premium description with better styling
-        Text(
-          'Connect with compassionate listeners who understand. Share your thoughts, release your stress, and find calm through meaningful connections.',
-          textAlign: isMobile ? TextAlign.center : TextAlign.left,
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontSize: descriptionSize,
-                height: 1.7,
-                fontWeight: FontWeight.w400,
-                color: const Color.fromRGBO(227, 250, 255, 1), // rgba(227, 250, 255, 1)
-                letterSpacing: 0.3,
-              ),
+          style: GoogleFonts.poppins(
+            fontSize: descriptionSize,
+            fontWeight: FontWeight.w700,
+            fontStyle: FontStyle.italic,
+            height: 1.6,
+            color: Colors.white.withOpacity(0.95),
+            letterSpacing: 0.3,
+          ),
         ),
       ],
     );
   }
 }
 
-// iPhone 16 Section
-class _iPhone16Section extends StatelessWidget {
-  const _iPhone16Section();
+// Character Section
+class _CharacterSection extends StatelessWidget {
+  const _CharacterSection();
 
   @override
   Widget build(BuildContext context) {
@@ -269,7 +227,7 @@ class _iPhone16Section extends StatelessWidget {
     final isTablet = screenWidth >= 600 && screenWidth < 1024;
     
     final horizontalPadding = isMobile ? 16.0 : (isTablet ? 40.0 : 140.0);
-    final topPadding = isMobile ? 40.0 : (isTablet ? 60.0 : 80.0);
+    final topPadding = isMobile ? 20.0 : (isTablet ? 30.0 : 40.0);
     final bottomPadding = isMobile ? 40.0 : 60.0;
     
     return Container(
@@ -283,55 +241,19 @@ class _iPhone16Section extends StatelessWidget {
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  constraints: BoxConstraints(
-                    maxWidth: isMobile ? double.infinity : 400,
-                    maxHeight: isMobile ? 300 : 400,
-                  ),
-                  child: Image.asset(
-                    Images.iPhone16,
-                    fit: BoxFit.contain,
-                  ),
-                ),
+                _CharacterImagesRow(isMobile: isMobile, isTablet: isTablet),
                 const SizedBox(height: 32),
-                _iPhone16TextContent(),
-                const SizedBox(height: 32),
-                _iPhone16RightTextContent(),
+                _CharacterTextContent(),
               ],
             )
-          : Column(
+          : Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // iPhone image on the left
-                    Expanded(
-                      flex: 1,
-                      child: Column(
-                        children: [
-                          Container(
-                            constraints: const BoxConstraints(
-                              maxWidth: 500,
-                              maxHeight: 600,
-                            ),
-                            child: Image.asset(
-                              Images.iPhone16,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                          const SizedBox(height: 32),
-                          // Text below the phone
-                          _iPhone16TextContent(),
-                        ],
-                      ),
-                    ),
+                _CharacterImagesRow(isMobile: false, isTablet: false),
                     const SizedBox(width: 48),
-                    // Text content on the right
                     Expanded(
                       flex: 1,
-                      child: _iPhone16RightTextContent(),
-                    ),
-                  ],
+                  child: _CharacterTextContent(),
                 ),
               ],
             ),
@@ -339,308 +261,73 @@ class _iPhone16Section extends StatelessWidget {
   }
 }
 
-// iPhone 16 Text Content Widget
-class _iPhone16TextContent extends StatelessWidget {
-  const _iPhone16TextContent();
+// Character Images Row
+class _CharacterImagesRow extends StatelessWidget {
+  final bool isMobile;
+  final bool isTablet;
+  
+  const _CharacterImagesRow({required this.isMobile, required this.isTablet});
 
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
-    final isTablet = screenWidth >= 600 && screenWidth < 1024;
-    
-    final headlineSize = isMobile ? 24.0 : (isTablet ? 32.0 : 48.0);
-    final descriptionSize = isMobile ? 14.0 : (isTablet ? 16.0 : 18.0);
-    
-    return Column(
-      crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
-      children: [
-        // Large bold italic heading
-        Text(
-          'FIND PEACE THROUGH\nMEANINGFUL CONNECTIONS',
-          textAlign: isMobile ? TextAlign.center : TextAlign.left,
-          style: TextStyle(
-            fontSize: headlineSize,
-            fontWeight: FontWeight.w900,
-            fontStyle: FontStyle.italic,
-            height: 1.1,
-            letterSpacing: -1.0,
-            color: const Color.fromRGBO(227, 250, 255, 1), // rgba(227, 250, 255, 1)
-          ),
-        ),
-        const SizedBox(height: 24),
-        // Italic paragraph text
-        Text(
-          'Discover a community where your feelings are validated and your experiences matter. Engage in conversations that inspire growth, healing, and personal transformation.',
-          textAlign: isMobile ? TextAlign.center : TextAlign.left,
-          style: TextStyle(
-            fontSize: descriptionSize,
-            fontStyle: FontStyle.italic,
-            height: 1.6,
-            fontWeight: FontWeight.w400,
-            color: const Color.fromRGBO(227, 250, 255, 1), // rgba(227, 250, 255, 1)
-            letterSpacing: 0.2,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-// iPhone 16 Right Side Text Content Widget
-class _iPhone16RightTextContent extends StatelessWidget {
-  const _iPhone16RightTextContent();
-
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
-    final isTablet = screenWidth >= 600 && screenWidth < 1024;
-    
-    final headlineSize = isMobile ? 24.0 : (isTablet ? 32.0 : 48.0);
-    final descriptionSize = isMobile ? 14.0 : (isTablet ? 16.0 : 18.0);
-    
-    return Column(
-      crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
-      children: [
-        // Large bold italic heading
-        Text(
-          'BUILD TRUST THROUGH\nAUTHENTIC CONVERSATIONS',
-          textAlign: isMobile ? TextAlign.center : TextAlign.left,
-          style: TextStyle(
-            fontSize: headlineSize,
-            fontWeight: FontWeight.w900,
-            fontStyle: FontStyle.italic,
-            height: 1.1,
-            letterSpacing: -1.0,
-            color: const Color.fromRGBO(227, 250, 255, 1), // rgba(227, 250, 255, 1)
-          ),
-        ),
-        const SizedBox(height: 24),
-        // Italic paragraph text
-        Text(
-          'Create lasting bonds with people who truly care. Share your journey, celebrate your victories, and find strength in a supportive network that empowers you to be your authentic self.',
-          textAlign: isMobile ? TextAlign.center : TextAlign.left,
-          style: TextStyle(
-            fontSize: descriptionSize,
-            fontStyle: FontStyle.italic,
-            height: 1.6,
-            fontWeight: FontWeight.w400,
-            color: const Color.fromRGBO(227, 250, 255, 1), // rgba(227, 250, 255, 1)
-            letterSpacing: 0.2,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-// Character Section - Matching the image layout
-class _CharacterSection extends StatelessWidget {
-  const _CharacterSection();
-
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
-    final isTablet = screenWidth >= 600 && screenWidth < 1024;
-    
-    final horizontalPadding = isMobile ? 16.0 : (isTablet ? 40.0 : 140.0);
-    final topPadding = isMobile ? 40.0 : (isTablet ? 60.0 : 80.0);
-    final bottomPadding = isMobile ? 40.0 : 60.0;
-    
+  Widget _buildCharacterImage(String imagePath, double size) {
     return Container(
-      padding: EdgeInsets.only(
-        left: isMobile || isTablet ? horizontalPadding : 0,
-        right: horizontalPadding,
-        top: topPadding,
-        bottom: bottomPadding,
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
       ),
+      padding: const EdgeInsets.all(8),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Image.asset(
+          imagePath,
+          fit: BoxFit.contain,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final topImageSize = isMobile ? 120.0 : (isTablet ? 210.0 : 300.0);
+    final bottomImageSize = isMobile ? 80.0 : (isTablet ? 140.0 : 200.0);
+    final spacing = isMobile ? 8.0 : 16.0;
+    final overlapOffset = isMobile ? 20.0 : (isTablet ? 35.0 : 50.0);
+    final stackHeight = topImageSize + bottomImageSize * 0.6;
+    
+    return SizedBox(
+      height: stackHeight,
       child: Stack(
         clipBehavior: Clip.none,
+        alignment: Alignment.topCenter,
         children: [
-          // Coin image on the side - larger and positioned to the right
+          // Image 1 on top (larger)
+          _buildCharacterImage(Images.animeGirl1, topImageSize),
+          // Images 2 and 3 positioned below, with image 2 overlapping
           Positioned(
-            top: isMobile ? -130 : (isTablet ? -190 : -250),
-            right: isMobile ? -150 : (isTablet ? -220 : -300),
-            child: Container(
-              width: isMobile ? 180 : (isTablet ? 250 : 350),
-              height: isMobile ? 180 : (isTablet ? 250 : 350),
-              child: Image.asset(
-                Images.coinXmate,
-                fit: BoxFit.contain,
-              ),
+            top: topImageSize * 0.7,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+      children: [
+                // Image 2 moved over to overlap image 1
+                Transform.translate(
+                  offset: Offset(-overlapOffset, 0),
+                  child: _buildCharacterImage(Images.avatarGirl2, bottomImageSize),
+                ),
+                SizedBox(width: spacing),
+                _buildCharacterImage(Images.avatarGirl3, bottomImageSize),
+              ],
             ),
           ),
-          // Main content
-          isMobile || isTablet
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // Large character image
-                    Container(
-                      constraints: BoxConstraints(
-                        maxWidth: isMobile ? 250 : 350,
-                        maxHeight: isMobile ? 250 : 350,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.white,
-                      ),
-                      padding: const EdgeInsets.all(8),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.asset(
-                          Images.animeGirl1,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    // Two smaller character images
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          constraints: BoxConstraints(
-                            maxWidth: isMobile ? 120 : 160,
-                            maxHeight: isMobile ? 120 : 160,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,
-                          ),
-                          padding: const EdgeInsets.all(8),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Image.asset(
-                              Images.avatarGirl2,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Container(
-                          constraints: BoxConstraints(
-                            maxWidth: isMobile ? 120 : 160,
-                            maxHeight: isMobile ? 120 : 160,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,
-                          ),
-                          padding: const EdgeInsets.all(8),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Image.asset(
-                              Images.avatarGirl3,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 32),
-                    _CharacterSectionTextContent(),
-                    const SizedBox(height: 32),
-                    _SpeechBubbleWithCharacter(),
-                  ],
-                )
-              : Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Left side - Character images (no margin, aligned to left)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Large character image
-                        Container(
-                          constraints: const BoxConstraints(
-                            maxWidth: 400,
-                            maxHeight: 400,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,
-                          ),
-                          padding: const EdgeInsets.all(12),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Image.asset(
-                              Images.animeGirl1,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        // Two smaller character images
-                        Row(
-                          children: [
-                            Container(
-                              constraints: const BoxConstraints(
-                                maxWidth: 200,
-                                maxHeight: 200,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.white,
-                              ),
-                              padding: const EdgeInsets.all(8),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Image.asset(
-                                  Images.avatarGirl2,
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Container(
-                              constraints: const BoxConstraints(
-                                maxWidth: 200,
-                                maxHeight: 200,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.white,
-                              ),
-                              padding: const EdgeInsets.all(8),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Image.asset(
-                                  Images.avatarGirl3,
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 48),
-                    // Right side - Text and speech bubble
-                    Expanded(
-                      flex: 1,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _CharacterSectionTextContent(),
-                          const SizedBox(height: 40),
-                          _SpeechBubbleWithCharacter(),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
         ],
       ),
     );
   }
 }
 
-// Character Section Text Content
-class _CharacterSectionTextContent extends StatelessWidget {
-  const _CharacterSectionTextContent();
+// Character Text Content
+class _CharacterTextContent extends StatelessWidget {
+  const _CharacterTextContent();
 
   @override
   Widget build(BuildContext context) {
@@ -648,35 +335,33 @@ class _CharacterSectionTextContent extends StatelessWidget {
     final isMobile = screenWidth < 600;
     final isTablet = screenWidth >= 600 && screenWidth < 1024;
     
-    final headlineSize = isMobile ? 24.0 : (isTablet ? 32.0 : 48.0);
-    final descriptionSize = isMobile ? 14.0 : (isTablet ? 16.0 : 18.0);
+    final headlineSize = isMobile ? 28.0 : (isTablet ? 36.0 : 48.0);
+    final descriptionSize = isMobile ? 16.0 : (isTablet ? 18.0 : 20.0);
     
     return Column(
       crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [
-        // Large bold heading
         Text(
-          'YOUR VOICE MATTERS\nYOUR STORY COUNTS',
+          'SOMEONE\'S HERE TO LISTEN',
           textAlign: isMobile ? TextAlign.center : TextAlign.left,
-          style: TextStyle(
+          style: GoogleFonts.poppins(
             fontSize: headlineSize,
-            fontWeight: FontWeight.w900,
+            fontWeight: FontWeight.w700,
             fontStyle: FontStyle.italic,
             height: 1.1,
-            letterSpacing: -1.0,
-            color: const Color(0xFF0A4A5C), // Dark teal/blue color
+            letterSpacing: -0.5,
+            color: const Color(0xFF0A4A5C),
           ),
         ),
         const SizedBox(height: 24),
-        // Paragraph text
         Text(
-          'Every conversation is a step toward healing. Our community of empathetic listeners is here to support you on your journey to emotional wellness and inner peace.',
+          'Every conversation is a step toward healing. Our community of empathetic listeners is here to support you on your journey to emotional wellness and inner peace. Connect with people who truly care.',
           textAlign: isMobile ? TextAlign.center : TextAlign.left,
-          style: TextStyle(
+          style: GoogleFonts.poppins(
             fontSize: descriptionSize,
+            fontWeight: FontWeight.w700,
             fontStyle: FontStyle.italic,
             height: 1.6,
-            fontWeight: FontWeight.w400,
             color: Colors.grey.shade700,
             letterSpacing: 0.2,
           ),
@@ -686,113 +371,9 @@ class _CharacterSectionTextContent extends StatelessWidget {
   }
 }
 
-// Speech Bubble Clipper with Tail
-class _SpeechBubbleClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final path = Path();
-    final borderRadius = 24.0;
-    final tailWidth = 16.0; // Smaller tail width
-    final tailHeight = 12.0; // Smaller tail height
-    final tailOffset = size.width * 0.85; // Position tail on the bottom right
-
-    // Main rounded rectangle
-    path.addRRect(
-      RRect.fromRectAndRadius(
-        Rect.fromLTWH(0, 0, size.width, size.height),
-        Radius.circular(borderRadius),
-      ),
-    );
-    
-    // Add small tail pointing down and to the right (towards character)
-    path.moveTo(tailOffset, size.height);
-    path.lineTo(tailOffset + tailWidth / 2, size.height + tailHeight);
-    path.lineTo(tailOffset + tailWidth, size.height);
-    path.close();
-    
-    return path;
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
-}
-
-// Speech Bubble with Character
-class _SpeechBubbleWithCharacter extends StatelessWidget {
-  const _SpeechBubbleWithCharacter();
-
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
-    final isTablet = screenWidth >= 600 && screenWidth < 1024;
-    
-    final descriptionSize = isMobile ? 14.0 : (isTablet ? 16.0 : 18.0);
-    
-    final characterSize = isMobile ? 120.0 : (isTablet ? 160.0 : 200.0);
-    
-    return SizedBox(
-      height: isMobile ? 220 : (isTablet ? 280 : 350),
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          // Speech bubble positioned on the left
-          Positioned(
-            left: 0,
-            top: 0,
-            right: characterSize + 20,
-            child: ClipPath(
-              clipper: _SpeechBubbleClipper(),
-              child: Container(
-                padding: EdgeInsets.all(isMobile ? 16.0 : (isTablet ? 20.0 : 24.0)),
-                margin: const EdgeInsets.only(bottom: 12), // Smaller space for smaller tail
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(24),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 20,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Text(
-                  'You\'re never alone in your journey. Our platform connects you with understanding companions who offer a safe space to express yourself freely and authentically.',
-                  style: TextStyle(
-                    fontSize: descriptionSize,
-                    fontStyle: FontStyle.italic,
-                    height: 1.6,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.grey.shade700,
-                    letterSpacing: 0.2,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          // Character positioned on the right side
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Container(
-              width: characterSize,
-              height: characterSize,
-              child: Image.asset(
-                Images.avatarCartoon,
-                fit: BoxFit.contain,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// Orange CTA Section
-class _OrangeCTASection extends StatelessWidget {
-  const _OrangeCTASection();
+// iPhone Section
+class _iPhoneSection extends StatelessWidget {
+  const _iPhoneSection();
 
   @override
   Widget build(BuildContext context) {
@@ -801,8 +382,120 @@ class _OrangeCTASection extends StatelessWidget {
     final isTablet = screenWidth >= 600 && screenWidth < 1024;
     
     final horizontalPadding = isMobile ? 16.0 : (isTablet ? 40.0 : 140.0);
-    final topPadding = isMobile ? 40.0 : (isTablet ? 60.0 : 80.0);
+    final topPadding = isMobile ? 20.0 : (isTablet ? 30.0 : 40.0);
     final bottomPadding = isMobile ? 40.0 : 60.0;
+    
+    return Container(
+      padding: EdgeInsets.only(
+        left: horizontalPadding,
+        right: horizontalPadding,
+        top: topPadding,
+        bottom: bottomPadding,
+      ),
+      child: isMobile || isTablet
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      constraints: BoxConstraints(
+                    maxWidth: isMobile ? double.infinity : 400,
+                    maxHeight: isMobile ? 300 : 400,
+                  ),
+                        child: Image.asset(
+                    Images.iPhone16,
+                              fit: BoxFit.contain,
+                            ),
+                    ),
+                    const SizedBox(height: 32),
+                _iPhoneTextContent(),
+                  ],
+                )
+              : Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                          constraints: const BoxConstraints(
+                      maxWidth: 500,
+                      maxHeight: 600,
+                    ),
+                            child: Image.asset(
+                      Images.iPhone16,
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                    ),
+                    const SizedBox(width: 48),
+                    Expanded(
+                      flex: 1,
+                  child: _iPhoneTextContent(),
+                ),
+        ],
+      ),
+    );
+  }
+}
+
+// iPhone Text Content
+class _iPhoneTextContent extends StatelessWidget {
+  const _iPhoneTextContent();
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 600;
+    final isTablet = screenWidth >= 600 && screenWidth < 1024;
+    
+    final headlineSize = isMobile ? 28.0 : (isTablet ? 36.0 : 48.0);
+    final descriptionSize = isMobile ? 16.0 : (isTablet ? 18.0 : 20.0);
+    
+    return Column(
+      crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      children: [
+        Text(
+          'YOUR VOICE MATTERS\nYOUR STORY COUNTS',
+          textAlign: isMobile ? TextAlign.center : TextAlign.left,
+          style: GoogleFonts.poppins(
+            fontSize: headlineSize,
+            fontWeight: FontWeight.w700,
+            fontStyle: FontStyle.italic,
+            height: 1.1,
+            letterSpacing: -0.5,
+            color: const Color(0xFF0A4A5C),
+          ),
+        ),
+        const SizedBox(height: 24),
+        Text(
+          'Discover a community where your feelings are validated and your experiences matter. Engage in conversations that inspire growth, healing, and personal transformation.',
+          textAlign: isMobile ? TextAlign.center : TextAlign.left,
+          style: GoogleFonts.poppins(
+            fontSize: descriptionSize,
+            fontWeight: FontWeight.w700,
+            fontStyle: FontStyle.italic,
+            height: 1.6,
+            color: Colors.grey.shade700,
+            letterSpacing: 0.2,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// Banner Section
+class _BannerSection extends StatelessWidget {
+  const _BannerSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 600;
+    final isTablet = screenWidth >= 600 && screenWidth < 1024;
+    
+    final horizontalPadding = isMobile ? 16.0 : (isTablet ? 40.0 : 140.0);
+    final topPadding = isMobile ? 20.0 : (isTablet ? 30.0 : 40.0);
+    final bottomPadding = isMobile ? 40.0 : 100.0;
     
     return Container(
       padding: EdgeInsets.only(
@@ -814,55 +507,127 @@ class _OrangeCTASection extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          // Main orange gradient card
+          // Avatar Cartoon Image - positioned above the banner
+          if (!isMobile)
+            Positioned(
+              right: isTablet ? 40 : 80,
+              top: isTablet ? -100 : -120,
+              child: Image.asset(
+                Images.avatarCartoon,
+                fit: BoxFit.contain,
+                width: isTablet ? 180 : 250,
+                height: isTablet ? 220 : 300,
+              ),
+            ),
+          // Banner Container
           Container(
-            padding: EdgeInsets.all(isMobile ? 24.0 : (isTablet ? 40.0 : 60.0)),
+            width: double.infinity,
+            padding: EdgeInsets.all(isMobile ? 32.0 : (isTablet ? 48.0 : 64.0)),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                stops: [0.0211, 0.2189, 0.5107, 1.0],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
                 colors: [
-                  Color(0xFFFFDDBA), 
-                  Color(0xFFFFDDBA), 
-                  Color(0xFFFFDCB7), 
-                  Color(0xFFFFBE82), 
+                  Color(0xFFFFE5CC), // Light orange/peach
+                  Color(0xFFFFD4A3), // Medium orange
+                  Color(0xFFFFB367), // Darker orange
                 ],
+                stops: [0.0, 0.5, 1.0],
               ),
-              borderRadius: BorderRadius.circular(32),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.orange.withOpacity(0.3),
-                  blurRadius: 30,
-                  offset: const Offset(0, 10),
-                ),
-              ],
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(isMobile ? 30.0 : 50.0),
+                topRight: Radius.circular(isMobile ? 30.0 : 50.0),
+                bottomLeft: Radius.circular(isMobile ? 30.0 : 50.0),
+                bottomRight: Radius.circular(isMobile ? 30.0 : 50.0),
+              ),
             ),
-            child: isMobile || isTablet
+            child: Stack(
+              clipBehavior: Clip.hardEdge,
+              children: [
+                // Content
+                isMobile || isTablet
                     ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          _OrangeCTATextContent(),
+                          _BannerTextContent(),
                           const SizedBox(height: 32),
-                          _OrangeCTAActionContent(),
+                          _BannerButtonSection(),
                         ],
                       )
                     : Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          // Left side - Text content
                           Expanded(
-                            flex: 1,
-                            child: _OrangeCTATextContent(),
+                            flex: 2,
+                            child: _BannerTextContent(),
                           ),
-                          const SizedBox(width: 48),
-                          // Right side - Action content
+                          const SizedBox(width: 24),
                           Expanded(
                             flex: 1,
-                            child: _OrangeCTAActionContent(),
+                            child: _BannerButtonSection(),
                           ),
                         ],
                       ),
+            // Decorative blurred circles - positioned inside the banner
+            Positioned(
+              top: isMobile ? 10 : 20,
+              right: isMobile ? 10 : 20,
+              child: Container(
+                width: isMobile ? 80 : 120,
+                height: isMobile ? 80 : 120,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: const Color(0xFFFF8B17).withOpacity(0.3),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFFFF8B17).withOpacity(0.5),
+                      blurRadius: 40,
+                      spreadRadius: 10,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: isMobile ? 10 : 20,
+              left: isMobile ? 10 : 20,
+              child: Container(
+                width: isMobile ? 60 : 100,
+                height: isMobile ? 60 : 100,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: const Color(0xFFFF8B17).withOpacity(0.3),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFFFF8B17).withOpacity(0.5),
+                      blurRadius: 30,
+                      spreadRadius: 8,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: isMobile ? 30 : 50,
+              right: isMobile ? 30 : 60,
+              child: Container(
+                width: isMobile ? 50 : 70,
+                height: isMobile ? 50 : 70,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: const Color(0xFFFF8B17).withOpacity(0.25),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFFFF8B17).withOpacity(0.4),
+                      blurRadius: 25,
+                      spreadRadius: 5,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+              ],
+            ),
           ),
         ],
       ),
@@ -870,9 +635,9 @@ class _OrangeCTASection extends StatelessWidget {
   }
 }
 
-// Orange CTA Text Content
-class _OrangeCTATextContent extends StatelessWidget {
-  const _OrangeCTATextContent();
+// Banner Text Content
+class _BannerTextContent extends StatelessWidget {
+  const _BannerTextContent();
 
   @override
   Widget build(BuildContext context) {
@@ -880,43 +645,58 @@ class _OrangeCTATextContent extends StatelessWidget {
     final isMobile = screenWidth < 600;
     final isTablet = screenWidth >= 600 && screenWidth < 1024;
     
-    final headlineSize = isMobile ? 24.0 : (isTablet ? 32.0 : 48.0);
+    final headlineSize = isMobile ? 24.0 : (isTablet ? 32.0 : 42.0);
     final descriptionSize = isMobile ? 14.0 : (isTablet ? 16.0 : 18.0);
     
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [
-        // Large bold orange title
         Text(
-          'READY TO START YOUR\nJOURNEY TO PEACE',
+          'READY TO FIND\nRELIEF?',
+          textAlign: isMobile ? TextAlign.center : TextAlign.left,
           style: GoogleFonts.poppins(
             fontSize: headlineSize,
-            fontWeight: FontWeight.w700,
-            fontStyle: FontStyle.italic,
-            height: 1.1,
-            letterSpacing: -1.0,
-            color: Colors.orange.shade800,
+            fontWeight: FontWeight.w800,
+            height: 1.2,
+            letterSpacing: -0.5,
+            color: const Color(0xFF0A4A5C),
           ),
         ),
-        const SizedBox(height: 24),
-        // Paragraph text
-        Text(
-          'Take the first step toward emotional wellness. Join our community of compassionate listeners and discover the power of meaningful connections.',
-          style: TextStyle(
-            fontSize: descriptionSize,
-            fontStyle: FontStyle.italic,
-            height: 1.6,
-            fontWeight: FontWeight.w400,
-            color: Colors.grey.shade900,
-            letterSpacing: 0.2,
+        if (!isMobile) ...[
+          const SizedBox(height: 16),
+          Text(
+            'Start your journey to emotional wellness today. Connect with compassionate listeners who are ready to support you.',
+            textAlign: TextAlign.left,
+            style: GoogleFonts.poppins(
+              fontSize: descriptionSize,
+              fontWeight: FontWeight.w500,
+              height: 1.5,
+              color: Colors.grey.shade700,
+            ),
           ),
-        ),
+        ],
       ],
     );
   }
 }
 
-// Get Started Button with Animation
+// Banner Button Section
+class _BannerButtonSection extends StatelessWidget {
+  const _BannerButtonSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const _GetStartedButton(),
+      ],
+    );
+  }
+}
+
+// Get Started Button
 class _GetStartedButton extends StatefulWidget {
   const _GetStartedButton();
 
@@ -928,6 +708,7 @@ class _GetStartedButtonState extends State<_GetStartedButton>
     with SingleTickerProviderStateMixin {
   late AnimationController _pressController;
   late Animation<double> _scaleAnimation;
+  bool _isPressed = false;
 
   @override
   void initState() {
@@ -948,17 +729,17 @@ class _GetStartedButtonState extends State<_GetStartedButton>
   }
 
   void _handleTapDown(TapDownDetails details) {
-    Provider.of<UIStateProvider>(context, listen: false).setButtonPressed(true);
+    setState(() => _isPressed = true);
     _pressController.forward();
   }
 
   void _handleTapUp(TapUpDetails details) {
-    Provider.of<UIStateProvider>(context, listen: false).setButtonPressed(false);
+    setState(() => _isPressed = false);
     _pressController.reverse();
   }
 
   void _handleTapCancel() {
-    Provider.of<UIStateProvider>(context, listen: false).setButtonPressed(false);
+    setState(() => _isPressed = false);
     _pressController.reverse();
   }
 
@@ -972,95 +753,52 @@ class _GetStartedButtonState extends State<_GetStartedButton>
     final verticalPadding = isMobile ? 14.0 : 18.0;
     final fontSize = isMobile ? 14.0 : (isTablet ? 15.0 : 16.0);
     
-    return Consumer<UIStateProvider>(
-      builder: (context, uiState, child) {
-        final isPressed = uiState.isButtonPressed;
-        return GestureDetector(
-          onTapDown: _handleTapDown,
-          onTapUp: _handleTapUp,
-          onTapCancel: _handleTapCancel,
-          onTap: () {
-            Navigator.of(context).pushReplacementNamed('/contact');
-            Provider.of<NavigationProvider>(context, listen: false).setCurrentRoute('/contact');
-          },
-          child: AnimatedBuilder(
-            animation: _scaleAnimation,
-            builder: (context, child) {
-              return Transform.scale(
-                scale: _scaleAnimation.value,
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: horizontalPadding,
-                    vertical: verticalPadding,
-                  ),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                      colors: [
-                        Color(0xFFFF8B17), 
-                        Color(0xFFFFB367), 
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(50),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromRGBO(201, 77, 0, isPressed ? 0.5 : 0.75),
-                        offset: Offset(0, isPressed ? 4 : 7.32),
-                        blurRadius: isPressed ? 4 : 0,
-                        spreadRadius: 0,
-                      ),
-                    ],
-                  ),
-                  child: Text(
-                    'Get Started Today',
-                    style: GoogleFonts.poppins(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: fontSize,
-                    ),
-                  ),
+    return GestureDetector(
+      onTapDown: _handleTapDown,
+      onTapUp: _handleTapUp,
+      onTapCancel: _handleTapCancel,
+      onTap: () => Navigator.of(context).pushReplacementNamed('/contact'),
+      child: AnimatedBuilder(
+        animation: _scaleAnimation,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _scaleAnimation.value,
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: horizontalPadding,
+                vertical: verticalPadding,
+              ),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    Color(0xFFFF8B17), // #FF8B17
+                    Color(0xFFFFB367), // #FFB367
+                  ],
                 ),
-              );
-            },
-          ),
-        );
-      },
-    );
-  }
-}
-
-// Orange CTA Action Content
-class _OrangeCTAActionContent extends StatelessWidget {
-  const _OrangeCTAActionContent();
-
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
-    final isTablet = screenWidth >= 600 && screenWidth < 1024;
-    
-    final promptSize = isMobile ? 18.0 : (isTablet ? 22.0 : 28.0);
-    
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // Prompt text
-        Text(
-          'READY TO FIND RELIEF ?',
-          style: GoogleFonts.poppins(
-            fontSize: promptSize,
-            fontWeight: FontWeight.w700,
-            fontStyle: FontStyle.italic,
-            color: Colors.grey.shade900,
-            letterSpacing: 0.5,
-          ),
-        ),
-        const SizedBox(height: 24),
-        // CTA Button with animation
-        const _GetStartedButton(),
-      ],
+                borderRadius: BorderRadius.circular(50),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromRGBO(201, 77, 0, _isPressed ? 0.5 : 0.75),
+                    offset: Offset(0, _isPressed ? 4 : 7.32),
+                    blurRadius: _isPressed ? 4 : 0,
+                    spreadRadius: 0,
+                  ),
+                ],
+              ),
+              child: Text(
+                'Get Started Today',
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: fontSize,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

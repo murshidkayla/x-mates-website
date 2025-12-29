@@ -34,6 +34,11 @@ class Footer extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     _RichFooterLink(
+                      label: 'Community Guidelines',
+                      route: '/community-guidelines',
+                    ),
+                    const SizedBox(height: 20),
+                    _RichFooterLink(
                       label: 'Contact',
                       route: '/contact',
                     ),
@@ -56,6 +61,11 @@ class Footer extends StatelessWidget {
                     _RichFooterLink(
                       label: 'Terms & Conditions',
                       route: '/terms-conditions',
+                    ),
+                    const SizedBox(width: 32),
+                    _RichFooterLink(
+                      label: 'Community Guidelines',
+                      route: '/community-guidelines',
                     ),
                     const SizedBox(width: 32),
                     _RichFooterLink(

@@ -49,6 +49,13 @@ class _PandoraNavbarState extends State<PandoraNavbar> {
                 ),
                 const SizedBox(width: 32),
                 _NavLink(
+                  label: 'Community Guidelines',
+                  route: '/community-guidelines',
+                  isActive: currentRoute == '/community-guidelines',
+                  currentRoute: currentRoute,
+                ),
+                const SizedBox(width: 32),
+                _NavLink(
                   label: 'Contact',
                   route: '/contact',
                   isActive: currentRoute == '/contact',

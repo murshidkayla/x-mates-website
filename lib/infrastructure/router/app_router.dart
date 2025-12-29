@@ -4,6 +4,7 @@ import '../../presentation/pages/privacy_policy_page.dart';
 import '../../presentation/pages/terms_conditions_page.dart';
 import '../../presentation/pages/contact_page.dart';
 import '../../presentation/pages/how_to_delete_page.dart';
+import '../../presentation/pages/community_guidelines_page.dart';
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -24,6 +25,9 @@ class AppRouter {
         break;
       case '/how-to-delete':
         page = const HowToDeletePage();
+        break;
+      case '/community-guidelines':
+        page = const CommunityGuidelinesPage();
         break;
       default:
         page = const HomePage();

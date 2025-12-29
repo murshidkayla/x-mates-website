@@ -422,77 +422,118 @@ class _ContactInfoSection extends StatelessWidget {
       constraints: BoxConstraints(
         maxWidth: isMobile ? double.infinity : 1000,
       ),
-      child: isMobile
-          ? Column(
-              children: [
-                _ContactInfoCard(
-                  icon: Icons.email_rounded,
-                  title: 'Email',
-                  info: 'xmatezsolutionpvtlimited390@gmail.com',
-                  onTap: () async {
-                    final Uri emailUri = Uri(
-                      scheme: 'mailto',
-                      path: 'xmatezsolutionpvtlimited390@gmail.com',
-                    );
-                    if (await canLaunchUrl(emailUri)) {
-                      await launchUrl(emailUri);
-                    }
-                  },
-                ),
-                SizedBox(height: 16),
-                _ContactInfoCard(
-                  icon: Icons.phone_rounded,
-                  title: 'Phone',
-                  info: '+91 9495270656',
-                  onTap: () async {
-                    final Uri phoneUri = Uri(
-                      scheme: 'tel',
-                      path: '+919495270656',
-                    );
-                    if (await canLaunchUrl(phoneUri)) {
-                      await launchUrl(phoneUri);
-                    }
-                  },
-                ),
-              ],
-            )
-          : Row(
-              children: [
-                Expanded(
-                  child: _ContactInfoCard(
-                    icon: Icons.email_rounded,
-                    title: 'Email',
-                    info: 'xmatezsolutionpvtlimited390@gmail.com',
-                    onTap: () async {
-                      final Uri emailUri = Uri(
-                        scheme: 'mailto',
-                        path: 'xmatezsolutionpvtlimited390@gmail.com',
-                      );
-                      if (await canLaunchUrl(emailUri)) {
-                        await launchUrl(emailUri);
-                      }
-                    },
-                  ),
-                ),
-                SizedBox(width: 20),
-                Expanded(
-                  child: _ContactInfoCard(
-                    icon: Icons.phone_rounded,
-                    title: 'Phone',
-                    info: '+91 9495270656',
-                    onTap: () async {
-                      final Uri phoneUri = Uri(
-                        scheme: 'tel',
-                        path: '+919495270656',
-                      );
-                      if (await canLaunchUrl(phoneUri)) {
-                        await launchUrl(phoneUri);
-                      }
-                    },
-                  ),
-                ),
-              ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Contact Information',
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+              color: AppTheme.textPrimary,
+              fontSize: isMobile ? 24 : 32,
+              fontWeight: FontWeight.w700,
+              letterSpacing: -1,
             ),
+          ),
+          SizedBox(height: isMobile ? 24 : 32),
+          Text(
+            'XMATEZ SOLUTION PRIVATE LIMITED',
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              color: AppTheme.textPrimary,
+              fontSize: isMobile ? 18 : 22,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          SizedBox(height: isMobile ? 20 : 24),
+          isMobile
+              ? Column(
+                  children: [
+                    _ContactInfoCard(
+                      icon: Icons.location_on_rounded,
+                      title: 'Address',
+                      info: 'Building No. C020 67/1717,\nSpace c, bhageeratha square,\nErnakulam north,\nErnakulam - 682018',
+                      onTap: () {},
+                    ),
+                    SizedBox(height: 16),
+                    _ContactInfoCard(
+                      icon: Icons.email_rounded,
+                      title: 'Email',
+                      info: 'xmatezsolutionpvtlimited390@gmail.com',
+                      onTap: () async {
+                        final Uri emailUri = Uri(
+                          scheme: 'mailto',
+                          path: 'xmatezsolutionpvtlimited390@gmail.com',
+                        );
+                        if (await canLaunchUrl(emailUri)) {
+                          await launchUrl(emailUri);
+                        }
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    _ContactInfoCard(
+                      icon: Icons.phone_rounded,
+                      title: 'Phone',
+                      info: '+91 9495270656',
+                      onTap: () async {
+                        final Uri phoneUri = Uri(
+                          scheme: 'tel',
+                          path: '+919495270656',
+                        );
+                        if (await canLaunchUrl(phoneUri)) {
+                          await launchUrl(phoneUri);
+                        }
+                      },
+                    ),
+                  ],
+                )
+              : Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: _ContactInfoCard(
+                        icon: Icons.location_on_rounded,
+                        title: 'Address',
+                        info: 'Building No. C020 67/1717,\nSpace c, bhageeratha square,\nErnakulam north,\nErnakulam - 682018',
+                        onTap: () {},
+                      ),
+                    ),
+                    SizedBox(width: 20),
+                    Expanded(
+                      child: _ContactInfoCard(
+                        icon: Icons.email_rounded,
+                        title: 'Email',
+                        info: 'xmatezsolutionpvtlimited390@gmail.com',
+                        onTap: () async {
+                          final Uri emailUri = Uri(
+                            scheme: 'mailto',
+                            path: 'xmatezsolutionpvtlimited390@gmail.com',
+                          );
+                          if (await canLaunchUrl(emailUri)) {
+                            await launchUrl(emailUri);
+                          }
+                        },
+                      ),
+                    ),
+                    SizedBox(width: 20),
+                    Expanded(
+                      child: _ContactInfoCard(
+                        icon: Icons.phone_rounded,
+                        title: 'Phone',
+                        info: '+91 9495270656',
+                        onTap: () async {
+                          final Uri phoneUri = Uri(
+                            scheme: 'tel',
+                            path: '+919495270656',
+                          );
+                          if (await canLaunchUrl(phoneUri)) {
+                            await launchUrl(phoneUri);
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+        ],
+      ),
     );
   }
 }
@@ -513,43 +554,55 @@ class _ContactInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ModernChatCard(
-      onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: AppTheme.accentBlue.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Icon(
-              icon,
-              color: AppTheme.accentBlue,
-              size: 28,
-            ),
-          ),
-          SizedBox(height: 16),
-          Text(
-            title,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
+    return SizedBox(
+      height: 240,
+      child: ModernChatCard(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  color: AppTheme.accentBlue.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(14),
                 ),
-          ),
-          SizedBox(height: 6),
-          Text(
-            info,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                child: Icon(
+                  icon,
                   color: AppTheme.accentBlue,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 13,
+                  size: 28,
                 ),
-            textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 16),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+              ),
+              SizedBox(height: 8),
+              Expanded(
+                child: Center(
+                  child: Text(
+                    info,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: AppTheme.accentBlue,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 13,
+                          height: 1.4,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
