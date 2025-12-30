@@ -36,6 +36,7 @@ class CommunityGuidelinesPage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              const SizedBox(height: 20),
               const PandoraNavbar(),
             // Ultra-Modern Header Section
             Container(

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../application/providers/navigation_provider.dart';
 import '../widgets/pandora_navbar.dart';
 import '../widgets/pandora_button.dart';
@@ -166,13 +167,14 @@ class _ContactPageState extends State<ContactPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              const SizedBox(height: 20),
               const PandoraNavbar(),
-              // Ultra-Modern Header Section
+              // Simple Header Section
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(
-                  horizontal: isMobile ? 20 : 80,
-                  vertical: isMobile ? 50 : 100,
+                  horizontal: isMobile ? 24 : 80,
+                  vertical: isMobile ? 60 : 80,
                 ),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -185,31 +187,36 @@ class _ContactPageState extends State<ContactPage> {
                   ),
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'Get in Touch',
-                      style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                      'GET IN TOUCH',
+                      style: GoogleFonts.poppins(
                         color: Colors.white,
-                        fontSize: isMobile ? 32 : 48,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: -1.5,
+                        fontSize: isMobile ? 36 : 48,
+                        fontWeight: FontWeight.w700,
+                        fontStyle: FontStyle.italic,
+                        letterSpacing: -0.5,
                         height: 1.2,
                       ),
+                      textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: isMobile ? 16 : 20),
+                    SizedBox(height: isMobile ? 20 : 24),
                     Text(
                       'Send us a message and we\'ll get back to you as soon as possible',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.white.withValues(alpha: 0.9),
+                      style: GoogleFonts.poppins(
+                        color: Colors.white.withOpacity(0.95),
                         fontSize: isMobile ? 16 : 18,
+                        fontWeight: FontWeight.w300,
                         height: 1.5,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
               ),
               // Content Section
+              _ContactInfoSection(isMobile: isMobile),
               _ContactFormSection(
               isMobile: isMobile,
               formKey: _formKey,
@@ -218,7 +225,6 @@ class _ContactPageState extends State<ContactPage> {
               messageController: _messageController,
               onSubmit: _launchEmailWithFormData,
             ),
-              _ContactInfoSection(isMobile: isMobile),
               const Footer(),
         ],
           ),
@@ -250,8 +256,8 @@ class _ContactFormSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 24 : 120,
-        vertical: isMobile ? 30 : 40,
+        horizontal: isMobile ? 24 : 80,
+        vertical: isMobile ? 50 : 70,
       ),
       child: ModernChatCard(
         padding: EdgeInsets.all(isMobile ? 20 : 32),
@@ -261,11 +267,14 @@ class _ContactFormSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Send Us a Message',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      fontSize: isMobile ? 22 : 28,
-                    ),
+                'SEND US A MESSAGE',
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w700,
+                  fontStyle: FontStyle.italic,
+                  fontSize: isMobile ? 24 : 32,
+                  color: AppTheme.textPrimary,
+                  letterSpacing: -0.5,
+                ),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: isMobile ? 24 : 32),
@@ -416,34 +425,37 @@ class _ContactInfoSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 20 : 80,
-        vertical: isMobile ? 40 : 60,
+        horizontal: isMobile ? 24 : 80,
+        vertical: isMobile ? 50 : 70,
       ),
       constraints: BoxConstraints(
         maxWidth: isMobile ? double.infinity : 1000,
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            'Contact Information',
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            'CONTACT INFORMATION',
+            style: GoogleFonts.poppins(
               color: AppTheme.textPrimary,
-              fontSize: isMobile ? 24 : 32,
+              fontSize: isMobile ? 28 : 36,
               fontWeight: FontWeight.w700,
-              letterSpacing: -1,
+              fontStyle: FontStyle.italic,
+              letterSpacing: -0.5,
             ),
+            textAlign: TextAlign.center,
           ),
-          SizedBox(height: isMobile ? 24 : 32),
+          SizedBox(height: isMobile ? 16 : 20),
           Text(
             'XMATEZ SOLUTION PRIVATE LIMITED',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: AppTheme.textPrimary,
-              fontSize: isMobile ? 18 : 22,
-              fontWeight: FontWeight.w600,
+            style: GoogleFonts.poppins(
+              color: AppTheme.textPrimary.withOpacity(0.8),
+              fontSize: isMobile ? 16 : 18,
+              fontWeight: FontWeight.w500,
             ),
+            textAlign: TextAlign.center,
           ),
-          SizedBox(height: isMobile ? 20 : 24),
+          SizedBox(height: isMobile ? 32 : 40),
           isMobile
               ? Column(
                   children: [
@@ -487,6 +499,7 @@ class _ContactInfoSection extends StatelessWidget {
                 )
               : Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
                       child: _ContactInfoCard(
@@ -496,7 +509,7 @@ class _ContactInfoSection extends StatelessWidget {
                         onTap: () {},
                       ),
                     ),
-                    SizedBox(width: 20),
+                    SizedBox(width: 24),
                     Expanded(
                       child: _ContactInfoCard(
                         icon: Icons.email_rounded,
@@ -513,7 +526,7 @@ class _ContactInfoSection extends StatelessWidget {
                         },
                       ),
                     ),
-                    SizedBox(width: 20),
+                    SizedBox(width: 24),
                     Expanded(
                       child: _ContactInfoCard(
                         icon: Icons.phone_rounded,
@@ -555,47 +568,50 @@ class _ContactInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 240,
+      height: 320,
+      width: double.infinity,
       child: ModernChatCard(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                width: 56,
-                height: 56,
+                width: 60,
+                height: 60,
                 decoration: BoxDecoration(
-                  color: AppTheme.accentBlue.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(14),
+                  color: AppTheme.primaryColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
                   icon,
-                  color: AppTheme.accentBlue,
-                  size: 28,
+                  color: AppTheme.primaryColor,
+                  size: 30,
                 ),
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 20),
               Text(
-                title,
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
+                title.toUpperCase(),
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                  color: AppTheme.textPrimary,
+                  letterSpacing: 0.5,
+                ),
               ),
-              SizedBox(height: 8),
+              SizedBox(height: 12),
               Expanded(
                 child: Center(
                   child: Text(
                     info,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppTheme.accentBlue,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 13,
-                          height: 1.4,
-                        ),
+                    style: GoogleFonts.poppins(
+                      color: AppTheme.textPrimary.withOpacity(0.8),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 13,
+                      height: 1.5,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),

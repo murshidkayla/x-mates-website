@@ -18,17 +18,16 @@ class TermsConditionsPage extends StatelessWidget {
     });
 
     return Scaffold(
-      backgroundColor: AppTheme.lightBackground,
+      backgroundColor: Colors.transparent,
       body: Container(
         decoration: BoxDecoration(
-          color: AppTheme.lightBackground,
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
               AppTheme.lightBackground,
-              AppTheme.primaryColor.withOpacity(0.03),
-              AppTheme.primaryColor.withOpacity(0.01),
+              AppTheme.primaryColor.withOpacity(0.05),
+              AppTheme.primaryColor.withOpacity(0.02),
               AppTheme.lightBackground,
             ],
             stops: const [0.0, 0.3, 0.7, 1.0],
@@ -37,6 +36,7 @@ class TermsConditionsPage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              const SizedBox(height: 20),
               const PandoraNavbar(),
             // Ultra-Modern Header Section
             Container(
@@ -54,13 +54,6 @@ class TermsConditionsPage extends StatelessWidget {
                     AppTheme.primaryColorDark,
                   ],
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppTheme.primaryColor.withOpacity(0.2),
-                    blurRadius: 20,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,16 +104,16 @@ class TermsConditionsPage extends StatelessWidget {
               ),
             ),
             // Ultra-Modern Content Section
-            Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 20 : 80,
-                vertical: isMobile ? 40 : 60,
-              ),
-              constraints: BoxConstraints(
-                maxWidth: isMobile ? double.infinity : 1000,
-              ),
-              color: AppTheme.lightBackground,
-              child: Column(
+            Center(
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: isMobile ? 20 : 80,
+                  vertical: isMobile ? 40 : 60,
+                ),
+                constraints: BoxConstraints(
+                  maxWidth: isMobile ? double.infinity : 1000,
+                ),
+                child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -525,6 +518,7 @@ class TermsConditionsPage extends StatelessWidget {
                     ],
                   ),
                 ],
+                ),
               ),
             ),
             const Footer(),
@@ -561,7 +555,7 @@ class _Section extends StatelessWidget {
             letterSpacing: -1,
           ),
         ),
-        SizedBox(height: isMobile ? 20 : 24),
+        SizedBox(height: isMobile ? 16 : 20),
         ...children,
       ],
     );
@@ -583,7 +577,7 @@ class _SubSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: isMobile ? 20 : 24),
+        SizedBox(height: isMobile ? 16 : 20),
         Text(
           title,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(

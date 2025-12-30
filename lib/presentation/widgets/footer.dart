@@ -11,7 +11,7 @@ class Footer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 80),
       decoration: BoxDecoration(
         color: AppTheme.primaryColor,
       ),
@@ -27,22 +27,22 @@ class Footer extends StatelessWidget {
                       label: 'Privacy Policy',
                       route: '/privacy-policy',
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 24),
                     _RichFooterLink(
                       label: 'Terms & Conditions',
                       route: '/terms-conditions',
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 24),
                     _RichFooterLink(
                       label: 'Community Guidelines',
                       route: '/community-guidelines',
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 24),
                     _RichFooterLink(
                       label: 'Contact',
                       route: '/contact',
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 24),
                     _RichFooterLink(
                       label: 'How to delete',
                       route: '/how-to-delete',
@@ -82,7 +82,7 @@ class Footer extends StatelessWidget {
               }
             },
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 60),
           Text(
             '© 2025 X Matez. All rights reserved.',
             style: TextStyle(

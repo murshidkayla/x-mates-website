@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class UIStateProvider extends ChangeNotifier {
   final Map<String, bool> _hoverStates = {};
+  final Map<String, bool> _buttonPressedStates = {};
   final Map<String, AnimationController> _controllers = {};
   bool _isMobileMenuOpen = false;
-  bool _isButtonPressed = false;
 
   // Hover states
   bool isHovered(String key) => _hoverStates[key] ?? false;
@@ -15,7 +15,6 @@ class UIStateProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
 
   // Mobile menu state
   bool get isMobileMenuOpen => _isMobileMenuOpen;
@@ -32,12 +31,12 @@ class UIStateProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Button pressed state
-  bool get isButtonPressed => _isButtonPressed;
+  // Button pressed states (supports multiple buttons with keys)
+  bool isButtonPressed(String key) => _buttonPressedStates[key] ?? false;
 
-  void setButtonPressed(bool value) {
-    if (_isButtonPressed != value) {
-      _isButtonPressed = value;
+  void setButtonPressed(String key, bool value) {
+    if (_buttonPressedStates[key] != value) {
+      _buttonPressedStates[key] = value;
       notifyListeners();
     }
   }
@@ -56,6 +55,7 @@ class UIStateProvider extends ChangeNotifier {
     }
     _controllers.clear();
     _hoverStates.clear();
+    _buttonPressedStates.clear();
     super.dispose();
   }
 }

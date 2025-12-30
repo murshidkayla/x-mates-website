@@ -14,5 +14,7 @@ class Images {
   static const String sideCoin4 = 'assets/new/side coin4.png';
   static const String bannerImg1 = 'assets/new/banner img1.png';
   static const String iPhone16 = 'assets/iPhone 16.png';
+  static const String xBackground = 'assets/new/x background.png';
+  static const String convoIcon = 'assets/new/convo icon.png';
 }
 
