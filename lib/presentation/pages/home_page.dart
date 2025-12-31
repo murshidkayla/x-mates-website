@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,6 +7,7 @@ import '../../application/providers/ui_state_provider.dart';
 import '../../appimages/images.dart';
 import '../widgets/pandora_navbar.dart';
 import '../widgets/footer.dart';
+import '../utils/responsive.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -16,9 +18,9 @@ class HomePage extends StatelessWidget {
       Provider.of<NavigationProvider>(context, listen: false).setCurrentRoute('/');
     });
 
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
-    final isTablet = screenWidth >= 600 && screenWidth < 1024;
+    final isMobile = Responsive.isMobile(context);
+    final isTablet = Responsive.isTablet(context);
+    final screenWidth = Responsive.width(context);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -40,15 +42,18 @@ class HomePage extends StatelessWidget {
               // Coin Image in the bottom right corner
               if (!isMobile)
                 Positioned(
-                  right: isTablet ? -60 : -100,
+                  right: isTablet ? -40 : -80,
                   bottom: isTablet ? 1100 : 1400,
                   child: Opacity(
                     opacity: 0.9,
-                    child: Image.asset(
-                      Images.coinXmate,
-                      fit: BoxFit.contain,
-                      width: isTablet ? 200 : 300,
-                      height: isTablet ? 200 : 300,
+                    child: ImageFiltered(
+                      imageFilter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                      child: Image.asset(
+                        Images.coinXmate,
+                        fit: BoxFit.contain,
+                        width: isTablet ? 120 : 200,
+                        height: isTablet ? 120 : 200,
+                      ),
                     ),
                   ),
                 ),
@@ -63,7 +68,7 @@ class HomePage extends StatelessWidget {
                       Images.xBackground,
                       fit: BoxFit.cover,
                       alignment: Alignment.centerRight,
-                      width: isTablet ? screenWidth * 0.5 : screenWidth * 0.6,
+                      width: isTablet ? screenWidth * 0.45 : screenWidth * 0.6,
                     ),
                   ),
                 ),
@@ -95,13 +100,27 @@ class _HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
-    final isTablet = screenWidth >= 600 && screenWidth < 1024;
+    final isMobile = Responsive.isMobile(context);
+    final isTablet = Responsive.isTablet(context);
     
-    final horizontalPadding = isMobile ? 20.0 : (isTablet ? 40.0 : 80.0);
-    final topPadding = isMobile ? 30.0 : (isTablet ? 50.0 : 80.0);
-    final bottomPadding = isMobile ? 50.0 : (isTablet ? 70.0 : 100.0);
+    final horizontalPadding = Responsive.value(
+      context,
+      mobile: 20.0,
+      tablet: 40.0,
+      desktop: 80.0,
+    );
+    final topPadding = Responsive.value(
+      context,
+      mobile: 30.0,
+      tablet: 50.0,
+      desktop: 80.0,
+    );
+    final bottomPadding = Responsive.value(
+      context,
+      mobile: 50.0,
+      tablet: 70.0,
+      desktop: 100.0,
+    );
     
     return Container(
       padding: EdgeInsets.only(
@@ -169,12 +188,20 @@ class _HeroTextContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
-    final isTablet = screenWidth >= 600 && screenWidth < 1024;
+    final isMobile = Responsive.isMobile(context);
     
-    final headlineSize = isMobile ? 32.0 : (isTablet ? 40.0 : 52.0);
-    final descriptionSize = isMobile ? 16.0 : (isTablet ? 18.0 : 20.0);
+    final headlineSize = Responsive.fontSize(
+      context,
+      mobile: 32.0,
+      tablet: 40.0,
+      desktop: 52.0,
+    );
+    final descriptionSize = Responsive.fontSize(
+      context,
+      mobile: 16.0,
+      tablet: 18.0,
+      desktop: 20.0,
+    );
     
     return Column(
       crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
@@ -254,13 +281,27 @@ class _CharacterSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
-    final isTablet = screenWidth >= 600 && screenWidth < 1024;
+    final isMobile = Responsive.isMobile(context);
+    final isTablet = Responsive.isTablet(context);
     
-    final horizontalPadding = isMobile ? 20.0 : (isTablet ? 40.0 : 80.0);
-    final topPadding = isMobile ? 30.0 : (isTablet ? 50.0 : 80.0);
-    final bottomPadding = isMobile ? 50.0 : (isTablet ? 70.0 : 100.0);
+    final horizontalPadding = Responsive.value(
+      context,
+      mobile: 20.0,
+      tablet: 40.0,
+      desktop: 80.0,
+    );
+    final topPadding = Responsive.value(
+      context,
+      mobile: 30.0,
+      tablet: 50.0,
+      desktop: 80.0,
+    );
+    final bottomPadding = Responsive.value(
+      context,
+      mobile: 50.0,
+      tablet: 70.0,
+      desktop: 100.0,
+    );
     
     return Container(
       padding: EdgeInsets.only(
@@ -275,16 +316,16 @@ class _CharacterSection extends StatelessWidget {
           // Avatar Cartoon Image - positioned above the character section
           if (!isMobile)
             Positioned(
-              right: isTablet ? 40 : 80,
-              top: isTablet ? 340 : 440,
+              right: isTablet ? 20 : 80,
+              top: isTablet ? 300 : 440,
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
                   Image.asset(
-                    Images.avatarCartoon,
-                    fit: BoxFit.contain,
-                    width: isTablet ? 180 : 250,
-                    height: isTablet ? 220 : 300,
+                Images.avatarCartoon,
+                fit: BoxFit.contain,
+                width: isTablet ? 180 : 250,
+                height: isTablet ? 220 : 300,
                   ),
                   // Speech bubble for avatar cartoon
                   Positioned(
@@ -310,8 +351,8 @@ class _CharacterSection extends StatelessWidget {
                   children: [
                     _CharacterImagesRow(isMobile: false, isTablet: false),
                     const SizedBox(width: 60),
-                    Expanded(
-                      flex: 1,
+                        Expanded(
+                          flex: 1,
                       child: _CharacterTextContent(),
                     ),
                   ],
@@ -329,8 +370,11 @@ class _CharacterImagesRow extends StatelessWidget {
   
   const _CharacterImagesRow({required this.isMobile, required this.isTablet});
 
-  Widget _buildCharacterImage(String imagePath, double width, double height, {bool cropBottom = false}) {
+  Widget _buildCharacterImage(String imagePath, double width, double height, {bool cropBottom = false, double? leftPadding, Alignment? imageAlignment}) {
     final containerHeight = cropBottom ? height - 8 : height; // Reduce height by 8px to remove bottom gap
+    final effectiveLeftPadding = leftPadding ?? (cropBottom ? 8.0 : 8.0);
+    final effectiveAlignment = imageAlignment ?? (cropBottom ? Alignment.topCenter : Alignment.center);
+    
     return Container(
       width: width,
       height: containerHeight,
@@ -339,21 +383,21 @@ class _CharacterImagesRow extends StatelessWidget {
         color: Colors.white,
       ),
       padding: cropBottom 
-          ? const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 0)
-          : const EdgeInsets.all(8),
+          ? EdgeInsets.only(top: 8, left: effectiveLeftPadding, right: 8, bottom: 0)
+          : EdgeInsets.all(effectiveLeftPadding),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: cropBottom
             ? Image.asset(
                 imagePath,
                 fit: BoxFit.cover,
-                alignment: Alignment.topCenter,
+                alignment: effectiveAlignment,
                 height: containerHeight - 8, // Account for top padding
               )
             : Image.asset(
-                imagePath,
-                fit: BoxFit.contain,
-              ),
+          imagePath,
+          fit: BoxFit.contain,
+        ),
       ),
     );
   }
@@ -387,13 +431,20 @@ class _CharacterImagesRow extends StatelessWidget {
       children: [
                 // Image 2 moved over to overlap image 1 - avatarGirl2
                 Transform.translate(
-                  offset: Offset(-overlapOffset, 0),
-                  child: _buildCharacterImage(Images.avatarGirl2, image2Width, image2Height, cropBottom: true),
+                  offset: Offset(-overlapOffset, 50),
+                  child: _buildCharacterImage(
+                    Images.avatarGirl2, 
+                    image2Width, 
+                    image2Height, 
+                    cropBottom: true,
+                    leftPadding: 0.0,
+                    imageAlignment: Alignment.topRight,
+                  ),
                 ),
                 SizedBox(width: isMobile ? 0.0 : 0.0),
                 // Image 3 - avatarGirl3 (moved down and closer)
                 Transform.translate(
-                  offset: Offset(isMobile ? -10.0 : -15.0, isMobile ? 30.0 : 40.0),
+                  offset: Offset(isMobile ? -10.0 : -15.0, isMobile ? 60.0 : 70.0),
                   child: _buildCharacterImage(Images.avatarGirl3, image3Width, image3Height, cropBottom: true),
                 ),
               ],
@@ -411,12 +462,20 @@ class _CharacterTextContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
-    final isTablet = screenWidth >= 600 && screenWidth < 1024;
+    final isMobile = Responsive.isMobile(context);
     
-    final headlineSize = isMobile ? 32.0 : (isTablet ? 40.0 : 52.0);
-    final descriptionSize = isMobile ? 16.0 : (isTablet ? 18.0 : 20.0);
+    final headlineSize = Responsive.fontSize(
+      context,
+      mobile: 32.0,
+      tablet: 40.0,
+      desktop: 52.0,
+    );
+    final descriptionSize = Responsive.fontSize(
+      context,
+      mobile: 16.0,
+      tablet: 18.0,
+      desktop: 20.0,
+    );
     
     return Column(
       crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
@@ -433,7 +492,7 @@ class _CharacterTextContent extends StatelessWidget {
             color: const Color.fromRGBO(100, 147, 157, 1),
           ),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: Responsive.spacing(context, mobile: 20.0, desktop: 24.0)),
         Text(
           'Every conversation is a step toward healing.\nOur community of empathetic listeners is here to support you\non your journey to emotional wellness.',
           textAlign: isMobile ? TextAlign.center : TextAlign.left,
@@ -455,13 +514,22 @@ class _iPhoneSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
-    final isTablet = screenWidth >= 600 && screenWidth < 1024;
+    final isMobile = Responsive.isMobile(context);
+    final isTablet = Responsive.isTablet(context);
     
-    final horizontalPadding = isMobile ? 20.0 : (isTablet ? 40.0 : 80.0);
-    final topPadding = isMobile ? 0.0 : (isTablet ? 0.0 : 0.0);
-    final bottomPadding = isMobile ? 50.0 : (isTablet ? 70.0 : 100.0);
+    final horizontalPadding = Responsive.value(
+      context,
+      mobile: 20.0,
+      tablet: 40.0,
+      desktop: 80.0,
+    );
+    final topPadding = 0.0;
+    final bottomPadding = Responsive.value(
+      context,
+      mobile: 50.0,
+      tablet: 70.0,
+      desktop: 100.0,
+    );
     
     return Transform.translate(
       offset: Offset(0, isMobile ? -20.0 : (isTablet ? -30.0 : -40.0)),
@@ -527,7 +595,7 @@ class _iPhoneSection extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 60),
                         child: _iPhoneTextContent(),
                       ),
-                    ),
+                ),
         ],
       ),
       ),
@@ -541,12 +609,20 @@ class _iPhoneTextContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
-    final isTablet = screenWidth >= 600 && screenWidth < 1024;
+    final isMobile = Responsive.isMobile(context);
     
-    final headlineSize = isMobile ? 32.0 : (isTablet ? 40.0 : 52.0);
-    final descriptionSize = isMobile ? 16.0 : (isTablet ? 18.0 : 20.0);
+    final headlineSize = Responsive.fontSize(
+      context,
+      mobile: 32.0,
+      tablet: 40.0,
+      desktop: 52.0,
+    );
+    final descriptionSize = Responsive.fontSize(
+      context,
+      mobile: 16.0,
+      tablet: 18.0,
+      desktop: 20.0,
+    );
     
     return Column(
       crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
@@ -563,7 +639,7 @@ class _iPhoneTextContent extends StatelessWidget {
             color: const Color.fromRGBO(100, 147, 157, 1),
           ),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: Responsive.spacing(context, mobile: 20.0, desktop: 24.0)),
         Text(
           'Discover a community where your feelings are validated and your experiences matter. Connect with compassionate listeners who are ready to support you.',
           textAlign: isMobile ? TextAlign.center : TextAlign.left,
@@ -585,12 +661,20 @@ class _iPhoneImageCaption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
-    final isTablet = screenWidth >= 600 && screenWidth < 1024;
+    final isMobile = Responsive.isMobile(context);
     
-    final headlineSize = isMobile ? 32.0 : (isTablet ? 40.0 : 52.0);
-    final descriptionSize = isMobile ? 16.0 : (isTablet ? 18.0 : 20.0);
+    final headlineSize = Responsive.fontSize(
+      context,
+      mobile: 32.0,
+      tablet: 40.0,
+      desktop: 52.0,
+    );
+    final descriptionSize = Responsive.fontSize(
+      context,
+      mobile: 16.0,
+      tablet: 18.0,
+      desktop: 20.0,
+    );
     
     return Column(
       crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
@@ -629,13 +713,27 @@ class _BannerSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
-    final isTablet = screenWidth >= 600 && screenWidth < 1024;
+    final isMobile = Responsive.isMobile(context);
+    final isTablet = Responsive.isTablet(context);
     
-    final horizontalPadding = isMobile ? 20.0 : (isTablet ? 40.0 : 80.0);
-    final topPadding = isMobile ? 30.0 : (isTablet ? 50.0 : 80.0);
-    final bottomPadding = isMobile ? 50.0 : (isTablet ? 70.0 : 100.0);
+    final horizontalPadding = Responsive.value(
+      context,
+      mobile: 20.0,
+      tablet: 40.0,
+      desktop: 80.0,
+    );
+    final topPadding = Responsive.value(
+      context,
+      mobile: 30.0,
+      tablet: 50.0,
+      desktop: 80.0,
+    );
+    final bottomPadding = Responsive.value(
+      context,
+      mobile: 50.0,
+      tablet: 70.0,
+      desktop: 100.0,
+    );
     
     return Container(
       padding: EdgeInsets.only(
@@ -645,22 +743,22 @@ class _BannerSection extends StatelessWidget {
         bottom: bottomPadding,
       ),
       child: Container(
-        width: double.infinity,
+            width: double.infinity,
         padding: EdgeInsets.symmetric(
           horizontal: isMobile ? 32.0 : (isTablet ? 48.0 : 80.0),
           vertical: isMobile ? 40.0 : (isTablet ? 60.0 : 80.0),
         ),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFFFFE5CC), // Light orange/peach
-              Color(0xFFFFD4A3), // Medium orange
-              Color(0xFFFFB367), // Darker orange
-            ],
-            stops: [0.0, 0.5, 1.0],
-          ),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFFFFE5CC), // Light orange/peach
+                  Color(0xFFFFD4A3), // Medium orange
+                  Color(0xFFFFB367), // Darker orange
+                ],
+                stops: [0.0, 0.5, 1.0],
+              ),
           borderRadius: BorderRadius.circular(isMobile ? 24.0 : 32.0),
           boxShadow: [
             BoxShadow(
@@ -674,61 +772,69 @@ class _BannerSection extends StatelessWidget {
               blurRadius: 10,
               offset: const Offset(0, 4),
               spreadRadius: 0,
-            ),
+              ),
           ],
-        ),
-        child: Stack(
+            ),
+            child: Stack(
           clipBehavior: Clip.none,
-          children: [
-             // Coin side on left top edge
-             if (!isMobile)
-               Positioned(
-                 left: isTablet ? -50 : -70,
-                 top: isTablet ? -70 : -90,
-                 child: Opacity(
-                   opacity: 0.7,
-                   child: Image.asset(
-                     Images.coinSide,
-                     width: isTablet ? 100 : 130,
-                     height: isTablet ? 100 : 130,
-                     fit: BoxFit.contain,
-                   ),
-                 ),
-               ),
-             // Coin3 on left bottom edge (same side as coin side, below)
-             if (!isMobile)
-               Positioned(
-                 left: isTablet ? -40 : -60,
-                 bottom: isTablet ? -80 : -100,
-                 child: Opacity(
-                   opacity: 0.7,
-                   child: Image.asset(
-                     Images.coin3,
-                     width: isTablet ? 120 : 150,
-                     height: isTablet ? 120 : 150,
-                     fit: BoxFit.contain,
-                   ),
-                 ),
-               ),
-             // Content
-            isMobile || isTablet
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Banner image at the top right
+                if (!isMobile)
+                  Positioned(
+                    top: isTablet ? 40 : -170,
+                    child: Opacity(
+                      opacity: 0.9,
+                      child: Image.asset(
+                        Images.bannerImg1,
+                        fit: BoxFit.contain,
+                        width: isTablet ? 200 : 300,
+                        height: isTablet ? 200 : 300,
+                      ),
+                    ),
+                  ),
+                // Content
+                isMobile || isTablet
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _BannerTextContent(),
+                        children: [
+                          _BannerTextContent(),
                       const SizedBox(height: 32),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(12),
+                      Text(
+                        'START YOUR JOURNEY\nTO EMOTIONAL WELLNESS',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.poppins(
+                          fontSize: isMobile ? 13.0 : 15.0,
+                          fontWeight: FontWeight.w600,
+                          fontStyle: FontStyle.italic,
+                          height: 1.4,
+                          letterSpacing: 0.3,
+                          color: const Color.fromRGBO(100, 147, 157, 1),
                         ),
-                        child: Text(
+                      ),
+                          const SizedBox(height: 32),
+                          _BannerButtonSection(),
+                        ],
+                      )
+                    : Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                    flex: 3,
+                            child: _BannerTextContent(),
+                          ),
+                  const SizedBox(width: 60),
+                          Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
                           'START YOUR JOURNEY\nTO EMOTIONAL WELLNESS',
-                          textAlign: TextAlign.center,
+                          textAlign: TextAlign.right,
                           style: GoogleFonts.poppins(
-                            fontSize: isMobile ? 13.0 : 15.0,
+                            fontSize: 15.0,
                             fontWeight: FontWeight.w600,
                             fontStyle: FontStyle.italic,
                             height: 1.4,
@@ -736,57 +842,15 @@ class _BannerSection extends StatelessWidget {
                             color: const Color.fromRGBO(100, 147, 157, 1),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 32),
-                      _BannerButtonSection(),
-                    ],
-                  )
-                : Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: _BannerTextContent(),
-                  ),
-                  const SizedBox(width: 60),
-                  Expanded(
-                    flex: 2,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.25),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: Colors.white.withOpacity(0.3),
-                              width: 1,
-                            ),
-                          ),
-                          child: Text(
-                            'START YOUR JOURNEY\nTO EMOTIONAL WELLNESS',
-                            textAlign: TextAlign.right,
-                            style: GoogleFonts.poppins(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w600,
-                              fontStyle: FontStyle.italic,
-                              height: 1.4,
-                              letterSpacing: 0.3,
-                              color: const Color.fromRGBO(100, 147, 157, 1),
-                            ),
-                          ),
-                        ),
                         const SizedBox(height: 40),
                         _BannerButtonSection(),
                       ],
                     ),
-                  ),
-                ],
-              ),
-          ],
-        ),
+                    ),
+                  ],
+            ),
+              ],
+            ),
       ),
     );
   }
@@ -798,12 +862,20 @@ class _BannerTextContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
-    final isTablet = screenWidth >= 600 && screenWidth < 1024;
+    final isMobile = Responsive.isMobile(context);
     
-    final headlineSize = isMobile ? 32.0 : (isTablet ? 40.0 : 52.0);
-    final descriptionSize = isMobile ? 16.0 : (isTablet ? 18.0 : 20.0);
+    final headlineSize = Responsive.fontSize(
+      context,
+      mobile: 32.0,
+      tablet: 40.0,
+      desktop: 52.0,
+    );
+    final descriptionSize = Responsive.fontSize(
+      context,
+      mobile: 16.0,
+      tablet: 18.0,
+      desktop: 20.0,
+    );
     
     return Column(
       crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
@@ -829,7 +901,7 @@ class _BannerTextContent extends StatelessWidget {
           ),
         ),
         if (!isMobile) ...[
-          const SizedBox(height: 20),
+          SizedBox(height: Responsive.spacing(context, mobile: 16.0, desktop: 20.0)),
           Text(
             'Start your journey to emotional wellness today. Connect with compassionate listeners who are ready to support you.',
             textAlign: TextAlign.left,
@@ -908,15 +980,26 @@ class _GetStartedButtonState extends State<_GetStartedButton>
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
-    final isTablet = screenWidth >= 600 && screenWidth < 1024;
     final uiState = Provider.of<UIStateProvider>(context, listen: true);
     final isPressed = uiState.isButtonPressed(_buttonKey);
     
-    final horizontalPadding = isMobile ? 20.0 : (isTablet ? 24.0 : 28.0);
-    final verticalPadding = isMobile ? 12.0 : 14.0;
-    final fontSize = isMobile ? 12.0 : (isTablet ? 13.0 : 14.0);
+    final horizontalPadding = Responsive.value(
+      context,
+      mobile: 20.0,
+      tablet: 24.0,
+      desktop: 28.0,
+    );
+    final verticalPadding = Responsive.value(
+      context,
+      mobile: 12.0,
+      desktop: 14.0,
+    );
+    final fontSize = Responsive.fontSize(
+      context,
+      mobile: 12.0,
+      tablet: 13.0,
+      desktop: 14.0,
+    );
     
     return GestureDetector(
       onTapDown: _handleTapDown,

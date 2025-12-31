@@ -6,6 +6,7 @@ import '../widgets/pandora_navbar.dart';
 import '../widgets/footer.dart';
 import '../widgets/logo.dart';
 import '../theme/app_theme.dart';
+import '../utils/responsive.dart';
 
 class HowToDeletePage extends StatelessWidget {
   const HowToDeletePage({super.key});
@@ -23,7 +24,7 @@ class HowToDeletePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width <= 768;
+    final isMobile = Responsive.isMobile(context);
     
     // Set route when page loads
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -395,7 +396,7 @@ class _StepCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width <= 768;
+    final isMobile = Responsive.isMobile(context);
     return Container(
       padding: EdgeInsets.all(isMobile ? 16 : 20),
       decoration: BoxDecoration(

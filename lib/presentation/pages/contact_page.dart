@@ -9,6 +9,7 @@ import '../widgets/pandora_button.dart';
 import '../widgets/modern_chat_card.dart';
 import '../widgets/footer.dart';
 import '../theme/app_theme.dart';
+import '../utils/responsive.dart';
 
 class ContactPage extends StatefulWidget {
   const ContactPage({super.key});
@@ -146,8 +147,6 @@ class _ContactPageState extends State<ContactPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width <= 768;
-
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(
@@ -172,10 +171,7 @@ class _ContactPageState extends State<ContactPage> {
               // Simple Header Section
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.symmetric(
-                  horizontal: isMobile ? 24 : 80,
-                  vertical: isMobile ? 60 : 80,
-                ),
+                padding: Responsive.sectionPadding(context),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
@@ -193,7 +189,12 @@ class _ContactPageState extends State<ContactPage> {
                       'GET IN TOUCH',
                       style: GoogleFonts.poppins(
                         color: Colors.white,
-                        fontSize: isMobile ? 36 : 48,
+                        fontSize: Responsive.fontSize(
+                          context,
+                          mobile: 36.0,
+                          tablet: 42.0,
+                          desktop: 48.0,
+                        ),
                         fontWeight: FontWeight.w700,
                         fontStyle: FontStyle.italic,
                         letterSpacing: -0.5,
@@ -201,12 +202,17 @@ class _ContactPageState extends State<ContactPage> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: isMobile ? 20 : 24),
+                    SizedBox(height: Responsive.spacing(context, mobile: 20.0, desktop: 24.0)),
                     Text(
                       'Send us a message and we\'ll get back to you as soon as possible',
                       style: GoogleFonts.poppins(
                         color: Colors.white.withOpacity(0.95),
-                        fontSize: isMobile ? 16 : 18,
+                        fontSize: Responsive.fontSize(
+                          context,
+                          mobile: 16.0,
+                          tablet: 17.0,
+                          desktop: 18.0,
+                        ),
                         fontWeight: FontWeight.w300,
                         height: 1.5,
                       ),
@@ -216,15 +222,14 @@ class _ContactPageState extends State<ContactPage> {
                 ),
               ),
               // Content Section
-              _ContactInfoSection(isMobile: isMobile),
+              const _ContactInfoSection(),
               _ContactFormSection(
-              isMobile: isMobile,
-              formKey: _formKey,
-              nameController: _nameController,
-              emailController: _emailController,
-              messageController: _messageController,
-              onSubmit: _launchEmailWithFormData,
-            ),
+                formKey: _formKey,
+                nameController: _nameController,
+                emailController: _emailController,
+                messageController: _messageController,
+                onSubmit: _launchEmailWithFormData,
+              ),
               const Footer(),
         ],
           ),
@@ -236,7 +241,6 @@ class _ContactPageState extends State<ContactPage> {
 
 // Contact Form Section
 class _ContactFormSection extends StatelessWidget {
-  final bool isMobile;
   final GlobalKey<FormState> formKey;
   final TextEditingController nameController;
   final TextEditingController emailController;
@@ -244,7 +248,6 @@ class _ContactFormSection extends StatelessWidget {
   final VoidCallback onSubmit;
 
   const _ContactFormSection({
-    required this.isMobile,
     required this.formKey,
     required this.nameController,
     required this.emailController,
@@ -255,12 +258,11 @@ class _ContactFormSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 24 : 80,
-        vertical: isMobile ? 50 : 70,
-      ),
+      padding: Responsive.sectionPadding(context),
       child: ModernChatCard(
-        padding: EdgeInsets.all(isMobile ? 20 : 32),
+        padding: EdgeInsets.all(
+          Responsive.value(context, mobile: 20.0, tablet: 26.0, desktop: 32.0),
+        ),
         child: Form(
           key: formKey,
           child: Column(
@@ -271,13 +273,18 @@ class _ContactFormSection extends StatelessWidget {
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w700,
                   fontStyle: FontStyle.italic,
-                  fontSize: isMobile ? 24 : 32,
+                  fontSize: Responsive.fontSize(
+                    context,
+                    mobile: 24.0,
+                    tablet: 28.0,
+                    desktop: 32.0,
+                  ),
                   color: AppTheme.textPrimary,
                   letterSpacing: -0.5,
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: isMobile ? 24 : 32),
+              SizedBox(height: Responsive.spacing(context, mobile: 24.0, desktop: 32.0)),
               _StandardTextField(
                 controller: nameController,
                 label: 'Full Name',
@@ -321,7 +328,7 @@ class _ContactFormSection extends StatelessWidget {
                   return null;
                 },
               ),
-              SizedBox(height: isMobile ? 24 : 32),
+              SizedBox(height: Responsive.spacing(context, mobile: 24.0, desktop: 32.0)),
               PandoraButton(
                 label: 'Send Message',
                 isLarge: true,
@@ -417,19 +424,16 @@ class _StandardTextField extends StatelessWidget {
 
 // Contact Info Section
 class _ContactInfoSection extends StatelessWidget {
-  final bool isMobile;
-
-  const _ContactInfoSection({required this.isMobile});
+  const _ContactInfoSection();
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = Responsive.isMobile(context);
+    
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 24 : 80,
-        vertical: isMobile ? 50 : 70,
-      ),
+      padding: Responsive.sectionPadding(context),
       constraints: BoxConstraints(
-        maxWidth: isMobile ? double.infinity : 1000,
+        maxWidth: Responsive.maxContentWidth(context),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -438,24 +442,34 @@ class _ContactInfoSection extends StatelessWidget {
             'CONTACT INFORMATION',
             style: GoogleFonts.poppins(
               color: AppTheme.textPrimary,
-              fontSize: isMobile ? 28 : 36,
+              fontSize: Responsive.fontSize(
+                context,
+                mobile: 28.0,
+                tablet: 32.0,
+                desktop: 36.0,
+              ),
               fontWeight: FontWeight.w700,
               fontStyle: FontStyle.italic,
               letterSpacing: -0.5,
             ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: isMobile ? 16 : 20),
+          SizedBox(height: Responsive.spacing(context, mobile: 16.0, desktop: 20.0)),
           Text(
             'XMATEZ SOLUTION PRIVATE LIMITED',
             style: GoogleFonts.poppins(
               color: AppTheme.textPrimary.withOpacity(0.8),
-              fontSize: isMobile ? 16 : 18,
+              fontSize: Responsive.fontSize(
+                context,
+                mobile: 16.0,
+                tablet: 17.0,
+                desktop: 18.0,
+              ),
               fontWeight: FontWeight.w500,
             ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: isMobile ? 32 : 40),
+          SizedBox(height: Responsive.spacing(context, mobile: 32.0, desktop: 40.0)),
           isMobile
               ? Column(
                   children: [
@@ -509,7 +523,7 @@ class _ContactInfoSection extends StatelessWidget {
                         onTap: () {},
                       ),
                     ),
-                    SizedBox(width: 24),
+                    SizedBox(width: Responsive.spacing(context, mobile: 16.0, desktop: 24.0)),
                     Expanded(
                       child: _ContactInfoCard(
                         icon: Icons.email_rounded,
@@ -526,7 +540,7 @@ class _ContactInfoSection extends StatelessWidget {
                         },
                       ),
                     ),
-                    SizedBox(width: 24),
+                    SizedBox(width: Responsive.spacing(context, mobile: 16.0, desktop: 24.0)),
                     Expanded(
                       child: _ContactInfoCard(
                         icon: Icons.phone_rounded,
@@ -595,11 +609,11 @@ class _ContactInfoCard extends StatelessWidget {
               Text(
                 title.toUpperCase(),
                 style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w600,
                   fontSize: 14,
                   color: AppTheme.textPrimary,
                   letterSpacing: 0.5,
-                ),
+                    ),
               ),
               SizedBox(height: 12),
               Expanded(
@@ -609,9 +623,9 @@ class _ContactInfoCard extends StatelessWidget {
                     style: GoogleFonts.poppins(
                       color: AppTheme.textPrimary.withOpacity(0.8),
                       fontWeight: FontWeight.w400,
-                      fontSize: 13,
+                          fontSize: 13,
                       height: 1.5,
-                    ),
+                        ),
                     textAlign: TextAlign.center,
                   ),
                 ),

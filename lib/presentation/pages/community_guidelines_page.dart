@@ -4,13 +4,14 @@ import '../../application/providers/navigation_provider.dart';
 import '../widgets/pandora_navbar.dart';
 import '../widgets/footer.dart';
 import '../theme/app_theme.dart';
+import '../utils/responsive.dart';
 
 class CommunityGuidelinesPage extends StatelessWidget {
   const CommunityGuidelinesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width <= 768;
+    final isMobile = Responsive.isMobile(context);
     
     // Set route when page loads
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -634,7 +635,7 @@ class _Section extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width <= 768;
+    final isMobile = Responsive.isMobile(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -666,7 +667,7 @@ class _SubSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width <= 768;
+    final isMobile = Responsive.isMobile(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

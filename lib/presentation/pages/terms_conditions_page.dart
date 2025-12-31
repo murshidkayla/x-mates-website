@@ -4,13 +4,14 @@ import '../../application/providers/navigation_provider.dart';
 import '../widgets/pandora_navbar.dart';
 import '../widgets/footer.dart';
 import '../theme/app_theme.dart';
+import '../utils/responsive.dart';
 
 class TermsConditionsPage extends StatelessWidget {
   const TermsConditionsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width <= 768;
+    final isMobile = Responsive.isMobile(context);
     
     // Set route when page loads
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -42,8 +43,8 @@ class TermsConditionsPage extends StatelessWidget {
             Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 20 : 80,
-                vertical: isMobile ? 50 : 100,
+                horizontal: Responsive.value(context, mobile: 20.0, tablet: 40.0, desktop: 80.0),
+                vertical: Responsive.value(context, mobile: 50.0, tablet: 80.0, desktop: 100.0),
               ),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -541,7 +542,7 @@ class _Section extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width <= 768;
+    final isMobile = Responsive.isMobile(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -573,7 +574,7 @@ class _SubSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width <= 768;
+    final isMobile = Responsive.isMobile(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

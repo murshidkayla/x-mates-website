@@ -3,94 +3,94 @@ import 'package:provider/provider.dart';
 import '../../application/providers/navigation_provider.dart';
 import '../../application/providers/ui_state_provider.dart';
 import '../theme/app_theme.dart';
+import '../utils/responsive.dart';
 
 class Footer extends StatelessWidget {
   const Footer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = Responsive.isMobile(context);
+    
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 80),
+      padding: Responsive.sectionPadding(context),
       decoration: BoxDecoration(
         color: AppTheme.primaryColor,
       ),
       child: Column(
         children: [
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final isMobile = constraints.maxWidth < 768;
-              if (isMobile) {
-                return Column(
+          isMobile
+              ? Column(
                   children: [
                     _RichFooterLink(
                       label: 'Privacy Policy',
                       route: '/privacy-policy',
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: Responsive.spacing(context, mobile: 20.0, desktop: 24.0)),
                     _RichFooterLink(
                       label: 'Terms & Conditions',
                       route: '/terms-conditions',
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: Responsive.spacing(context, mobile: 20.0, desktop: 24.0)),
                     _RichFooterLink(
                       label: 'Community Guidelines',
                       route: '/community-guidelines',
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: Responsive.spacing(context, mobile: 20.0, desktop: 24.0)),
                     _RichFooterLink(
                       label: 'Contact',
                       route: '/contact',
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: Responsive.spacing(context, mobile: 20.0, desktop: 24.0)),
                     _RichFooterLink(
                       label: 'How to delete',
                       route: '/how-to-delete',
                     ),
                   ],
-                );
-              } else {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                )
+              : Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: Responsive.spacing(context, mobile: 16.0, desktop: 32.0),
+                  runSpacing: Responsive.spacing(context, mobile: 16.0, desktop: 16.0),
                   children: [
                     _RichFooterLink(
                       label: 'Privacy Policy',
                       route: '/privacy-policy',
                     ),
-                    const SizedBox(width: 32),
                     _RichFooterLink(
                       label: 'Terms & Conditions',
                       route: '/terms-conditions',
                     ),
-                    const SizedBox(width: 32),
                     _RichFooterLink(
                       label: 'Community Guidelines',
                       route: '/community-guidelines',
                     ),
-                    const SizedBox(width: 32),
                     _RichFooterLink(
                       label: 'Contact',
                       route: '/contact',
                     ),
-                    const SizedBox(width: 32),
                     _RichFooterLink(
                       label: 'How to delete',
                       route: '/how-to-delete',
                     ),
                   ],
-                );
-              }
-            },
-          ),
-          const SizedBox(height: 60),
+                ),
+          SizedBox(height: Responsive.spacing(context, mobile: 40.0, desktop: 60.0)),
           Text(
             '© 2025 X Matez. All rights reserved.',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 14,
+              fontSize: Responsive.fontSize(
+                context,
+                mobile: 13.0,
+                tablet: 13.5,
+                desktop: 14.0,
+              ),
               fontWeight: FontWeight.w500,
               letterSpacing: 0.2,
             ),
+            textAlign: TextAlign.center,
           ),
         ],
       ),

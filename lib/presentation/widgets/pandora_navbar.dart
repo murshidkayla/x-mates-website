@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../application/providers/navigation_provider.dart';
 import '../../application/providers/ui_state_provider.dart';
+import '../utils/responsive.dart';
 
 class PandoraNavbar extends StatefulWidget {
   const PandoraNavbar({super.key});
@@ -14,69 +15,142 @@ class PandoraNavbar extends StatefulWidget {
 class _PandoraNavbarState extends State<PandoraNavbar> {
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width <= 768;
+    final isMobile = Responsive.isMobile(context);
+    final isTablet = Responsive.isTablet(context);
     final currentRoute = Provider.of<NavigationProvider>(context).currentRoute;
 
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 400),
-      transitionBuilder: (Widget child, Animation<double> animation) {
-        return FadeTransition(
-          opacity: animation,
-          child: child,
+    return Consumer<UIStateProvider>(
+      builder: (context, uiState, child) {
+        final isMobileMenuOpen = uiState.isMobileMenuOpen;
+
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 400),
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+          child: Container(
+            key: ValueKey(currentRoute),
+            padding: EdgeInsets.symmetric(
+              horizontal: isMobile ? 16 : (isTablet ? 24 : 40),
+              vertical: 16,
+            ),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    if (!isMobile)
+                      Flexible(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            _NavLink(
+                              label: 'Home',
+                              route: '/',
+                              isActive: currentRoute == '/',
+                              currentRoute: currentRoute,
+                            ),
+                            SizedBox(width: isTablet ? 16 : 28),
+                            _NavLink(
+                              label: 'Privacy',
+                              route: '/privacy-policy',
+                              isActive: currentRoute == '/privacy-policy',
+                              currentRoute: currentRoute,
+                            ),
+                            SizedBox(width: isTablet ? 16 : 28),
+                            _NavLink(
+                              label: 'Terms',
+                              route: '/terms-conditions',
+                              isActive: currentRoute == '/terms-conditions',
+                              currentRoute: currentRoute,
+                            ),
+                            if (!isTablet) ...[
+                              const SizedBox(width: 28),
+                              _NavLink(
+                                label: 'Community Guidelines',
+                                route: '/community-guidelines',
+                                isActive: currentRoute == '/community-guidelines',
+                                currentRoute: currentRoute,
+                              ),
+                            ],
+                            SizedBox(width: isTablet ? 16 : 28),
+                            _NavLink(
+                              label: 'Contact',
+                              route: '/contact',
+                              isActive: currentRoute == '/contact',
+                              currentRoute: currentRoute,
+                            ),
+                          ],
+                        ),
+                      )
+                    else
+                      IconButton(
+                        icon: Icon(
+                          isMobileMenuOpen ? Icons.close : Icons.menu,
+                          color: const Color.fromRGBO(66, 107, 112, 1),
+                          size: 28,
+                        ),
+                        onPressed: () {
+                          uiState.toggleMobileMenu();
+                        },
+                      ),
+                  ],
+                ),
+                if (isMobile && isMobileMenuOpen)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Column(
+                      children: [
+                        _NavLink(
+                          label: 'Home',
+                          route: '/',
+                          isActive: currentRoute == '/',
+                          currentRoute: currentRoute,
+                          onTap: () => uiState.setMobileMenuOpen(false),
+                        ),
+                        const SizedBox(height: 16),
+                        _NavLink(
+                          label: 'Privacy',
+                          route: '/privacy-policy',
+                          isActive: currentRoute == '/privacy-policy',
+                          currentRoute: currentRoute,
+                          onTap: () => uiState.setMobileMenuOpen(false),
+                        ),
+                        const SizedBox(height: 16),
+                        _NavLink(
+                          label: 'Terms',
+                          route: '/terms-conditions',
+                          isActive: currentRoute == '/terms-conditions',
+                          currentRoute: currentRoute,
+                          onTap: () => uiState.setMobileMenuOpen(false),
+                        ),
+                        const SizedBox(height: 16),
+                        _NavLink(
+                          label: 'Community Guidelines',
+                          route: '/community-guidelines',
+                          isActive: currentRoute == '/community-guidelines',
+                          currentRoute: currentRoute,
+                          onTap: () => uiState.setMobileMenuOpen(false),
+                        ),
+                        const SizedBox(height: 16),
+                        _NavLink(
+                          label: 'Contact',
+                          route: '/contact',
+                          isActive: currentRoute == '/contact',
+                          currentRoute: currentRoute,
+                          onTap: () => uiState.setMobileMenuOpen(false),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          ),
         );
       },
-      child: Container(
-        key: ValueKey(currentRoute),
-        padding: EdgeInsets.symmetric(
-          horizontal: isMobile ? 16 : 24,
-          vertical: 16,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            if (!isMobile)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  _NavLink(
-                    label: 'Home',
-                    route: '/',
-                    isActive: currentRoute == '/',
-                    currentRoute: currentRoute,
-                  ),
-                  const SizedBox(width: 28),
-                  _NavLink(
-                    label: 'Privacy',
-                    route: '/privacy-policy',
-                    isActive: currentRoute == '/privacy-policy',
-                    currentRoute: currentRoute,
-                  ),
-                  const SizedBox(width: 28),
-                  _NavLink(
-                    label: 'Terms',
-                    route: '/terms-conditions',
-                    isActive: currentRoute == '/terms-conditions',
-                    currentRoute: currentRoute,
-                  ),
-                  const SizedBox(width: 28),
-                  _NavLink(
-                    label: 'Community Guidelines',
-                    route: '/community-guidelines',
-                    isActive: currentRoute == '/community-guidelines',
-                    currentRoute: currentRoute,
-                  ),
-                  const SizedBox(width: 28),
-                  _NavLink(
-                    label: 'Contact',
-                    route: '/contact',
-                    isActive: currentRoute == '/contact',
-                    currentRoute: currentRoute,
-                  ),
-                ],
-              ),
-          ],
-        ),
-      ),
     );
   }
 }
@@ -86,12 +160,14 @@ class _NavLink extends StatefulWidget {
   final String route;
   final bool isActive;
   final String currentRoute;
+  final VoidCallback? onTap;
 
   const _NavLink({
     required this.label,
     required this.route,
     required this.isActive,
     required this.currentRoute,
+    this.onTap,
   });
 
   @override
@@ -180,6 +256,7 @@ class _NavLinkState extends State<_NavLink> with SingleTickerProviderStateMixin 
           Provider.of<NavigationProvider>(context, listen: false)
               .setCurrentRoute(widget.route);
           Navigator.of(context).pushReplacementNamed(widget.route);
+          widget.onTap?.call();
         },
         child: AnimatedBuilder(
           animation: _controller,
@@ -188,9 +265,9 @@ class _NavLinkState extends State<_NavLink> with SingleTickerProviderStateMixin 
               scale: isHovered ? _scaleAnimation.value : 1.0,
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
                   AnimatedBuilder(
                     animation: _controller,
                     builder: (context, child) {
@@ -210,28 +287,28 @@ class _NavLinkState extends State<_NavLink> with SingleTickerProviderStateMixin 
                       return AnimatedDefaultTextStyle(
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.easeInOut,
-                        style: GoogleFonts.poppins(
+              style: GoogleFonts.poppins(
                           color: color,
-                          fontSize: 16,
+                fontSize: 16,
                           fontWeight: widget.isActive ? FontWeight.w700 : FontWeight.w600,
-                          letterSpacing: 0.3,
-                        ),
+                letterSpacing: 0.3,
+              ),
                         child: Text(widget.label),
                       );
                     },
-                  ),
+            ),
                   const SizedBox(height: 4),
-                  AnimatedBuilder(
-                    animation: _underlineAnimation,
-                    builder: (context, child) {
-                      return Opacity(
-                        opacity: _underlineAnimation.value,
-                        child: Container(
-                          width: 7,
-                          height: 7,
-                          decoration: BoxDecoration(
-                            color: const Color.fromRGBO(66, 107, 112, 1),
-                            shape: BoxShape.circle,
+            AnimatedBuilder(
+              animation: _underlineAnimation,
+              builder: (context, child) {
+                return Opacity(
+                  opacity: _underlineAnimation.value,
+                  child: Container(
+                    width: 7,
+                    height: 7,
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(66, 107, 112, 1),
+                      shape: BoxShape.circle,
                             boxShadow: widget.isActive
                                 ? [
                                     BoxShadow(
@@ -241,12 +318,12 @@ class _NavLinkState extends State<_NavLink> with SingleTickerProviderStateMixin 
                                     ),
                                   ]
                                 : null,
-                          ),
-                        ),
-                      );
-                    },
+                    ),
                   ),
-                ],
+                );
+              },
+            ),
+          ],
               ),
             );
           },
