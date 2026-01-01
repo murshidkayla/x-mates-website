@@ -500,7 +500,7 @@ class _CharacterTextContent extends StatelessWidget {
             fontSize: descriptionSize,
             fontWeight: FontWeight.w300,
             height: 1.5,
-            color: Colors.grey.shade700,
+            color: Colors.black,
           ),
         ),
       ],
@@ -647,7 +647,7 @@ class _iPhoneTextContent extends StatelessWidget {
             fontSize: descriptionSize,
             fontWeight: FontWeight.w300,
             height: 1.5,
-            color: Colors.grey.shade700,
+            color: Colors.black,
           ),
         ),
       ],
@@ -781,14 +781,48 @@ class _BannerSection extends StatelessWidget {
                 // Banner image at the top right
                 if (!isMobile)
                   Positioned(
-                    top: isTablet ? 40 : -170,
+                    right: 0,
+                    top: isTablet ? 55 : -130,
                     child: Opacity(
                       opacity: 0.9,
                       child: Image.asset(
                         Images.bannerImg1,
                         fit: BoxFit.contain,
-                        width: isTablet ? 200 : 300,
-                        height: isTablet ? 200 : 300,
+                        width: isTablet ? 120 : 180,
+                        height: isTablet ? 120 : 180,
+                      ),
+                    ),
+                  ),
+                // Banner image at the top left
+                if (!isMobile)
+                  Positioned(
+                    left: 0,
+                    top: isTablet ? 55 : -130,
+                    child: Opacity(
+                      opacity: 0.9,
+                      child: Image.asset(
+                        Images.bannerImg1,
+                        fit: BoxFit.contain,
+                        width: isTablet ? 120 : 180,
+                        height: isTablet ? 120 : 180,
+                      ),
+                    ),
+                  ),
+                // Small banner image at the bottom right
+                if (!isMobile)
+                  Positioned(
+                    right: isTablet ? 20 : 40,
+                    bottom: isTablet ? -90 : -110,
+                    child: Opacity(
+                      opacity: 0.9,
+                      child: Transform.rotate(
+                        angle: 3.14159, // 180 degrees in radians (π)
+                        child: Image.asset(
+                          Images.bannerImg1,
+                          fit: BoxFit.contain,
+                          width: isTablet ? 80 : 120,
+                          height: isTablet ? 80 : 120,
+                        ),
                       ),
                     ),
                   ),
