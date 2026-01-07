@@ -19,8 +19,9 @@ class PrivacyPolicyPage extends StatelessWidget {
     });
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: isMobile ? AppTheme.lightBackground : Colors.transparent,
       body: Container(
+        width: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,

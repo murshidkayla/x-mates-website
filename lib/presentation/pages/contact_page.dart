@@ -147,9 +147,12 @@ class _ContactPageState extends State<ContactPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = Responsive.isMobile(context);
+    
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: isMobile ? AppTheme.lightBackground : Colors.transparent,
       body: Container(
+        width: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,

@@ -133,18 +133,36 @@ class _HeroSection extends StatelessWidget {
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                _HeroTextContent(),
-                const SizedBox(height: 32),
-                Container(
-                  constraints: BoxConstraints(
-                    maxWidth: isMobile ? double.infinity : 500,
-                    maxHeight: isMobile ? 400 : 500,
+                if (isMobile) ...[
+                  // Mobile: Text first
+                  _HeroTextContent(),
+                  const SizedBox(height: 32),
+                  // Then image
+                  Container(
+                    constraints: BoxConstraints(
+                      maxWidth: double.infinity,
+                      maxHeight: 400,
+                    ),
+                    child: Image.asset(
+                      Images.phoneInHand,
+                      fit: BoxFit.contain,
+                    ),
                   ),
-                  child: Image.asset(
-                    Images.phoneInHand,
-                    fit: BoxFit.contain,
+                ] else ...[
+                  // Tablet: Keep original layout
+                  _HeroTextContent(),
+                  const SizedBox(height: 32),
+                  Container(
+                    constraints: BoxConstraints(
+                      maxWidth: 500,
+                      maxHeight: 500,
+                    ),
+                    child: Image.asset(
+                      Images.phoneInHand,
+                      fit: BoxFit.contain,
+                    ),
                   ),
-                ),
+                ],
               ],
             )
           : Row(
@@ -341,9 +359,18 @@ class _CharacterSection extends StatelessWidget {
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    _CharacterImagesRow(isMobile: isMobile, isTablet: isTablet),
-                    const SizedBox(height: 32),
-                    _CharacterTextContent(),
+                    if (isMobile) ...[
+                      // Mobile: Text first
+                      _CharacterTextContent(),
+                      const SizedBox(height: 32),
+                      // Then images
+                      _CharacterImagesRow(isMobile: isMobile, isTablet: isTablet),
+                    ] else ...[
+                      // Tablet: Keep original layout
+                      _CharacterImagesRow(isMobile: isMobile, isTablet: isTablet),
+                      const SizedBox(height: 32),
+                      _CharacterTextContent(),
+                    ],
                   ],
                 )
               : Row(
@@ -404,15 +431,18 @@ class _CharacterImagesRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Specific sizes for each image (reduced)
-    final image1Width = 295.4; // 422 * 0.7
-    final image1Height = 324.1; // 463 * 0.7
-    final image2Width = 217.0; // 309.79 * 0.7
-    final image2Height = 238.0; // 339.89 * 0.7
-    final image3Width = 135.82535705566407; // 194.04 * 0.7
-    final image3Height = 149.02166442871093; // 212.89 * 0.7
+    // Scale down sizes for mobile, keep original for desktop/tablet
+    final scaleFactor = isMobile ? 0.5 : (isTablet ? 0.7 : 0.7);
     
-    final overlapOffset = isMobile ? 20.0 : (isTablet ? 35.0 : 50.0);
+    // Specific sizes for each image
+    final image1Width = 295.4 * scaleFactor; // 422 * 0.7
+    final image1Height = 324.1 * scaleFactor; // 463 * 0.7
+    final image2Width = 217.0 * scaleFactor; // 309.79 * 0.7
+    final image2Height = 238.0 * scaleFactor; // 339.89 * 0.7
+    final image3Width = 135.82535705566407 * scaleFactor; // 194.04 * 0.7
+    final image3Height = 149.02166442871093 * scaleFactor; // 212.89 * 0.7
+    
+    final overlapOffset = isMobile ? 10.0 : (isTablet ? 35.0 : 50.0);
     final stackHeight = image1Height + image2Height * 0.6;
     
     return SizedBox(
@@ -431,7 +461,7 @@ class _CharacterImagesRow extends StatelessWidget {
       children: [
                 // Image 2 moved over to overlap image 1 - avatarGirl2
                 Transform.translate(
-                  offset: Offset(-overlapOffset, 50),
+                  offset: Offset(-overlapOffset, isMobile ? 25.0 : 50.0),
                   child: _buildCharacterImage(
                     Images.avatarGirl2, 
                     image2Width, 
@@ -441,10 +471,10 @@ class _CharacterImagesRow extends StatelessWidget {
                     imageAlignment: Alignment.topRight,
                   ),
                 ),
-                SizedBox(width: isMobile ? 0.0 : 0.0),
+                SizedBox(width: 0.0),
                 // Image 3 - avatarGirl3 (moved down and closer)
                 Transform.translate(
-                  offset: Offset(isMobile ? -10.0 : -15.0, isMobile ? 60.0 : 70.0),
+                  offset: Offset(isMobile ? -5.0 : -15.0, isMobile ? 30.0 : 70.0),
                   child: _buildCharacterImage(Images.avatarGirl3, image3Width, image3Height, cropBottom: true),
                 ),
               ],
@@ -544,20 +574,41 @@ class _iPhoneSection extends StatelessWidget {
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
-                      constraints: BoxConstraints(
-                    maxWidth: isMobile ? double.infinity : 400,
-                    maxHeight: isMobile ? 300 : 400,
-                  ),
+                    if (isMobile) ...[
+                      // Mobile: Text first
+                      _iPhoneTextContent(),
+                      const SizedBox(height: 32),
+                      // Then image
+                      Container(
+                        constraints: BoxConstraints(
+                          maxWidth: double.infinity,
+                          maxHeight: 300,
+                        ),
                         child: Image.asset(
-                    Images.iPhone16,
-                              fit: BoxFit.contain,
-                            ),
-                    ),
-                    const SizedBox(height: 16),
-                    _iPhoneImageCaption(),
-                    const SizedBox(height: 32),
-                _iPhoneTextContent(),
+                          Images.iPhone16,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      // Then caption text
+                      _iPhoneImageCaption(),
+                    ] else ...[
+                      // Tablet: Keep original layout
+                      Container(
+                        constraints: BoxConstraints(
+                          maxWidth: 400,
+                          maxHeight: 400,
+                        ),
+                        child: Image.asset(
+                          Images.iPhone16,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      _iPhoneImageCaption(),
+                      const SizedBox(height: 32),
+                      _iPhoneTextContent(),
+                    ],
                   ],
                 )
               : Row(
@@ -745,8 +796,8 @@ class _BannerSection extends StatelessWidget {
       child: Container(
             width: double.infinity,
         padding: EdgeInsets.symmetric(
-          horizontal: isMobile ? 32.0 : (isTablet ? 48.0 : 80.0),
-          vertical: isMobile ? 40.0 : (isTablet ? 60.0 : 80.0),
+          horizontal: isMobile ? 24.0 : (isTablet ? 36.0 : 60.0),
+          vertical: isMobile ? 30.0 : (isTablet ? 45.0 : 60.0),
         ),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
@@ -759,7 +810,7 @@ class _BannerSection extends StatelessWidget {
                 ],
                 stops: [0.0, 0.5, 1.0],
               ),
-          borderRadius: BorderRadius.circular(isMobile ? 24.0 : 32.0),
+          borderRadius: BorderRadius.circular(isMobile ? 20.0 : 28.0),
           boxShadow: [
             BoxShadow(
               color: const Color(0xFFFFB367).withOpacity(0.3),
@@ -782,14 +833,14 @@ class _BannerSection extends StatelessWidget {
                 if (!isMobile)
                   Positioned(
                     right: 0,
-                    top: isTablet ? 55 : -130,
+                    top: isTablet ? 40 : -100,
                     child: Opacity(
                       opacity: 0.9,
                       child: Image.asset(
                         Images.bannerImg1,
                         fit: BoxFit.contain,
-                        width: isTablet ? 120 : 180,
-                        height: isTablet ? 120 : 180,
+                        width: isTablet ? 90 : 135,
+                        height: isTablet ? 90 : 135,
                       ),
                     ),
                   ),
@@ -797,22 +848,22 @@ class _BannerSection extends StatelessWidget {
                 if (!isMobile)
                   Positioned(
                     left: 0,
-                    top: isTablet ? 55 : -130,
+                    top: isTablet ? 40 : -100,
                     child: Opacity(
                       opacity: 0.9,
                       child: Image.asset(
                         Images.bannerImg1,
                         fit: BoxFit.contain,
-                        width: isTablet ? 120 : 180,
-                        height: isTablet ? 120 : 180,
+                        width: isTablet ? 90 : 135,
+                        height: isTablet ? 90 : 135,
                       ),
                     ),
                   ),
                 // Small banner image at the bottom right
                 if (!isMobile)
                   Positioned(
-                    right: isTablet ? 20 : 40,
-                    bottom: isTablet ? -90 : -110,
+                    right: isTablet ? 15 : 30,
+                    bottom: isTablet ? -70 : -85,
                     child: Opacity(
                       opacity: 0.9,
                       child: Transform.rotate(
@@ -820,8 +871,8 @@ class _BannerSection extends StatelessWidget {
                         child: Image.asset(
                           Images.bannerImg1,
                           fit: BoxFit.contain,
-                          width: isTablet ? 80 : 120,
-                          height: isTablet ? 80 : 120,
+                          width: isTablet ? 60 : 90,
+                          height: isTablet ? 60 : 90,
                         ),
                       ),
                     ),
@@ -833,20 +884,20 @@ class _BannerSection extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                         children: [
                           _BannerTextContent(),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 24),
                       Text(
                         'START YOUR JOURNEY\nTO EMOTIONAL WELLNESS',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.poppins(
-                          fontSize: isMobile ? 13.0 : 15.0,
+                          fontSize: isMobile ? 11.0 : 13.0,
                           fontWeight: FontWeight.w600,
                           fontStyle: FontStyle.italic,
                           height: 1.4,
                           letterSpacing: 0.3,
-                          color: const Color.fromRGBO(100, 147, 157, 1),
+                          color: Colors.black,
                         ),
                       ),
-                          const SizedBox(height: 32),
+                          const SizedBox(height: 24),
                           _BannerButtonSection(),
                         ],
                       )
@@ -868,15 +919,15 @@ class _BannerSection extends StatelessWidget {
                           'START YOUR JOURNEY\nTO EMOTIONAL WELLNESS',
                           textAlign: TextAlign.right,
                           style: GoogleFonts.poppins(
-                            fontSize: 15.0,
+                            fontSize: 13.0,
                             fontWeight: FontWeight.w600,
                             fontStyle: FontStyle.italic,
                             height: 1.4,
                             letterSpacing: 0.3,
-                            color: const Color.fromRGBO(100, 147, 157, 1),
+                            color: Colors.black,
                           ),
                         ),
-                        const SizedBox(height: 40),
+                        const SizedBox(height: 30),
                         _BannerButtonSection(),
                       ],
                     ),
@@ -935,7 +986,7 @@ class _BannerTextContent extends StatelessWidget {
           ),
         ),
         if (!isMobile) ...[
-          SizedBox(height: Responsive.spacing(context, mobile: 16.0, desktop: 20.0)),
+          SizedBox(height: Responsive.spacing(context, mobile: 14.0, desktop: 18.0)),
           Text(
             'Start your journey to emotional wellness today. Connect with compassionate listeners who are ready to support you.',
             textAlign: TextAlign.left,
@@ -1019,20 +1070,20 @@ class _GetStartedButtonState extends State<_GetStartedButton>
     
     final horizontalPadding = Responsive.value(
       context,
-      mobile: 20.0,
-      tablet: 24.0,
-      desktop: 28.0,
+      mobile: 18.0,
+      tablet: 22.0,
+      desktop: 26.0,
     );
     final verticalPadding = Responsive.value(
       context,
-      mobile: 12.0,
-      desktop: 14.0,
+      mobile: 10.0,
+      desktop: 12.0,
     );
     final fontSize = Responsive.fontSize(
       context,
-      mobile: 12.0,
-      tablet: 13.0,
-      desktop: 14.0,
+      mobile: 11.0,
+      tablet: 12.0,
+      desktop: 13.0,
     );
     
     return GestureDetector(

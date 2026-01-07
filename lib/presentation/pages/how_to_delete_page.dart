@@ -4,7 +4,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../application/providers/navigation_provider.dart';
 import '../widgets/pandora_navbar.dart';
 import '../widgets/footer.dart';
-import '../widgets/logo.dart';
 import '../theme/app_theme.dart';
 import '../utils/responsive.dart';
 
@@ -32,9 +31,22 @@ class HowToDeletePage extends StatelessWidget {
     });
 
     return Scaffold(
-      backgroundColor: AppTheme.lightBackground,
+      backgroundColor: isMobile ? AppTheme.lightBackground : Colors.transparent,
       body: Container(
-        color: AppTheme.lightBackground,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              AppTheme.lightBackground,
+              AppTheme.primaryColor.withOpacity(0.05),
+              AppTheme.primaryColor.withOpacity(0.02),
+              AppTheme.lightBackground,
+            ],
+            stops: const [0.0, 0.3, 0.7, 1.0],
+          ),
+        ),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -42,101 +54,42 @@ class HowToDeletePage extends StatelessWidget {
               const PandoraNavbar(),
             // Ultra-Modern Header Section
             Container(
+              width: double.infinity,
               padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 16 : 60,
-                vertical: isMobile ? 30 : 60,
+                horizontal: Responsive.value(context, mobile: 20.0, tablet: 40.0, desktop: 80.0),
+                vertical: Responsive.value(context, mobile: 50.0, tablet: 80.0, desktop: 100.0),
               ),
-              decoration: const BoxDecoration(
-                color: AppTheme.primaryColor,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    AppTheme.primaryColor,
+                    AppTheme.primaryColorDark,
+                  ],
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  isMobile
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white.withOpacity(0.1),
-                                border: Border.all(
-                                  color: Colors.white.withOpacity(0.2),
-                                  width: 1,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.white.withValues(alpha: 0.1),
-                                    blurRadius: 12,
-                                    spreadRadius: 3,
-                                  ),
-                                ],
-                              ),
-                              child: const XMatezLogo(size: 50, isDark: true),
-                            ),
-                            const SizedBox(height: 12),
-                            Text(
-                              'How to Delete\nYour Account',
-                              style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: -0.8,
-                                height: 1.2,
-                              ),
-                            ),
-                          ],
-                        )
-                      : Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white.withOpacity(0.1),
-                                border: Border.all(
-                                  color: Colors.white.withOpacity(0.2),
-                                  width: 1,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.white.withValues(alpha: 0.1),
-                                    blurRadius: 20,
-                                    spreadRadius: 5,
-                                  ),
-                                ],
-                              ),
-                              child: const XMatezLogo(size: 70, isDark: true),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                'How to Delete Your Account',
-                                    style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                                  color: Colors.white,
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.w700,
-                                      letterSpacing: -1,
-                                      height: 1.2,
-                                    ),
-                                  ),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    'Follow these simple steps to permanently delete your account',
-                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: Colors.white.withValues(alpha: 0.9),
-                                      fontSize: 14,
-                                      height: 1.4,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                  Text(
+                    'How to Delete Your Account',
+                    style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                      color: Colors.white,
+                      fontSize: isMobile ? 32 : 48,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -1.5,
+                      height: 1.2,
+                    ),
+                  ),
+                  SizedBox(height: isMobile ? 16 : 20),
+                  Text(
+                    'Follow these simple steps to permanently delete your account',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Colors.white.withValues(alpha: 0.9),
+                      fontSize: isMobile ? 16 : 18,
+                      height: 1.5,
+                    ),
                   ),
                 ],
               ),
