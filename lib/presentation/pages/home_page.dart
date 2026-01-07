@@ -335,7 +335,7 @@ class _CharacterSection extends StatelessWidget {
           if (!isMobile)
             Positioned(
               right: isTablet ? 20 : 80,
-              top: isTablet ? 300 : 440,
+              top: isTablet ? 180 : 300,
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
